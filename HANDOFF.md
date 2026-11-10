@@ -1,15 +1,15 @@
 # Handoff — 2026-11-10 (evening, second laptop)
 
 ## Done this session
-- Repo cloned on a second laptop into `~/Documents/fens-league` over HTTPS (the repo is publicly readable). This laptop has no SSH key for GitHub, so **pushing from here isn't set up yet**.
-- New page `lobby-main.html` + `lobby-main.css`: the Figma screen "1.0 - Lobby Main" (238:6770). `index.html` is unchanged and still the live page.
+- Repo cloned on a second laptop into `~/Documents/fens-league` over HTTPS (the repo is publicly readable). It now has its own GitHub SSH key (`~/.ssh/id_ed25519_github`), so pushing works from both computers.
+- New page `lobby-main.html` + `lobby-main.css`: the Figma screen "1.0 - Lobby Main" (238:6770). (Later made the only lobby, see below.)
   - Colours are the values Figma's variables resolve to (`get_variable_defs`), written as plain hex; the generated code's fallbacks (blue gradient, mint button) are wrong.
   - Figma's 30MB ball GIF is replaced by the same ball video; the bounce intro is ported and plays on every load (the user wants it in every version). The cards below the header come in 100ms after the third bounce.
   - User changes from Figma: crests stretched to their 114×68 slot (as Figma does), EGT logo 72×30, "Месец" filter removed, "Как се играе?" has the old moving white highlight on a 6% border.
 - Reusable `<event-container>` (`components/`), Figma component set 276:9189, 4 variants (Match Outcome / Correct Score × Default / Locked). `components.html` shows all four. Switching variants animates; the pill's icon turns anticlockwise.
+- Later the same evening: the new lobby became the only one. `lobby-main.html`/`.css` are now `index.html`/`styles.css`; the old lobby page, its stylesheet and its six old icons were deleted (in git history). The old address `/lobby-main` no longer exists.
 
 ## Open
-- Swap `lobby-main.html` in as the main page? Not decided.
 - Trump card PNGs are ~2.5MB each for a 24px image.
 - Легенда has no open state in Figma.
 
