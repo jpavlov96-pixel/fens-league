@@ -74,7 +74,11 @@
 
       <!-- Figma: visual-primary (178:40679) -->
       <div class="visual-primary" aria-hidden="true">
-        <video class="visual-primary__video" src="assets/visual-primary.webm" autoplay muted loop playsinline></video>
+        <!-- Safari can't show WebM transparency, so it takes the HEVC-with-alpha .mov; other browsers skip it -->
+        <video class="visual-primary__video" autoplay muted loop playsinline>
+          <source src="assets/visual-primary.mov" type='video/quicktime; codecs="hvc1"'>
+          <source src="assets/visual-primary.webm" type="video/webm">
+        </video>
       </div>
 
       <!-- Figma: hero-text (190:42735) -->
