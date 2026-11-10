@@ -1,27 +1,23 @@
-# Handoff — 2026-11-09
+# Handoff — 2026-11-10
 
 ## Done today
-- Ball is now `assets/visual-primary.webm` (330×330, transparent, 16s loop, 2.9MB) in a `<video>`, shown at 110px. Old PNG frames and `visual-primary.png` moved to the Trash.
-- Built 9 entry animations; the user **chose "Drop and bounce" refined (`introBounceRefined()`, `#intro-2`, the default)** as final. Its approved values are in memory (`chosen-intro-animation`) and at the top of the function.
-- Added a permanent ball shadow (`.visual-primary-shadow`, not in Figma): 140×14px, centre 26px right of the ball.
-- Intro plumbing for all intros: hero hidden from first paint (`intro-pending` class set in `<head>`), waits for the video (max 2.5s), once per visit on the plain address, tap to skip.
-- `serve.py` (no-cache server) replaces `python3 -m http.server`.
-- Republished the private logo-free copy: https://claude.ai/artifact/FXd8F2BLribqPFZ237YxoT (up to date as of today).
+- Git + GitHub: private repo https://github.com/jpavlov96-pixel/fens-league (`main`, SSH). `gh` isn't installed; the user creates repos on github.com.
+- Hosting: Cloudflare Worker (static assets), https://fens-league.j-pavlov96.workers.dev/, free, no password. Every push to `main` goes live in ~30s. `.assetsignore` hides the notes and dev files (checked: 404).
+- Final ball videos from the user (`~/Downloads/Juli_Ball2/ball_01.*`): the WebM is swapped in, and the 135MB MOV is re-encoded to a 3.5MB HEVC-with-alpha `assets/visual-primary.mov`, which Safari takes first.
+- The 375px limit is gone: the page fills any width (375 is pixel-identical to before; desktop just stretches).
+- The header logo is now in git and live (the user is OK with EGT branding on the hosted site).
+- The tab is renamed "Fens League" (Figma says "Fen League"), and every tap replays the intro (`replayIntro()`).
+- All live files were checked byte for byte against local.
 
 ## Unfinished / waiting on the user
-- Hosting: user wants it on GitHub + free hosting with a password. Recommended a private GitHub repo + Cloudflare Pages with a small password check (free). 2026-11-10: git repo pushed to private https://github.com/jpavlov96-pixel/fens-league (header logo included since the user OK'd it). Hosted free, no password, as a Cloudflare Worker: https://fens-league.j-pavlov96.workers.dev/ (deploys on push; the dashboard showed "disconnected from your Git account" but deploys still came through). `.assetsignore` hides notes/dev files. `gh` isn't installed; SSH to GitHub works (account `jpavlov96-pixel`).
-- 2026-11-10: final ball videos from the user (`~/Downloads/Juli_Ball2/ball_01.webm` / `.mov`, 330×330, 21.33s, 30fps). WebM swapped in as-is (old one in Trash). The 135MB PNG-codec .mov was re-encoded to `assets/visual-primary.mov`, HEVC with alpha at 1 Mbps (3.5MB), and the `<video>` now has a `video/quicktime; codecs="hvc1"` source first (Safari takes it, Chrome/Firefox skip to the WebM). Not yet checked on a real iPhone. The ball shows the EGT DIGITAL logo; the user is OK with that on the hosted site.
-  - How it was encoded: ffmpeg/brew aren't installed, `avconvert`'s alpha preset rejects the file, and `swift` is broken on this Mac (Command Line Tools modulemap clash). What worked: JXA (`osascript -l JavaScript`) with AVFoundation, first copying each PNG sample out of the .mov, then encoding with AVAssetWriter (codec `muxa`, pixel buffer adaptor). Classes must be fetched with `$.NSClassFromString`.
-- Draft intros (`#intro-1`, `-light`, `-roll`, `-chalk`, `-scoreboard`, `-tilt`, `-net`, `-2-old`) are still in the code; user may want them removed.
-- Still open from before: event-card is an empty white box.
-- 2026-11-10: the sub-header tab "Fen League" (Figma) is renamed "Fens League" (`#fens-league`) at the user's request. Every tap on it replays the intro (`replayIntro()`: skips any running intro, then `introBounceRefined()` from the start; its timers are tracked in `bounceTimers` so replays don't fight).
-- 2026-11-10: the 375px width restriction is gone. The page fills any width: at 375 every element measures exactly as before; on desktop things just stretch (text left, ball on the right edge), not designed yet. Intro checked at 1440px: the ball lands in its new spot.
-- The claude.ai link still stores the 360 old PNG frames (unused).
+- The MOV isn't tested on a real iPhone yet (open the live link in Safari).
+- Cloudflare's settings show "disconnected from your Git account", but deploys still arrive. If they stop, the user reconnects via Manage → GitHub app → repo access.
+- The event-card is still an empty white box. Draft intros are still in the code (the user may want them removed). Desktop isn't designed.
+- The user is designing a bottom-sheet pop-up ("2.21 - Prediction / Schedule / Season"). Advice given: design at 375×548 (iPhone SE in Safari), sheet ≤520px (500 for a clear top gap), key content in the top ~470px, 34px bottom safe area; in code `max-height: calc(100svh - 48px)` with internal scroll.
 
-## Decisions and gotchas
-- Intros must measure the page only after `intro-pending` is removed (the ball is parked 1000px up while pending); getting this wrong made the ball drop from below.
-- The preview pane freezes animations and rAF when not drawn; check intros by pausing animations and seeking, and use timers (not rAF) for anything that must finish.
-- Publishing: build a copy with styles inlined and the logo swapped for a "LOGO" placeholder; never include `egt-digital-logo.svg`.
+## Gotchas
+- Re-encoding video: no ffmpeg/brew, `swift` is broken (CLT modulemap clash), and `avconvert`'s alpha preset rejects PNG-codec MOVs. What works: JXA (`osascript -l JavaScript`) + AVFoundation, getting classes via `$.NSClassFromString`; copy the PNG samples out, then encode with codec `muxa` through a pixel buffer adaptor.
+- The preview pane pauses video and rAF while hidden (`document.hidden`); that's not a page bug.
 
 ## First task next time
-Set up the GitHub repo (private, logo left out) and Cloudflare Pages with a password, if the user still wants it.
+Build the bottom-sheet pop-up once the user shares its Figma node (re-read the Figma structure first).

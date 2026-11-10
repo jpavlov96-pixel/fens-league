@@ -10,7 +10,8 @@ HTML/CSS prototype of the "Фенска Лига" lobby from the Figma file "Las
 - Entry animations live at the end of `index.html`'s script. The final one is `introBounceRefined()` (`#intro-2`, the default); the others are drafts picked by `#intro-…` in the address. Keep the chosen motion if assets change.
 - `HANDOFF.md`: where the last session stopped.
 - Git: branch `main`, remote `origin` = private GitHub repo `jpavlov96-pixel/fens-league` (SSH).
-- Hosting: Cloudflare Worker with static assets, https://fens-league.j-pavlov96.workers.dev/, deployed from GitHub on every push to `main`. `.assetsignore` keeps the notes and dev files off the site.
+- Hosting: Cloudflare Worker with static assets, https://fens-league.j-pavlov96.workers.dev/, deployed from GitHub on every push to `main`, so **a push is a public deploy**: push only when the user asks. `.assetsignore` keeps the notes and dev files off the site.
+- Tab "Fens League" (renamed from Figma's "Fen League" by the user) replays the intro on every tap (`replayIntro()`).
 
 ## How to run it
 - Start the server from this folder: `python3 serve.py`, run with Bash in the background. It's `http.server` on port 8420 with caching turned off; plain `http.server` let browsers keep old copies of `styles.css`. A server launched from `.claude/launch.json` can't read ~/Documents, so that entry only attaches to the URL.
