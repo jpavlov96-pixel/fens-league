@@ -9,7 +9,8 @@ HTML/CSS prototype of the "Фенска Лига" lobby from the Figma file "Las
 - `assets/`: images and icons exported from Figma (never redrawn), plus the ball video from the user: `visual-primary.webm` (Chrome/Firefox) and `visual-primary.mov` (HEVC with alpha, for Safari/iPhone).
 - Entry animations live at the end of `index.html`'s script. The final one is `introBounceRefined()` (`#intro-2`, the default); the others are drafts picked by `#intro-…` in the address. Keep the chosen motion if assets change.
 - `HANDOFF.md`: where the last session stopped.
-- Git: branch `main`, remote `origin` = private GitHub repo `jpavlov96-pixel/fens-league` (SSH). `.gitignore` keeps `assets/egt-digital-logo.svg` out of the repo; never commit it.
+- Git: branch `main`, remote `origin` = private GitHub repo `jpavlov96-pixel/fens-league` (SSH).
+- Hosting: Cloudflare Worker with static assets, https://fens-league.j-pavlov96.workers.dev/, deployed from GitHub on every push to `main`. `.assetsignore` keeps the notes and dev files off the site.
 
 ## How to run it
 - Start the server from this folder: `python3 serve.py`, run with Bash in the background. It's `http.server` on port 8420 with caching turned off; plain `http.server` let browsers keep old copies of `styles.css`. A server launched from `.claude/launch.json` can't read ~/Documents, so that entry only attaches to the URL.
@@ -21,4 +22,4 @@ HTML/CSS prototype of the "Фенска Лига" lobby from the Figma file "Las
 - **Reload the preview** after every change the user can see.
 - **Don't publish** anything (claude.ai links or otherwise) unless the user asks again.
 - Build only what's asked, section by section, and **re-read the Figma structure first**, because it changes between sessions.
-- EGT Digital branding: the user is OK with it showing on the hosted site (2026-11-10), including the logo on the ball video and the "EGT Digital" alt text. The header logo file `egt-digital-logo.svg` is still kept out of git. claude.ai copies still swap the logo for a "LOGO" placeholder.
+- EGT Digital branding: the user is OK with it showing on the hosted site (2026-11-10), including the logo on the ball video and the header logo `egt-digital-logo.svg`, which is in git and on the live site. claude.ai copies still swap the logo for a "LOGO" placeholder.
