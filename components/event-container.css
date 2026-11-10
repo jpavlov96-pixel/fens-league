@@ -5,6 +5,7 @@
 event-container {
   display: block;
   width: 100%;
+  -webkit-tap-highlight-color: transparent; /* no blue flash when tapped on a phone */
 }
 
 .event {

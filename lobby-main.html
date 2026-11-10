@@ -385,6 +385,26 @@
           .onfinish = function () { ring.remove(); };
       });
 
+      // The grey panel behind the match card takes each landing like the ground taking the
+      // ball's weight: it squashes down onto its bottom edge (and a touch wider), springs
+      // back a little past its size, and settles; strongest on the first landing
+      var panel = document.querySelector('.prediction');
+      var panelGive = [0.08, 0.04, 0.02, 0.008]; // how far each landing squashes it
+      var springTime = 240; // one squash-and-rebound
+      var settleTime = 110; // how fast each wobble dies away
+      var panelEnd = bounceTime + 500;
+      var panelFrames = [];
+      for (var pt = 0; pt <= panelEnd; pt += 10) {
+        var give = 0;
+        landings.forEach(function (at, i) {
+          var since = pt - at;
+          if (since > 0) give += panelGive[i] * Math.exp(-since / settleTime) * Math.sin(2 * Math.PI * since / springTime);
+        });
+        panelFrames.push({ offset: pt / panelEnd, transform: 'scale(' + (1 + give * 0.4) + ', ' + (1 - give) + ')' });
+      }
+      panelFrames[panelFrames.length - 1] = { offset: 1, transform: 'none' };
+      panel.animate(panelFrames, { duration: panelEnd });
+
       // The first landing jolts the header section
       section.animate([
         { transform: 'none' },

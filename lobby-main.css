@@ -14,6 +14,9 @@ body {
 
 a { color: inherit; text-decoration: none; }
 
+/* No blue flash over links and buttons when they are tapped on a phone */
+html { -webkit-tap-highlight-color: transparent; }
+
 button {
   font: inherit;
   color: inherit;
@@ -425,6 +428,7 @@ img { display: block; }
   padding: 10px;
   border-radius: 0 0 12px 12px;
   background: linear-gradient(to bottom, #17181800, #272727);
+  transform-origin: 50% 100%; /* the intro squashes it down onto its bottom edge */
 }
 
 .tab-list {

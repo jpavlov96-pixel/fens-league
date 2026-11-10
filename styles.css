@@ -10,6 +10,9 @@ body {
 
 a { color: inherit; text-decoration: none; }
 
+/* No blue flash over links and buttons when they are tapped on a phone */
+html { -webkit-tap-highlight-color: transparent; }
+
 /* "Главно Лоби - work from here": top-level layers are positioned like Figma.
    Figma's frame is 375px; the page stretches to the window, with the elements on the
    right of the frame pinned to the right edge instead (desktop isn't designed yet) */
