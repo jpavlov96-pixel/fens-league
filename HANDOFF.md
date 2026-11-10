@@ -14,6 +14,7 @@
   - How it was encoded: ffmpeg/brew aren't installed, `avconvert`'s alpha preset rejects the file, and `swift` is broken on this Mac (Command Line Tools modulemap clash). What worked: JXA (`osascript -l JavaScript`) with AVFoundation, first copying each PNG sample out of the .mov, then encoding with AVAssetWriter (codec `muxa`, pixel buffer adaptor). Classes must be fetched with `$.NSClassFromString`.
 - Draft intros (`#intro-1`, `-light`, `-roll`, `-chalk`, `-scoreboard`, `-tilt`, `-net`, `-2-old`) are still in the code; user may want them removed.
 - Still open from before: event-card is an empty white box.
+- 2026-11-10: the sub-header tab "Fen League" (Figma) is renamed "Fens League" (`#fens-league`) at the user's request. Every tap on it replays the intro (`replayIntro()`: skips any running intro, then `introBounceRefined()` from the start; its timers are tracked in `bounceTimers` so replays don't fight).
 - 2026-11-10: the 375px width restriction is gone. The page fills any width: at 375 every element measures exactly as before; on desktop things just stretch (text left, ball on the right edge), not designed yet. Intro checked at 1440px: the ball lands in its new spot.
 - The claude.ai link still stores the 360 old PNG frames (unused).
 
