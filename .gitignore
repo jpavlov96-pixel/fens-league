@@ -1,0 +1,5 @@
+# Real EGT Digital logo: never leaves this machine
+assets/egt-digital-logo.svg
+
+.DS_Store
+__pycache__/

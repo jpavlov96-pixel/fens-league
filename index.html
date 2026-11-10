@@ -1,0 +1,1136 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Фенска Лига</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // Hide the hero from the first paint until its entry animation starts (see the
+    // intro code at the end of the page). Skipped with reduced motion, and on the
+    // plain address once the intro has played this visit; #intro-… addresses always play.
+    var introSkip = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    try {
+      if (!/^#intro-/.test(location.hash) && sessionStorage.getItem('fens-intro-played')) introSkip = true;
+    } catch (e) {}
+    if (!introSkip) document.documentElement.classList.add('intro-pending');
+  </script>
+</head>
+<body>
+  <!-- Figma: "Главно Лоби - work from here" (178:40236). Layers below are in Figma's order, back to front. -->
+  <div class="main-lobby">
+
+    <!-- Figma: Lobby (178:40239) -->
+    <div class="lobby">
+      <!-- Figma: gradient-bgr (178:40240) -->
+      <div class="gradient-bgr" aria-hidden="true"></div>
+    </div>
+
+    <!-- Figma: hero-section (190:42890) -->
+    <section class="hero-section">
+      <!-- Figma: change-button (190:42942) -->
+      <button class="change-button" type="button">
+        <span class="change-button__icon">
+          <img src="assets/icon-edit.svg" alt="">
+        </span>
+        <span class="change-button__text">Промени</span>
+      </button>
+
+      <!-- Figma: hero-botton-info (190:42894) -->
+      <div class="hero-botton-info">
+        <img class="hero-botton-info__icon" src="assets/icon-timer.svg" alt="">
+        <div class="hero-botton-info__texts">
+          <p class="hero-botton-info__title">Прогнози до 19 Ноември, 18:00ч.</p>
+          <p class="hero-botton-info__note">Заключва се за промени при старт на кръга.</p>
+        </div>
+      </div>
+
+      <!-- Figma: event-card (190:42974). Empty white frame in Figma for now. -->
+      <div class="event-card"></div>
+
+      <!-- Figma: hero-nav (190:42891) -->
+      <nav class="hero-nav" aria-label="Rounds">
+        <a class="navigation-l1" href="#round-9">
+          <span class="navigation-l1__text">
+            <span>Текущ </span>
+            <img class="navigation-l1__dot" src="assets/nav-dot-inactive.svg" alt="">
+            <span>Кръг 9</span>
+          </span>
+        </a>
+        <a class="navigation-l1 is-active" href="#round-10" aria-current="true">
+          <span class="navigation-l1__text">
+            <span>Следващ</span>
+            <img class="navigation-l1__dot" src="assets/nav-dot-active.svg" alt="">
+            <span>Кръг 10</span>
+          </span>
+        </a>
+      </nav>
+
+      <!-- Not in Figma: the ball's shadow (light from the top left) -->
+      <div class="visual-primary-shadow" aria-hidden="true"></div>
+
+      <!-- Figma: visual-primary (178:40679) -->
+      <div class="visual-primary" aria-hidden="true">
+        <video class="visual-primary__video" src="assets/visual-primary.webm" autoplay muted loop playsinline></video>
+      </div>
+
+      <!-- Figma: hero-text (190:42735) -->
+      <div class="hero-text">
+        <div class="hero-text__label">
+          <h1 class="hero-text__title">Фенска Лига</h1>
+          <p class="hero-text__tagline">Един мач. Една прогноза. Всеки кръг.</p>
+        </div>
+        <div class="hero-text__buttons">
+          <a class="chip chip--league" href="#first-league">
+            <img class="chip__flag" src="assets/flag-bulgaria.svg" alt="">
+            <span class="chip__text">Първа Лига</span>
+          </a>
+          <a class="chip chip--how-to-play" href="#how-to-play">
+            <span class="chip__ring" aria-hidden="true"></span>
+            <span class="chip__text">Как се играе?</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Figma: header (187:42686) -->
+    <header class="header">
+      <div class="app-header">
+        <a class="promo-item" href="#offers">Offers</a>
+
+        <a class="logo" href="#" aria-label="EGT Digital">
+          <span class="brand-logo">
+            <span class="brand-logo__img">
+              <img src="assets/egt-digital-logo.svg" alt="EGT Digital">
+            </span>
+          </span>
+        </a>
+
+        <div class="auth">
+          <a class="sign-up" href="#signup">Sign up</a>
+          <a class="sign-in" href="#signin">Sign In</a>
+        </div>
+      </div>
+
+      <nav class="sub-header" aria-label="Main">
+        <div class="sub-header__items">
+          <a class="nav-link" href="#in-play">In Play</a>
+          <a class="nav-link is-active" href="#fen-league" aria-current="page">Fen League</a>
+          <a class="nav-link" href="#casino">Casino</a>
+          <a class="nav-link" href="#live-casino">Live Casino</a>
+          <a class="nav-link" href="#virtuals">Virtuals</a>
+          <a class="nav-link" href="#esport">eSport</a>
+        </div>
+      </nav>
+    </header>
+
+  </div>
+
+  <script>
+    // Switch the active nav link on tap
+    var links = document.querySelectorAll('.nav-link');
+    links.forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        links.forEach(function (l) {
+          l.classList.remove('is-active');
+          l.removeAttribute('aria-current');
+        });
+        link.classList.add('is-active');
+        link.setAttribute('aria-current', 'page');
+      });
+    });
+
+    // Switch the active round tab on tap
+    var rounds = document.querySelectorAll('.navigation-l1');
+    rounds.forEach(function (round) {
+      round.addEventListener('click', function (e) {
+        e.preventDefault();
+        rounds.forEach(function (r) {
+          r.classList.remove('is-active');
+          r.removeAttribute('aria-current');
+          r.querySelector('.navigation-l1__dot').src = 'assets/nav-dot-inactive.svg';
+        });
+        round.classList.add('is-active');
+        round.setAttribute('aria-current', 'true');
+        round.querySelector('.navigation-l1__dot').src = 'assets/nav-dot-active.svg';
+      });
+    });
+
+    // Entry animations (not in Figma). Pick one with the address:
+    // #intro-1 = Kick-off, #intro-2 (or nothing) = Drop and bounce (refined),
+    // #intro-2-old = Drop and bounce as first built.
+    // Drafts: #intro-light = Light from the ball, #intro-roll = Roll and reveal,
+    // #intro-chalk = Chalk lines, #intro-scoreboard = Scoreboard, #intro-tilt = Pitch tilt,
+    // #intro-net = Goal net.
+    // The header and the red gradient stay visible throughout all of them.
+    // On the plain address the intro plays once per visit; a tap skips to the end.
+
+    // Intro version 1, "Kick-off": the ball comes up out of the background into
+    // the middle of the hero, spinning very fast and slowing down while it lingers,
+    // then gets kicked: it arcs to its corner while the hero content comes in behind it.
+    function introKickoff() {
+      var ball = document.querySelector('.visual-primary');
+      var ballVideo = document.querySelector('.visual-primary__video');
+      var introTime = 700;
+      var holdTime = 3000;
+      var flightTime = 900;
+      var kickTime = introTime + holdTime;
+      var kickoffTime = kickTime + flightTime;
+
+      // Start: ball centred in the hero (offset from its final spot) at 2.2×.
+      // Flight: a curve bent through `bend`, so it rises a little past its spot and settles.
+      var start = { x: -147.5, y: 122, scale: 2.2 };
+      var bend = { x: -130, y: -30 };
+      var ballFrames = [
+        { transform: 'translate(-147.5px, 122px) scale(0.2)', opacity: 0, filter: 'blur(6px)', offset: 0, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)' },
+        { transform: 'translate(-147.5px, 122px) scale(2.2)', opacity: 1, filter: 'blur(0px)', offset: introTime / kickoffTime }
+      ];
+      for (var k = 0; k <= 20; k++) {
+        var t = k / 20;
+        var e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        var x = (1 - e) * (1 - e) * start.x + 2 * e * (1 - e) * bend.x;
+        var y = (1 - e) * (1 - e) * start.y + 2 * e * (1 - e) * bend.y;
+        var s = start.scale + (1 - start.scale) * e;
+        ballFrames.push({
+          transform: 'translate(' + x + 'px, ' + y + 'px) scale(' + s + ')',
+          opacity: 1,
+          offset: (kickTime + t * flightTime) / kickoffTime
+        });
+      }
+      ball.animate(ballFrames, { duration: kickoffTime, fill: 'backwards' });
+
+      // Spin at 16× speed when it appears (the most browsers allow), slowing to the
+      // normal idle spin by the kick
+      // (a timer rather than requestAnimationFrame, which can pause and leave it stuck at 16×)
+      ballVideo.playbackRate = 16;
+      var spinStart = performance.now();
+      var spinTimer = setInterval(function () {
+        var p = Math.min((performance.now() - spinStart) / kickTime, 1);
+        ballVideo.playbackRate = 1 + 15 * Math.pow(1 - p, 2);
+        if (p === 1) clearInterval(spinTimer);
+      }, 50);
+
+      // Hero content follows in the ball's wake
+      function bringIn(selector, from, delay) {
+        document.querySelector(selector).animate([
+          { opacity: 0, transform: from },
+          { opacity: 1, transform: 'none' }
+        ], { duration: 500, delay: delay, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'backwards' });
+      }
+      bringIn('.hero-text__title', 'translateX(-24px)', kickTime + 550);
+      bringIn('.hero-text__tagline', 'translateX(-24px)', kickTime + 630);
+      bringIn('.hero-text__buttons', 'translateX(-24px)', kickTime + 710);
+      bringIn('.hero-nav', 'translateY(12px)', kickTime + 900);
+      bringIn('.event-card', 'translateY(12px)', kickTime + 980);
+      bringIn('.hero-botton-info', 'translateY(12px)', kickTime + 1060);
+      bringIn('.change-button', 'translateY(12px)', kickTime + 1060);
+    }
+
+    // Intro draft "Light from the ball": the hero starts dark with only the
+    // ball showing, glowing gold. A circle of light grows out from the ball and
+    // reveals the hero; each block fades in as the edge of the light reaches it.
+    function introLight() {
+      var hero = document.querySelector('.hero-section');
+      var ball = document.querySelector('.visual-primary');
+      var glowTime = 900;
+      var revealTime = 1200;
+
+      // Ball centre and the farthest hero corner from it, measured from the page
+      var heroBox = hero.getBoundingClientRect();
+      var ballBox = ball.getBoundingClientRect();
+      var cx = ballBox.left - heroBox.left + ballBox.width / 2;
+      var cy = ballBox.top - heroBox.top + ballBox.height / 2;
+      var reach = Math.hypot(Math.max(cx, heroBox.width - cx), Math.max(cy, heroBox.height - cy));
+      // Starting circle: the ball plus room for its glow
+      var startRadius = ballBox.width / 2 + 40;
+
+      // The light: the hero is clipped to a circle on the ball that grows to cover it all
+      var revealEasing = 'cubic-bezier(0.55, 0, 0.3, 1)';
+      hero.animate([
+        { clipPath: 'circle(' + startRadius + 'px at ' + cx + 'px ' + cy + 'px)' },
+        { clipPath: 'circle(' + startRadius + 'px at ' + cx + 'px ' + cy + 'px)', offset: glowTime / (glowTime + revealTime), easing: revealEasing },
+        { clipPath: 'circle(' + reach + 'px at ' + cx + 'px ' + cy + 'px)' }
+      ], { duration: glowTime + revealTime, fill: 'backwards' });
+
+      // The ball glows gold (the nav's #f5d584) while it waits, then the glow settles
+      ball.animate([
+        { boxShadow: '0 0 0 0 #f5d58400' },
+        { boxShadow: '0 0 32px 8px #f5d584b3', offset: 0.25 },
+        { boxShadow: '0 0 32px 8px #f5d584b3', offset: 0.5 },
+        { boxShadow: '0 0 0 0 #f5d58400' }
+      ], { duration: glowTime + revealTime + 600, easing: 'ease-in-out' });
+
+      // Each block fades in when the light's edge reaches its nearest point
+      ['.hero-text__title', '.hero-text__tagline', '.hero-text__buttons', '.hero-nav',
+        '.event-card', '.hero-botton-info', '.change-button'].forEach(function (selector) {
+        var el = document.querySelector(selector);
+        var box = el.getBoundingClientRect();
+        var nx = Math.min(Math.max(cx, box.left - heroBox.left), box.right - heroBox.left);
+        var ny = Math.min(Math.max(cy, box.top - heroBox.top), box.bottom - heroBox.top);
+        var share = Math.hypot(nx - cx, ny - cy) / reach;
+        el.animate([
+          { opacity: 0, filter: 'blur(4px)' },
+          { opacity: 1, filter: 'blur(0px)' }
+        ], { duration: 600, delay: glowTime + share * revealTime, easing: 'ease-out', fill: 'backwards' });
+      });
+    }
+
+    // Intro draft "Roll and reveal": the ball rolls in from off the left edge
+    // at its own height, uncovering the title, tagline and chips just behind it,
+    // overshoots its corner slightly and rolls back into place. The rest of the
+    // hero comes in once it lands. The roll is the whole ball turning like a wheel,
+    // matched to the distance travelled, so the video's own spin is paused meanwhile.
+    function introRoll() {
+      var hero = document.querySelector('.hero-section');
+      var ball = document.querySelector('.visual-primary');
+      var ballVideo = document.querySelector('.visual-primary__video');
+      var heroText = document.querySelector('.hero-text');
+      var waitTime = 300;
+      var rollTime = 1800;
+      var overshoot = 12;
+      var landTime = waitTime + rollTime;
+
+      // Measured from the page: where the ball sits, and where the text block is
+      var heroBox = hero.getBoundingClientRect();
+      var ballBox = ball.getBoundingClientRect();
+      var textBox = heroText.getBoundingClientRect();
+      var ballLeft = ballBox.left - heroBox.left;
+      var radius = ballBox.width / 2;
+      var textLeft = textBox.left - heroBox.left;
+      var startX = -(ballLeft + ballBox.width); // just off the left edge
+
+      // Ball position and text reveal, sampled along one path so they stay in step.
+      // The ball slows down across the hero, rolls `overshoot` px past its spot, then rolls back.
+      var ballFrames = [];
+      var textFrames = [];
+      for (var k = 0; k <= 40; k++) {
+        var t = k / 40;
+        var x;
+        if (t < 0.85) {
+          var u = t / 0.85;
+          x = startX + (overshoot - startX) * (1 - (1 - u) * (1 - u));
+        } else {
+          var v = (t - 0.85) / 0.15;
+          x = overshoot * (1 - (v < 0.5 ? 2 * v * v : 1 - Math.pow(-2 * v + 2, 2) / 2));
+        }
+        var angle = x / radius * 180 / Math.PI; // rolling without slipping
+        var shown = Math.min(Math.max(ballLeft + x - textLeft, 0), textBox.width); // up to the ball's back edge
+        var offset = (waitTime + t * rollTime) / landTime;
+        ballFrames.push({ transform: 'translateX(' + x + 'px) rotate(' + angle + 'deg)', offset: offset });
+        textFrames.push({ clipPath: 'inset(-10px ' + (textBox.width - shown) + 'px -10px -10px)', offset: offset });
+      }
+      ballFrames.unshift({ transform: ballFrames[0].transform, offset: 0 });
+      textFrames.unshift({ clipPath: textFrames[0].clipPath, offset: 0 });
+      ball.animate(ballFrames, { duration: landTime, fill: 'backwards' });
+      heroText.animate(textFrames, { duration: landTime, fill: 'backwards' });
+
+      // Hold the video's own spin while rolling; it picks up again on landing
+      ballVideo.pause();
+      setTimeout(function () { ballVideo.play(); }, landTime);
+
+      // The rest of the hero comes up once the ball has landed
+      function bringIn(selector, delay) {
+        document.querySelector(selector).animate([
+          { opacity: 0, transform: 'translateY(12px)' },
+          { opacity: 1, transform: 'none' }
+        ], { duration: 500, delay: delay, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'backwards' });
+      }
+      bringIn('.hero-nav', landTime - 300);
+      bringIn('.event-card', landTime - 220);
+      bringIn('.hero-botton-info', landTime - 140);
+      bringIn('.change-button', landTime - 140);
+    }
+
+    // Intro version 2, "Drop and bounce": the ball drops from above the hero into
+    // its corner and bounces three times, each lower, squashing a little on every
+    // landing. Each landing sends out a gold ring and brings in the next content:
+    // first the title, then the tagline and chips, then the rest of the hero.
+    function introBounce() {
+      var hero = document.querySelector('.hero-section');
+      var ball = document.querySelector('.visual-primary');
+      var waitTime = 200;
+      var fallTime = 520;
+      var bounces = [{ height: 36, time: 380 }, { height: 12, time: 230 }, { height: 4, time: 130 }];
+      // One value per landing: the drop, then each bounce
+      var squash = [0.18, 0.10, 0.06, 0.03]; // how much each landing flattens the ball
+      var ringScale = [2.4, 1.9, 1.5, 1.25]; // how far each landing's ring spreads
+      var squashTime = 60; // either side of a landing
+
+      // Measured from the page: where the ball sits
+      var heroBox = hero.getBoundingClientRect();
+      var ballBox = ball.getBoundingClientRect();
+      var radius = ballBox.width / 2;
+      var cx = ballBox.left - heroBox.left + radius;
+      var cy = ballBox.top - heroBox.top + radius;
+      var startY = -(ballBox.bottom - heroBox.top); // just above the hero's top edge
+
+      // When each landing happens
+      var landings = [waitTime + fallTime];
+      bounces.forEach(function (b) { landings.push(landings[landings.length - 1] + b.time); });
+      var bounceTime = landings[landings.length - 1] + squashTime;
+
+      // Height above its spot: a fall from rest, then one arc per bounce
+      function heightAt(ms) {
+        if (ms < waitTime) return startY;
+        if (ms < landings[0]) {
+          var p = (ms - waitTime) / fallTime;
+          return startY * (1 - p * p);
+        }
+        for (var i = 0; i < bounces.length; i++) {
+          if (ms < landings[i + 1]) {
+            var q = (ms - landings[i]) / bounces[i].time;
+            return -bounces[i].height * (1 - Math.pow(2 * q - 1, 2));
+          }
+        }
+        return 0;
+      }
+
+      // Flattening around each landing, strongest at the moment of contact
+      function squashAt(ms) {
+        var s = 0;
+        landings.forEach(function (at, i) {
+          var d = Math.abs(ms - at);
+          if (d < squashTime) s = Math.max(s, squash[i] * (1 - d / squashTime));
+        });
+        return s;
+      }
+
+      // Sampled every 10ms; the squash keeps the bottom of the ball on the ground
+      var ballFrames = [];
+      for (var ms = 0; ms <= bounceTime; ms += 10) {
+        var sq = squashAt(ms);
+        ballFrames.push({
+          transform: 'translateY(' + (heightAt(ms) + radius * sq) + 'px) scale(' + (1 + sq) + ', ' + (1 - sq) + ')',
+          offset: ms / bounceTime
+        });
+      }
+      ballFrames[ballFrames.length - 1].offset = 1;
+      ball.animate(ballFrames, { duration: bounceTime, fill: 'backwards' });
+
+      // A gold ring (the nav's #f5d584) spreads from the ball on each landing, behind it
+      landings.forEach(function (at, i) {
+        var ring = document.createElement('div');
+        ring.style.cssText = 'position: absolute; left: ' + (cx - radius) + 'px; top: ' + (cy - radius) + 'px; ' +
+          'width: ' + radius * 2 + 'px; height: ' + radius * 2 + 'px; border: 1px solid #f5d584; ' +
+          'border-radius: 50%; opacity: 0; pointer-events: none;';
+        hero.insertBefore(ring, ball);
+        ring.animate([
+          { transform: 'scale(1)', opacity: 0.4 },
+          { transform: 'scale(' + ringScale[i] + ')', opacity: 0 }
+        ], { duration: 700, delay: at, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)' })
+          .onfinish = function () { ring.remove(); };
+      });
+
+      // Content drops in with the landings
+      function bringIn(selector, delay) {
+        document.querySelector(selector).animate([
+          { opacity: 0, transform: 'translateY(-8px) scale(0.97)' },
+          { opacity: 1, transform: 'none' }
+        ], { duration: 450, delay: delay, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'backwards' });
+      }
+      bringIn('.hero-text__title', landings[0]);
+      bringIn('.hero-text__tagline', landings[1]);
+      bringIn('.hero-text__buttons', landings[1] + 60);
+      bringIn('.hero-nav', landings[2]);
+      bringIn('.event-card', landings[2] + 60);
+      bringIn('.hero-botton-info', landings[2] + 120);
+      bringIn('.change-button', landings[2] + 120);
+    }
+
+    // Intro draft "Chalk lines": chalk pitch markings draw themselves out from the
+    // ball. A centre circle traces around it, then one chalk line runs on like a
+    // passing move: from the circle to the text block, round its outline, on to the
+    // round tabs, the match card and the bottom row. Each block fills in with its
+    // real content as its outline closes, and the chalk fades away at the end.
+    function introChalk() {
+      var hero = document.querySelector('.hero-section');
+      var ball = document.querySelector('.visual-primary');
+      var svgNS = 'http://www.w3.org/2000/svg';
+      var circleStart = 200;
+      var circleTime = 600;
+      var lineTime = 650;
+      var lineGap = 400; // between one block's outline starting and the next
+      var fillTime = 400;
+      var pad = 2; // outline distance from its block
+      var edge = 6; // keep outlines this far inside the hero's sides
+
+      // Measured from the page: the ball, and each block's box in hero coordinates
+      var heroBox = hero.getBoundingClientRect();
+      var ballBox = ball.getBoundingClientRect();
+      var radius = ballBox.width / 2;
+      var cx = ballBox.left - heroBox.left + radius;
+      var cy = ballBox.top - heroBox.top + radius;
+      var circleRadius = radius + 10;
+
+      function boxAround(selectors) {
+        var box = { left: Infinity, top: Infinity, right: -Infinity, bottom: -Infinity };
+        selectors.forEach(function (selector) {
+          var r = document.querySelector(selector).getBoundingClientRect();
+          box.left = Math.min(box.left, r.left - heroBox.left);
+          box.top = Math.min(box.top, r.top - heroBox.top);
+          box.right = Math.max(box.right, r.right - heroBox.left);
+          box.bottom = Math.max(box.bottom, r.bottom - heroBox.top);
+        });
+        box.left = Math.max(box.left - pad, edge);
+        box.right = Math.min(box.right + pad, heroBox.width - edge);
+        box.top -= pad;
+        box.bottom += pad;
+        return box;
+      }
+
+      // Blocks top to bottom, each with its outline's corners (clockwise)
+      var blocks = [
+        ['.hero-text'],
+        ['.hero-nav'],
+        ['.event-card'],
+        ['.hero-botton-info', '.change-button']
+      ].map(function (selectors) {
+        var box = boxAround(selectors);
+        return {
+          selectors: selectors,
+          corners: [[box.left, box.top], [box.right, box.top], [box.right, box.bottom], [box.left, box.bottom]]
+        };
+      });
+
+      // Which corner of `corners` is nearest the point, and how far
+      function nearestCorner(corners, point) {
+        var best = 0;
+        var bestDist = Infinity;
+        corners.forEach(function (c, i) {
+          var d = Math.hypot(c[0] - point[0], c[1] - point[1]);
+          if (d < bestDist) { best = i; bestDist = d; }
+        });
+        return { index: best, distance: bestDist };
+      }
+
+      // The chalk layer sits behind the ball and the content; a little noise roughens the lines
+      var svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('width', heroBox.width);
+      svg.setAttribute('height', heroBox.height);
+      svg.style.cssText = 'position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none;';
+      svg.innerHTML = '<defs><filter id="chalk-rough">' +
+        '<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" result="noise"/>' +
+        '<feDisplacementMap in="SourceGraphic" in2="noise" scale="2"/></filter></defs>';
+      hero.insertBefore(svg, ball);
+
+      function chalk(tag, attributes, delay, duration) {
+        var line = document.createElementNS(svgNS, tag);
+        for (var name in attributes) line.setAttribute(name, attributes[name]);
+        line.setAttribute('fill', 'none');
+        line.setAttribute('stroke', '#ffffff');
+        line.setAttribute('stroke-opacity', '0.55');
+        line.setAttribute('stroke-width', '1.5');
+        line.setAttribute('stroke-linecap', 'round');
+        line.setAttribute('stroke-linejoin', 'round');
+        line.setAttribute('filter', 'url(#chalk-rough)');
+        line.setAttribute('pathLength', '1');
+        line.setAttribute('stroke-dasharray', '1');
+        line.setAttribute('stroke-dashoffset', '1');
+        svg.appendChild(line);
+        line.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }],
+          { duration: duration, delay: delay, easing: 'ease-in-out', fill: 'both' });
+      }
+
+      // Centre circle, starting at the bottom left of the ball (towards the blocks)
+      chalk('circle', { cx: cx, cy: cy, r: circleRadius, transform: 'rotate(135 ' + cx + ' ' + cy + ')' },
+        circleStart, circleTime);
+
+      // The chain: into each block at its corner nearest the previous one (the circle
+      // for the first block, the closest corner of the block above for the rest),
+      // then round its outline
+      var lastEnd = 0;
+      blocks.forEach(function (block, i) {
+        var start = circleStart + circleTime - 100 + i * lineGap;
+        var from;
+        var entry;
+        if (i === 0) {
+          entry = nearestCorner(block.corners, [cx, cy]).index;
+          var target = block.corners[entry];
+          var angle = Math.atan2(target[1] - cy, target[0] - cx);
+          from = [cx + circleRadius * Math.cos(angle), cy + circleRadius * Math.sin(angle)];
+        } else {
+          var bestPair = null;
+          blocks[i - 1].corners.forEach(function (prev) {
+            var near = nearestCorner(block.corners, prev);
+            if (!bestPair || near.distance < bestPair.distance) {
+              bestPair = { from: prev, index: near.index, distance: near.distance };
+            }
+          });
+          from = bestPair.from;
+          entry = bestPair.index;
+        }
+        var c = block.corners.slice(entry).concat(block.corners.slice(0, entry));
+        var d = 'M' + from[0] + ' ' + from[1] +
+          ' L' + c.map(function (p) { return p[0] + ' ' + p[1]; }).join(' L') + ' Z';
+        chalk('path', { d: d }, start, lineTime);
+        lastEnd = start + lineTime;
+
+        // The block fills in as its outline closes
+        block.selectors.forEach(function (selector) {
+          document.querySelector(selector).animate([{ opacity: 0 }, { opacity: 1 }],
+            { duration: fillTime, delay: start + lineTime - 200, easing: 'ease-out', fill: 'backwards' });
+        });
+      });
+
+      // The chalk fades away once everything is in
+      svg.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, delay: lastEnd + 300, fill: 'forwards' })
+        .onfinish = function () { svg.remove(); };
+    }
+
+    // Intro draft "Scoreboard": the hero's text arrives like a stadium split-flap
+    // board, powered by the ball. The ball stays in its corner, spinning at 16× and
+    // slowing to normal; while it spins, every letter flicks through random letters
+    // (numbers count up), and the letters lock left to right in waves, the last one
+    // as the ball reaches its normal spin. The rest of the hero fades in as it settles.
+    function introScoreboard() {
+      var ballVideo = document.querySelector('.visual-primary__video');
+      var spinTime = 3000;
+      var settleTime = 200; // after the last lock, before the real text is put back
+      var upper = 'АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЬЮЯ';
+      var lower = upper.toLowerCase();
+
+      // Each board: its text, and when its letters lock (as a share of spinTime)
+      var boards = [
+        ['.hero-text__title', 0.1, 0.55],
+        ['.hero-text__tagline', 0.3, 0.75],
+        ['.navigation-l1__text > span', 0.45, 0.85],
+        ['.hero-botton-info__title', 0.55, 0.95],
+        ['.hero-botton-info__note', 0.6, 1]
+      ];
+      var boardEls = [];
+      boards.forEach(function (b) {
+        document.querySelectorAll(b[0]).forEach(function (el) { boardEls.push({ el: el, from: b[1], to: b[2] }); });
+      });
+
+      // Hidden until the fonts are in, so letter widths are measured in the real font
+      boardEls.forEach(function (b) { b.el.style.visibility = 'hidden'; });
+      ['.hero-text__buttons', '.event-card', '.change-button'].forEach(function (selector) {
+        document.querySelector(selector).style.opacity = '0';
+      });
+
+      document.fonts.ready.then(function () {
+        // Split each text into one cell per letter or number, each fixed at its final width
+        var cells = [];
+        boardEls.forEach(function (b) {
+          var final = b.el.textContent;
+          b.final = final;
+          b.el.textContent = '';
+          var boardCells = [];
+          final.match(/\d+|\D/g).forEach(function (part) {
+            if (part === ' ') { b.el.appendChild(document.createTextNode(' ')); return; }
+            var span = document.createElement('span');
+            span.textContent = part;
+            b.el.appendChild(span);
+            var kind = /\d/.test(part) ? 'digit'
+              : part !== part.toLowerCase() ? 'upper'
+              : part !== part.toUpperCase() ? 'lower' : null;
+            if (kind) boardCells.push({ span: span, final: part, kind: kind });
+          });
+          boardCells.forEach(function (c) { c.width = c.span.getBoundingClientRect().width; });
+          boardCells.forEach(function (c, j) {
+            c.span.style.cssText = 'display: inline-block; text-align: center; width: ' + c.width + 'px;';
+            var share = boardCells.length === 1 ? 1 : j / (boardCells.length - 1);
+            c.lockAt = (b.from + (b.to - b.from) * share) * spinTime;
+            cells.push(c);
+          });
+          b.el.style.visibility = '';
+        });
+
+        // Ball spin, flicking and locking all run off one clock. A timer rather than
+        // requestAnimationFrame, which can pause and leave the board stuck.
+        var startTime = performance.now();
+        ballVideo.playbackRate = 16;
+        var timer = setInterval(function () {
+          var elapsed = performance.now() - startTime;
+          var p = Math.min(elapsed / spinTime, 1);
+          var rate = 1 + 15 * Math.pow(1 - p, 2);
+          ballVideo.playbackRate = rate;
+
+          cells.forEach(function (c) {
+            if (c.locked) return;
+            if (elapsed >= c.lockAt) {
+              c.locked = true;
+              c.span.textContent = c.final;
+              c.span.animate([
+                { transform: 'translateY(-35%)', opacity: 0.4 },
+                { transform: 'none', opacity: 1 }
+              ], { duration: 140, easing: 'ease-out' });
+            } else if (c.kind === 'digit') {
+              var n = Math.round(Number(c.final) * elapsed / c.lockAt);
+              c.span.textContent = String(n).padStart(c.final.length, '0');
+            } else if (Math.random() < 0.15 + rate / 16) {
+              // Flicks less often as the ball slows
+              var set = c.kind === 'upper' ? upper : lower;
+              c.span.textContent = set[Math.floor(Math.random() * set.length)];
+            }
+          });
+
+          if (elapsed >= spinTime + settleTime) {
+            clearInterval(timer);
+            ballVideo.playbackRate = 1;
+            boardEls.forEach(function (b) { b.el.textContent = b.final; });
+          }
+        }, 40);
+
+        // The rest of the hero fades in as the board settles
+        [['.hero-text__buttons', 0.7], ['.event-card', 0.8], ['.change-button', 0.9]].forEach(function (item) {
+          var el = document.querySelector(item[0]);
+          el.style.opacity = '';
+          el.animate([{ opacity: 0 }, { opacity: 1 }],
+            { duration: 500, delay: item[1] * spinTime, easing: 'ease-out', fill: 'backwards' });
+        });
+      });
+    }
+
+    // Intro draft "Pitch tilt": like a broadcast camera move before kick-off. The
+    // hero's blocks start tilted back as one flat pitch seen from high in the stands,
+    // with the ball spinning in the middle of it. The camera swings down: the pitch
+    // rises to face the viewer, and the ball lifts off and settles into its corner.
+    function introTilt() {
+      var hero = document.querySelector('.hero-section');
+      var ball = document.querySelector('.visual-primary');
+      var ballVideo = document.querySelector('.visual-primary__video');
+      var tilt = 50; // degrees the pitch starts tilted back
+      var depth = 500; // perspective distance, px
+      var fadeTime = 400;
+      var swingStart = 1000;
+      var swingTime = 1400;
+      var liftStart = 1200;
+      var endTime = swingStart + swingTime;
+      var swingEasing = 'cubic-bezier(0.65, 0, 0.35, 1)';
+
+      // Measured from the page. The pitch hinges on the hero's bottom edge.
+      var heroBox = hero.getBoundingClientRect();
+      var ballBox = ball.getBoundingClientRect();
+      var hingeX = heroBox.width / 2;
+      var hingeY = heroBox.height;
+
+      // Where a point of the hero lands on the tilted pitch, and how much it shrinks
+      function onPitch(x, y) {
+        var rel = y - hingeY;
+        var a = tilt * Math.PI / 180;
+        var scale = depth / (depth - rel * Math.sin(a));
+        return { x: hingeX + (x - hingeX) * scale, y: hingeY + rel * Math.cos(a) * scale, scale: scale };
+      }
+
+      // The blocks: one shared hinge and perspective, so they tilt as a single surface
+      ['.hero-text', '.hero-nav', '.event-card', '.hero-botton-info', '.change-button'].forEach(function (selector) {
+        var el = document.querySelector(selector);
+        var box = el.getBoundingClientRect();
+        var origin = (hingeX - (box.left - heroBox.left)) + 'px ' + (hingeY - (box.top - heroBox.top)) + 'px';
+        var tilted = 'perspective(' + depth + 'px) rotateX(' + tilt + 'deg)';
+        el.animate([
+          { transform: tilted, transformOrigin: origin, opacity: 0 },
+          { transform: tilted, transformOrigin: origin, opacity: 1, offset: fadeTime / endTime },
+          { transform: tilted, transformOrigin: origin, opacity: 1, offset: swingStart / endTime, easing: swingEasing },
+          { transform: 'perspective(' + depth + 'px) rotateX(0deg)', transformOrigin: origin, opacity: 1 }
+        ], { duration: endTime, fill: 'backwards' });
+      });
+
+      // The ball starts on the middle of the tilted pitch, at the size it would be there,
+      // then lifts off in an arc (bent through `bend`) to its corner
+      var finalX = ballBox.left - heroBox.left + ballBox.width / 2;
+      var finalY = ballBox.top - heroBox.top + ballBox.height / 2;
+      var spot = onPitch(heroBox.width / 2, heroBox.height / 2);
+      var start = { x: spot.x - finalX, y: spot.y - finalY, scale: spot.scale };
+      var bend = { x: start.x * 0.4, y: -30 };
+      var ballFrames = [];
+      for (var ms = 0; ms <= endTime; ms += 20) {
+        var u = Math.min(Math.max((ms - liftStart) / (endTime - liftStart), 0), 1);
+        var e = u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+        var x = (1 - e) * (1 - e) * start.x + 2 * e * (1 - e) * bend.x;
+        var y = (1 - e) * (1 - e) * start.y + 2 * e * (1 - e) * bend.y;
+        var s = start.scale + (1 - start.scale) * e;
+        ballFrames.push({
+          transform: 'translate(' + x + 'px, ' + y + 'px) scale(' + s + ')',
+          opacity: Math.min(ms / fadeTime, 1),
+          offset: ms / endTime
+        });
+      }
+      ballFrames[ballFrames.length - 1].offset = 1;
+      ball.animate(ballFrames, { duration: endTime, fill: 'backwards' });
+
+      // Spin at 8× on the pitch, slowing to the normal idle spin as it settles.
+      // A timer rather than requestAnimationFrame, which can pause and leave it stuck.
+      ballVideo.playbackRate = 8;
+      var spinStart = performance.now();
+      var spinTimer = setInterval(function () {
+        var p = Math.min((performance.now() - spinStart) / endTime, 1);
+        ballVideo.playbackRate = 1 + 7 * Math.pow(1 - p, 2);
+        if (p === 1) clearInterval(spinTimer);
+      }, 50);
+    }
+
+    // Intro draft "Goal net": seen from behind the goal. A fine diamond net covers
+    // the hero; the ball is struck in from the lower left, growing as it flies at the
+    // viewer, and slams into the net at its corner spot. The net stretches around it,
+    // a ripple runs outward through the mesh, and as the ripple passes the net clears
+    // away and each block of the lobby fades in behind it.
+    function introNet() {
+      var hero = document.querySelector('.hero-section');
+      var ball = document.querySelector('.visual-primary');
+      var ballVideo = document.querySelector('.visual-primary__video');
+      var flightStart = 200;
+      var flightTime = 550;
+      var hitTime = flightStart + flightTime;
+      var settleTime = 250; // ball easing back off the net
+      var rippleTime = 1200; // ripple reaching the farthest corner
+      var clearWidth = 80; // how far behind the ripple the net has fully cleared
+      var mesh = 16; // net hole size, px
+      var bulge = 18; // how far the net stretches around the ball, px
+      var wave = 6; // ripple strength, px
+
+      // Measured from the page: the hit spot is the ball's own spot
+      var heroBox = hero.getBoundingClientRect();
+      var ballBox = ball.getBoundingClientRect();
+      var w = heroBox.width;
+      var h = heroBox.height;
+      var radius = ballBox.width / 2;
+      var hx = ballBox.left - heroBox.left + radius;
+      var hy = ballBox.top - heroBox.top + radius;
+      var reach = Math.hypot(Math.max(hx, w - hx), Math.max(hy, h - hy)) + clearWidth;
+      var endTime = hitTime + rippleTime + 300;
+
+      // How far the ripple has travelled, and its inverse (when it reaches a distance)
+      function rippleAt(ms) {
+        var q = Math.min(Math.max((ms - hitTime) / rippleTime, 0), 1);
+        return reach * (1 - (1 - q) * (1 - q));
+      }
+      function rippleReaches(d) {
+        return hitTime + rippleTime * (1 - Math.sqrt(1 - Math.min(d / reach, 1)));
+      }
+
+      // The net: a canvas over the whole hero, in front of the ball (we're behind the goal)
+      var dpr = window.devicePixelRatio || 1;
+      var canvas = document.createElement('canvas');
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.cssText = 'position: absolute; left: 0; top: 0; width: ' + w + 'px; height: ' + h + 'px; pointer-events: none;';
+      hero.appendChild(canvas);
+      var ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      // Diagonal strands both ways, sampled every 6px so they can bend
+      var strands = [];
+      var step = mesh * Math.SQRT2;
+      for (var c = -h; c <= w + h; c += step) {
+        [1, -1].forEach(function (dir) {
+          var points = [];
+          for (var y = -6; y <= h + 6; y += 6) points.push([c + dir * y, y]);
+          strands.push(points);
+        });
+      }
+
+      // A strand point pushed out from the hit spot by the stretch and the ripple
+      function shift(p, ms, ripple) {
+        var dx = p[0] - hx;
+        var dy = p[1] - hy;
+        var d = Math.hypot(dx, dy) || 1;
+        var since = ms - hitTime;
+        var push = 0;
+        if (since > 0) {
+          var stretch = since < 120 ? since / 120 : Math.exp(-(since - 120) / 250);
+          push += bulge * stretch * Math.exp(-Math.pow(d - radius, 2) / (2 * 30 * 30));
+          push += wave * (1 - ripple / reach) * Math.exp(-Math.pow(d - ripple, 2) / (2 * 14 * 14));
+        }
+        return [p[0] + dx / d * push, p[1] + dy / d * push];
+      }
+
+      var startClock = null;
+      function drawNet(now) {
+        if (startClock === null) startClock = now;
+        var ms = now - startClock;
+        var ripple = rippleAt(ms);
+        ctx.clearRect(0, 0, w, h);
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        strands.forEach(function (points) {
+          points.forEach(function (p, i) {
+            var q = shift(p, ms, ripple);
+            if (i === 0) ctx.moveTo(q[0], q[1]); else ctx.lineTo(q[0], q[1]);
+          });
+        });
+        ctx.stroke();
+        // Clear the net behind the ripple
+        if (ripple > 0) {
+          ctx.globalCompositeOperation = 'destination-out';
+          var fade = ctx.createRadialGradient(hx, hy, Math.max(ripple - clearWidth, 0), hx, hy, ripple);
+          fade.addColorStop(0, 'rgba(0, 0, 0, 1)');
+          fade.addColorStop(1, 'rgba(0, 0, 0, 0)');
+          ctx.fillStyle = fade;
+          ctx.fillRect(0, 0, w, h);
+        }
+        if (ms < endTime) requestAnimationFrame(drawNet);
+        else canvas.remove();
+      }
+      requestAnimationFrame(drawNet);
+      setTimeout(function () { canvas.remove(); }, endTime + 1000); // in case frames were paused
+
+      // The shot: from the lower left, small and far away, speeding up and growing
+      // as it comes at the viewer, hitting the net slightly over full size, then easing back
+      var start = { x: 60 - hx, y: h - 50 - hy, scale: 0.3 };
+      var ballFrames = [];
+      for (var k = 0; k <= 20; k++) {
+        var f = k / 20;
+        var e = f * f;
+        ballFrames.push({
+          transform: 'translate(' + start.x * (1 - e) + 'px, ' + (start.y * (1 - e) - 40 * Math.sin(Math.PI * e)) + 'px) ' +
+            'scale(' + (start.scale + (1.15 - start.scale) * e) + ')',
+          opacity: Math.min(f * 4, 1),
+          offset: (flightStart + f * flightTime) / (hitTime + settleTime)
+        });
+      }
+      ballFrames.unshift({ transform: ballFrames[0].transform, opacity: 0, offset: 0 });
+      ballFrames.push({ transform: 'translate(0, 4px) scale(0.98)', opacity: 1, offset: (hitTime + settleTime * 0.6) / (hitTime + settleTime), easing: 'ease-in-out' });
+      ballFrames.push({ transform: 'none', opacity: 1, offset: 1 });
+      ball.animate(ballFrames, { duration: hitTime + settleTime, easing: 'linear', fill: 'backwards' });
+
+      // Spin at 6× in flight, slowing to the normal idle spin as the net clears.
+      // A timer rather than requestAnimationFrame, which can pause and leave it stuck.
+      ballVideo.playbackRate = 6;
+      var spinStart = performance.now();
+      var spinTimer = setInterval(function () {
+        var p = Math.min((performance.now() - spinStart) / (hitTime + rippleTime), 1);
+        ballVideo.playbackRate = 1 + 5 * Math.pow(1 - p, 2);
+        if (p === 1) clearInterval(spinTimer);
+      }, 50);
+
+      // Each block fades in when the ripple reaches its nearest point
+      ['.hero-text', '.hero-nav', '.event-card', '.hero-botton-info', '.change-button'].forEach(function (selector) {
+        var el = document.querySelector(selector);
+        var box = el.getBoundingClientRect();
+        var nx = Math.min(Math.max(hx, box.left - heroBox.left), box.right - heroBox.left);
+        var ny = Math.min(Math.max(hy, box.top - heroBox.top), box.bottom - heroBox.top);
+        el.animate([{ opacity: 0 }, { opacity: 1 }],
+          { duration: 400, delay: rippleReaches(Math.hypot(nx - hx, ny - hy)), easing: 'ease-out', fill: 'backwards' });
+      });
+    }
+
+    // Intro version 2, refined: Drop and bounce with more physical detail.
+    // The ball drops from above the top of the screen, past the header, and bounces
+    // three times into its corner. It stretches tall just before each landing and
+    // squashes on it; a soft shadow under it grows and darkens as it comes down;
+    // each landing kicks its spin faster, sends a flat gold ring out along the
+    // ground, and brings in the next content; the first landing jolts the hero.
+    function introBounceRefined() {
+      var hero = document.querySelector('.hero-section');
+      var ball = document.querySelector('.visual-primary');
+      var ballVideo = document.querySelector('.visual-primary__video');
+      var waitTime = 100;
+      var bounces = [{ height: 36, time: 380 }, { height: 12, time: 230 }, { height: 4, time: 130 }];
+      // One value per landing: the drop, then each bounce
+      var squash = [0.18, 0.10, 0.06, 0.03]; // how much each landing flattens the ball
+      var stretch = [0.10, 0.06, 0.03, 0]; // how tall and thin it gets just before
+      var spinKick = [1, 0.6, 0.3, 0.15]; // extra spin speed each landing gives (on top of 1×)
+      var ringScale = [2.4, 1.9, 1.5, 1.25]; // how far each landing's ring spreads
+      var stretchTime = 70; // before a landing
+      var squashTime = 100; // after a landing
+
+      // Measured from the page: where the ball sits, and the ground under it
+      var heroBox = hero.getBoundingClientRect();
+      var ballBox = ball.getBoundingClientRect();
+      var radius = ballBox.width / 2;
+      var cx = ballBox.left - heroBox.left + radius;
+      var groundY = ballBox.bottom - heroBox.top;
+
+      // Start just above the top of the screen and fall fast, speeding up sharply
+      // (`fallCurve`: 2 would be plain gravity, higher starts slower and hits harder)
+      var startY = -ballBox.bottom - 10;
+      var fallTime = 450;
+      var fallCurve = 3;
+      var fromLeft = 110; // how far left of its spot the ball starts, px
+
+      // When each landing happens
+      var landings = [waitTime + fallTime];
+      bounces.forEach(function (b) { landings.push(landings[landings.length - 1] + b.time); });
+      var bounceTime = landings[landings.length - 1] + squashTime;
+
+      // Height above its spot: a fall from rest, then one arc per bounce
+      function heightAt(ms) {
+        if (ms < waitTime) return startY;
+        if (ms < landings[0]) {
+          var p = (ms - waitTime) / fallTime;
+          return startY * (1 - Math.pow(p, fallCurve));
+        }
+        for (var i = 0; i < bounces.length; i++) {
+          if (ms < landings[i + 1]) {
+            var q = (ms - landings[i]) / bounces[i].time;
+            return -bounces[i].height * (1 - Math.pow(2 * q - 1, 2));
+          }
+        }
+        return 0;
+      }
+
+      // Sideways: it comes in from the left and drifts right to its spot, covering most
+      // of the distance in the fall and less with each bounce
+      function xAt(ms) {
+        var u = Math.min(Math.max((ms - waitTime) / (bounceTime - waitTime), 0), 1);
+        return -fromLeft * Math.pow(1 - u, 2.5);
+      }
+
+      // Shape: negative stretches tall just before a landing, positive squashes just after
+      function shapeAt(ms) {
+        for (var i = 0; i < landings.length; i++) {
+          var since = ms - landings[i];
+          if (since >= 0 && since < squashTime) return squash[i] * Math.sin(Math.PI * since / squashTime);
+          if (since >= -stretchTime && since < 0) return -stretch[i] * (1 + since / stretchTime);
+        }
+        return 0;
+      }
+
+      // The ball stays the front-most thing on the page: let it out of the hero's frame
+      // and above the header until it has finished bouncing (the first bounce rises
+      // above the hero's top edge)
+      hero.style.overflow = 'visible';
+      hero.style.zIndex = '1';
+      setTimeout(function () { hero.style.overflow = ''; hero.style.zIndex = ''; }, bounceTime);
+
+      // The ball's shadow (part of the page, see .visual-primary-shadow): small, faint
+      // and further right while the ball is high (the light comes from the top left),
+      // full and in place as it lands, and it stays there once the ball has stopped
+      var shadow = document.querySelector('.visual-primary-shadow');
+
+      // Ball and shadow, sampled every 10ms; the squash and stretch keep the ball's bottom on the ground
+      var ballFrames = [];
+      var shadowFrames = [];
+      for (var ms = 0; ms <= bounceTime; ms += 10) {
+        var y = heightAt(ms);
+        var d = shapeAt(ms);
+        ballFrames.push({
+          transform: 'translate(' + xAt(ms) + 'px, ' + (y + radius * d) + 'px) scale(' + (1 + d) + ', ' + (1 - d) + ')',
+          offset: ms / bounceTime
+        });
+        var near = Math.min(Math.max(1 - -y / 200, 0), 1); // 1 on the ground, 0 from 200px up
+        shadowFrames.push({
+          transform: 'translateX(' + (xAt(ms) + Math.min(-y * 0.3, 40)) + 'px) scale(' + (0.4 + 0.6 * near) + ', 1)',
+          opacity: 0.1 + 0.9 * near,
+          offset: ms / bounceTime
+        });
+      }
+      ballFrames[ballFrames.length - 1].offset = 1;
+      shadowFrames[shadowFrames.length - 1].offset = 1;
+      ball.animate(ballFrames, { duration: bounceTime, fill: 'backwards' });
+      shadow.animate(shadowFrames, { duration: bounceTime, fill: 'backwards' });
+
+      // Each landing: a flat gold ring (the nav's #f5d584) spreads along the ground behind the ball
+      landings.forEach(function (at, i) {
+        var ring = document.createElement('div');
+        ring.className = 'intro-temp';
+        var ringHeight = radius * 2 * 0.28;
+        ring.style.cssText = 'position: absolute; left: ' + (cx - radius) + 'px; top: ' + (groundY - ringHeight / 2) + 'px; ' +
+          'width: ' + radius * 2 + 'px; height: ' + ringHeight + 'px; border: 1px solid #f5d584; ' +
+          'border-radius: 50%; opacity: 0; pointer-events: none;';
+        hero.insertBefore(ring, ball);
+        ring.animate([
+          { transform: 'translateX(' + xAt(at) + 'px) scale(0.6)', opacity: 0.4 },
+          { transform: 'translateX(' + xAt(at) + 'px) scale(' + ringScale[i] + ')', opacity: 0 }
+        ], { duration: 700, delay: at, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)' })
+          .onfinish = function () { ring.remove(); };
+      });
+
+      // The first landing jolts the hero
+      hero.animate([
+        { transform: 'none' },
+        { transform: 'translateY(2px)', offset: 0.25 },
+        { transform: 'translateY(-1px)', offset: 0.6 },
+        { transform: 'none' }
+      ], { duration: 180, delay: landings[0] });
+
+      // Each landing kicks the spin faster, easing back to the normal idle spin.
+      // A timer rather than requestAnimationFrame, which can pause and leave it stuck.
+      var spinStart = performance.now();
+      var spinTimer = setInterval(function () {
+        var t = performance.now() - spinStart;
+        var rate = 1;
+        landings.forEach(function (at, i) {
+          if (t > at) rate += spinKick[i] * Math.exp(-(t - at) / 300);
+        });
+        ballVideo.playbackRate = rate;
+        if (t > bounceTime + 1500) { clearInterval(spinTimer); ballVideo.playbackRate = 1; }
+      }, 50);
+
+      // Content drops in with the landings
+      function bringIn(selector, delay) {
+        document.querySelector(selector).animate([
+          { opacity: 0, transform: 'translateY(-8px) scale(0.97)' },
+          { opacity: 1, transform: 'none' }
+        ], { duration: 450, delay: delay, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'backwards' });
+      }
+      bringIn('.hero-text__title', landings[0]);
+      bringIn('.hero-text__tagline', landings[1]);
+      bringIn('.hero-text__buttons', landings[1] + 60);
+      bringIn('.hero-nav', landings[2]);
+      bringIn('.event-card', landings[2] + 60);
+      bringIn('.hero-botton-info', landings[2] + 120);
+      bringIn('.change-button', landings[2] + 120);
+    }
+
+    // Starting the intro. The hero is hidden from the first paint (see <head>) and
+    // shown in the same moment the intro starts, so the finished lobby never flashes.
+    // The intro waits for the ball video to be ready, but never more than 2.5s.
+    var intros = {
+      '#intro-1': introKickoff,
+      '#intro-2': introBounceRefined,
+      '#intro-2-old': introBounce,
+      '#intro-light': introLight,
+      '#intro-roll': introRoll,
+      '#intro-chalk': introChalk,
+      '#intro-scoreboard': introScoreboard,
+      '#intro-tilt': introTilt,
+      '#intro-net': introNet
+    };
+    var introVideo = document.querySelector('.visual-primary__video');
+    var introStarted = false;
+
+    function startIntro() {
+      if (introStarted) return;
+      introStarted = true;
+      try { sessionStorage.setItem('fens-intro-played', '1'); } catch (e) {}
+      var intro = intros[location.hash] || introBounceRefined;
+      // Reveal first, so the intro measures everything in its real place (the ball
+      // waits above the screen until now); nothing is drawn between the two
+      document.documentElement.classList.remove('intro-pending');
+      document.querySelector('.hero-section').animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200 });
+      intro();
+      // Intros other than version 2 don't place the ball's shadow: fade it in once
+      // everything they animate has finished, so it never sits there without the ball
+      if (intro !== introBounceRefined) {
+        var introEnd = 0;
+        document.getAnimations().forEach(function (a) {
+          var timing = a.effect.getComputedTiming();
+          if (timing.iterations === 1) introEnd = Math.max(introEnd, timing.endTime);
+        });
+        document.querySelector('.visual-primary-shadow').animate([{ opacity: 0 }, { opacity: 1 }],
+          { duration: 400, delay: introEnd, fill: 'backwards' });
+      }
+      document.addEventListener('pointerdown', skipIntro, { once: true });
+    }
+
+    // A tap jumps every running part of the intro to its end
+    function skipIntro() {
+      document.getAnimations().forEach(function (a) {
+        if (a.effect.getComputedTiming().iterations === 1) a.finish();
+      });
+      document.querySelectorAll('.intro-temp').forEach(function (el) { el.remove(); });
+      var hero = document.querySelector('.hero-section');
+      hero.style.overflow = '';
+      hero.style.zIndex = '';
+      introVideo.playbackRate = 1;
+    }
+
+    if (document.documentElement.classList.contains('intro-pending')) {
+      if (introVideo.readyState >= 3) startIntro();
+      else {
+        introVideo.addEventListener('canplay', startIntro, { once: true });
+        setTimeout(startIntro, 2500);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "fens-league",
+      "url": "http://localhost:8420",
+      "port": 8420
+    }
+  ]
+}

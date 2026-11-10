@@ -1,0 +1,527 @@
+/* All values come from the Figma file "Last Fan" (lobby frame 178:40236) */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #171818;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* "Главно Лоби - work from here": top-level layers are positioned like Figma */
+.main-lobby {
+  position: relative;
+  width: 375px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: #171818;
+  overflow: hidden;
+}
+
+/* ---------- Lobby ---------- */
+.lobby {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 375px;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* gradient-bgr (Radial / Mobile) */
+.gradient-bgr {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 375px;
+  height: 180px;
+  background: radial-gradient(243px 116.64px at 187px 0, #e42313 0%, #171818 100%);
+}
+
+/* ---------- header ---------- */
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  width: 375px;
+}
+
+/* app-header-layout-2 */
+.app-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  padding: 0 10px;
+}
+
+.app-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: #ffffff1a;
+}
+
+.promo-item,
+.sign-up,
+.sign-in {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border: 1px solid;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.promo-item,
+.sign-in {
+  border-color: #ffffff40;
+  border-radius: 120px;
+  background: #ffffff0d;
+  color: #f5d584;
+}
+
+.sign-up {
+  border-color: #ffffff00;
+  border-radius: 2px;
+  color: #efefef;
+}
+
+.auth {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.logo {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 0.38px);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-logo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 72px;
+  height: 30px;
+}
+
+.brand-logo__img {
+  position: relative;
+  flex: 1 0 0;
+  aspect-ratio: 82 / 34;
+}
+
+.brand-logo__img img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
+/* sub-header-l1-variant-1 */
+.sub-header {
+  display: flex;
+  align-items: center;
+  width: 375px;
+  padding: 0 0 10px 10px;
+  background: #32333400;
+}
+
+.sub-header__items {
+  display: flex;
+  flex: 1 0 0;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 40px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.sub-header__items::-webkit-scrollbar { display: none; }
+
+.nav-link {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+  color: #c9c9c9;
+  white-space: nowrap;
+}
+
+.nav-link.is-active {
+  color: #f5d584;
+}
+
+.nav-link.is-active::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 0;
+  height: 3px;
+  border-radius: 120px 120px 0 0;
+  background: #f5d584;
+}
+
+/* ---------- hero-section ---------- */
+.hero-section {
+  position: absolute;
+  top: 100px;
+  left: 0;
+  width: 375px;
+  height: 379px;
+  border-radius: 0 0 24px 24px;
+  background: linear-gradient(to bottom, #17181800 10.833%, #272727 100%);
+  overflow: hidden;
+}
+
+/* change-button */
+.change-button {
+  position: absolute;
+  top: 337px;
+  left: 305px;
+  width: 60px;
+  height: 32px;
+  border: 1px solid #ffffff0d;
+  border-radius: 6px;
+  background: #ffffff0d;
+  font-family: inherit;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.change-button__icon {
+  position: absolute;
+  top: 2px;
+  left: 22px;
+  width: 14px;
+  height: 14px;
+  overflow: hidden;
+}
+
+.change-button__icon img {
+  position: absolute;
+  top: -1.56%;
+  left: 1.56%;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
+.change-button__text {
+  position: absolute;
+  top: 16px;
+  left: 6px;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: normal;
+  color: #ffffff;
+  opacity: 0.5;
+  white-space: nowrap;
+}
+
+/* hero-botton-info */
+.hero-botton-info {
+  position: absolute;
+  top: 338px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-botton-info__icon {
+  display: block;
+  flex-shrink: 0;
+  width: 31px;
+  height: 32px;
+}
+
+.hero-botton-info__texts {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  line-height: normal;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.hero-botton-info__title {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 15px;
+}
+
+.hero-botton-info__note {
+  font-size: 11px;
+  line-height: 13px;
+  font-weight: 400;
+  opacity: 0.5;
+}
+
+/* event-card */
+.event-card {
+  position: absolute;
+  top: 188px;
+  left: 10px;
+  width: 355px;
+  height: 140px;
+  background: #ffffff;
+}
+
+/* hero-nav */
+.hero-nav {
+  position: absolute;
+  top: 151px;
+  left: 0;
+  width: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* navigation-l1 */
+.navigation-l1 {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 5px 5px;
+}
+
+.navigation-l1__text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 22px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 22px;
+  color: #ffffff;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.navigation-l1__text > span {
+  opacity: 0.7;
+}
+
+.navigation-l1__dot {
+  display: block;
+  width: 4px;
+  height: 4px;
+}
+
+.navigation-l1::after {
+  content: "";
+  position: absolute;
+  top: 24px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 120px 120px 0 0;
+  background: #ffffff;
+  opacity: 0.1;
+}
+
+.navigation-l1.is-active .navigation-l1__text {
+  font-weight: 500;
+}
+
+.navigation-l1.is-active .navigation-l1__text > span {
+  opacity: 1;
+}
+
+.navigation-l1.is-active::after {
+  opacity: 1;
+}
+
+/* hero-text */
+.hero-text {
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  width: 248px;
+}
+
+.hero-text__label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  color: #ffffff;
+}
+
+.hero-text__title {
+  width: 100%;
+  font-family: "Montserrat", sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  line-height: normal;
+  text-shadow: 0 0 12px #30303099;
+}
+
+.hero-text__tagline {
+  width: 100%;
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.hero-text__buttons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chip {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 8px;
+  background: #ffffff0d;
+}
+
+.chip--league {
+  gap: 6px;
+  box-shadow: 0 0 6px 0 #00000026;
+}
+
+/* Gold stroke replaced by a steady 6% white border; the moving highlight runs on top of it */
+.chip--how-to-play {
+  position: relative;
+  border: 1px solid #ffffff0f;
+}
+
+/* A white highlight that travels around the 1px stroke */
+.chip__ring {
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  border-radius: 8px;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+.chip__ring::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  background: conic-gradient(#ffffff00 0deg 260deg, #ffffff73 310deg, #ffffff00 360deg);
+  animation: chip-ring-spin 8s linear infinite;
+}
+
+@keyframes chip-ring-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip__ring::before { animation: none; }
+}
+
+.chip__flag {
+  display: block;
+  width: 14px;
+  height: 14px;
+}
+
+.chip__text {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 22px;
+  color: #ffffff;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+/* visual-primary shadow (not in Figma): on the ground under the ball, shifted right
+   and stretched as the light comes from the top left */
+.visual-primary-shadow {
+  position: absolute;
+  top: 116px;
+  left: 291px;
+  width: 140px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, #000000b3, #00000000);
+  pointer-events: none;
+}
+
+/* visual-primary */
+.visual-primary {
+  position: absolute;
+  top: 13px;
+  left: 280px;
+  width: 110px;
+  height: 110px;
+  border-radius: 391px;
+  overflow: hidden;
+}
+
+/* 330×330 video (3×), the ball fills the frame */
+.visual-primary__video {
+  display: block;
+  width: 110px;
+  height: 110px;
+}
+
+/* Entry animation: the hero, background included, stays hidden until its intro starts
+   (class set in <head>), so its empty panel never shows while the ball video loads */
+.intro-pending .hero-section {
+  visibility: hidden;
+}
+
+/* The ball waits above the screen rather than invisible at its spot, so the video is
+   first drawn off-screen (it can show as a black square for a moment when it first appears) */
+.intro-pending .hero-section > .visual-primary {
+  visibility: visible;
+  transform: translateY(-1000px);
+}
