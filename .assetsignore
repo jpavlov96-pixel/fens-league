@@ -1,0 +1,8 @@
+# Files in the repo that the Cloudflare site must not serve
+.assetsignore
+.gitignore
+.claude
+AGENTS.md
+CLAUDE.md
+HANDOFF.md
+serve.py
