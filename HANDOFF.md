@@ -10,9 +10,11 @@
 
 ## Unfinished / waiting on the user
 - Hosting: user wants it on GitHub + free hosting with a password. Recommended a private GitHub repo + Cloudflare Pages with a small password check (free). 2026-11-10: git repo made (branch `main`, logo in `.gitignore`) and pushed to private https://github.com/jpavlov96-pixel/fens-league; Cloudflare Pages still to do. `gh` isn't installed; SSH to GitHub works (account `jpavlov96-pixel`).
-- iPhone/Safari can't show the WebM's transparency: needs an HEVC-with-alpha .mov (user's export was ~100MB; re-encode to ~3MB with ffmpeg `hevc_videotoolbox`, ffmpeg not installed).
+- 2026-11-10: final ball videos from the user (`~/Downloads/Juli_Ball2/ball_01.webm` / `.mov`, 330×330, 21.33s, 30fps). WebM swapped in as-is (old one in Trash). The 135MB PNG-codec .mov was re-encoded to `assets/visual-primary.mov`, HEVC with alpha at 1 Mbps (3.5MB), and the `<video>` now has a `video/quicktime; codecs="hvc1"` source first (Safari takes it, Chrome/Firefox skip to the WebM). Not yet checked on a real iPhone. The ball shows the EGT DIGITAL logo; the user is OK with that on the hosted site.
+  - How it was encoded: ffmpeg/brew aren't installed, `avconvert`'s alpha preset rejects the file, and `swift` is broken on this Mac (Command Line Tools modulemap clash). What worked: JXA (`osascript -l JavaScript`) with AVFoundation, first copying each PNG sample out of the .mov, then encoding with AVAssetWriter (codec `muxa`, pixel buffer adaptor). Classes must be fetched with `$.NSClassFromString`.
 - Draft intros (`#intro-1`, `-light`, `-roll`, `-chalk`, `-scoreboard`, `-tilt`, `-net`, `-2-old`) are still in the code; user may want them removed.
-- Still open from before: event-card is an empty white box; page is fixed at 375px.
+- Still open from before: event-card is an empty white box.
+- 2026-11-10: the 375px width restriction is gone. The page fills any width: at 375 every element measures exactly as before; on desktop things just stretch (text left, ball on the right edge), not designed yet. Intro checked at 1440px: the ball lands in its new spot.
 - The claude.ai link still stores the 360 old PNG frames (unused).
 
 ## Decisions and gotchas

@@ -19,4 +19,4 @@ HTML/CSS prototype of the "Фенска Лига" lobby from the Figma file "Las
 - **Reload the preview** after every change the user can see.
 - **Don't publish** anything (claude.ai links or otherwise) unless the user asks again.
 - Build only what's asked, section by section, and **re-read the Figma structure first**, because it changes between sessions.
-- Don't publish anything showing the real EGT Digital logo or branding.
+- EGT Digital branding: the user is OK with it showing on the hosted site (2026-11-10), including the logo on the ball video. The header logo file `egt-digital-logo.svg` is still kept out of git.
