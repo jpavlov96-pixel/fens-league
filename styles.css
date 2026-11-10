@@ -10,10 +10,12 @@ body {
 
 a { color: inherit; text-decoration: none; }
 
-/* "Главно Лоби - work from here": top-level layers are positioned like Figma */
+/* "Главно Лоби - work from here": top-level layers are positioned like Figma.
+   Figma's frame is 375px; the page stretches to the window, with the elements on the
+   right of the frame pinned to the right edge instead (desktop isn't designed yet) */
 .main-lobby {
   position: relative;
-  width: 375px;
+  width: 100%;
   min-height: 100vh;
   margin: 0 auto;
   background: #171818;
@@ -25,7 +27,7 @@ a { color: inherit; text-decoration: none; }
   position: absolute;
   top: 0;
   left: 0;
-  width: 375px;
+  width: 100%;
   height: 100%;
   overflow: hidden;
 }
@@ -35,9 +37,10 @@ a { color: inherit; text-decoration: none; }
   position: absolute;
   top: 0;
   left: 0;
-  width: 375px;
+  width: 100%;
   height: 180px;
-  background: radial-gradient(243px 116.64px at 187px 0, #e42313 0%, #171818 100%);
+  /* centred: 187px of the 375px frame */
+  background: radial-gradient(243px 116.64px at calc(50% - 0.5px) 0, #e42313 0%, #171818 100%);
 }
 
 /* ---------- header ---------- */
@@ -47,7 +50,7 @@ a { color: inherit; text-decoration: none; }
   left: 0;
   display: flex;
   flex-direction: column;
-  width: 375px;
+  width: 100%;
 }
 
 /* app-header-layout-2 */
@@ -143,7 +146,7 @@ a { color: inherit; text-decoration: none; }
 .sub-header {
   display: flex;
   align-items: center;
-  width: 375px;
+  width: 100%;
   padding: 0 0 10px 10px;
   background: #32333400;
 }
@@ -194,7 +197,7 @@ a { color: inherit; text-decoration: none; }
   position: absolute;
   top: 100px;
   left: 0;
-  width: 375px;
+  width: 100%;
   height: 379px;
   border-radius: 0 0 24px 24px;
   background: linear-gradient(to bottom, #17181800 10.833%, #272727 100%);
@@ -205,7 +208,7 @@ a { color: inherit; text-decoration: none; }
 .change-button {
   position: absolute;
   top: 337px;
-  left: 305px;
+  right: 10px; /* Figma: left 305px of 375 */
   width: 60px;
   height: 32px;
   border: 1px solid #ffffff0d;
@@ -292,7 +295,7 @@ a { color: inherit; text-decoration: none; }
   position: absolute;
   top: 188px;
   left: 10px;
-  width: 355px;
+  right: 10px; /* Figma: 355px wide */
   height: 140px;
   background: #ffffff;
 }
@@ -302,7 +305,7 @@ a { color: inherit; text-decoration: none; }
   position: absolute;
   top: 151px;
   left: 0;
-  width: 380px;
+  right: -5px; /* Figma: 380px wide, 5px past the 375 frame */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -487,7 +490,7 @@ a { color: inherit; text-decoration: none; }
 .visual-primary-shadow {
   position: absolute;
   top: 116px;
-  left: 291px;
+  right: -56px; /* left 291px of the 375 frame */
   width: 140px;
   height: 14px;
   border-radius: 50%;
@@ -499,7 +502,7 @@ a { color: inherit; text-decoration: none; }
 .visual-primary {
   position: absolute;
   top: 13px;
-  left: 280px;
+  right: -15px; /* Figma: left 280px of 375 */
   width: 110px;
   height: 110px;
   border-radius: 391px;
