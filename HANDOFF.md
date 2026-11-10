@@ -9,7 +9,7 @@
 - Republished the private logo-free copy: https://claude.ai/artifact/FXd8F2BLribqPFZ237YxoT (up to date as of today).
 
 ## Unfinished / waiting on the user
-- Hosting: user wants it on GitHub + free hosting with a password. Recommended a private GitHub repo + Cloudflare Pages with a small password check (free). 2026-11-10: local git repo made (branch `main`, logo in `.gitignore`); GitHub repo + push and Cloudflare Pages still to do. `gh` isn't installed; SSH to GitHub works (account `jpavlov96-pixel`).
+- Hosting: user wants it on GitHub + free hosting with a password. Recommended a private GitHub repo + Cloudflare Pages with a small password check (free). 2026-11-10: git repo made (branch `main`, logo in `.gitignore`) and pushed to private https://github.com/jpavlov96-pixel/fens-league; Cloudflare Pages still to do. `gh` isn't installed; SSH to GitHub works (account `jpavlov96-pixel`).
 - iPhone/Safari can't show the WebM's transparency: needs an HEVC-with-alpha .mov (user's export was ~100MB; re-encode to ~3MB with ffmpeg `hevc_videotoolbox`, ffmpeg not installed).
 - Draft intros (`#intro-1`, `-light`, `-roll`, `-chalk`, `-scoreboard`, `-tilt`, `-net`, `-2-old`) are still in the code; user may want them removed.
 - Still open from before: event-card is an empty white box; page is fixed at 375px.
