@@ -1,0 +1,307 @@
+/* <event-container>: Figma component set "event-container" (276:9189), file "Last Fan".
+   Variants: Match Outcome / Correct Score × Default / Locked. All values from Figma,
+   colours as plain hex. Markup is built by event-container.js. */
+
+event-container {
+  display: block;
+  width: 100%;
+}
+
+.event {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 0 8px 8px;
+}
+
+:where(.event) button {
+  font: inherit;
+  background: none;
+  border: 0;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+:where(.event) button:disabled { cursor: default; }
+
+.event img { display: block; }
+
+/* bgr-frame */
+.event__bgr {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* content-top */
+.event__top {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+}
+
+/* time-stamp */
+.event__time {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 250px;
+  height: 18px;
+  padding: 8px 10px;
+}
+
+.event__time-bgr {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(180deg);
+}
+
+.event__time-text {
+  position: relative;
+  flex: 1 0 0;
+  overflow: hidden;
+  font-size: 11px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 12px;
+  color: #000000;
+  opacity: 0.65;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* teams */
+.event__teams {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+}
+
+.event__crest {
+  flex-shrink: 0;
+  width: 114px;
+  height: 68px;
+  object-fit: fill; /* like Figma: the square image is stretched to the 114 × 68 slot */
+}
+
+/* Figma shows standard Cyrillic letters; with lang="bg" Montserrat would switch to its Bulgarian forms */
+.event__vs,
+.event__score { font-feature-settings: "locl" 0; }
+
+/* Match Outcome: "vs" */
+.event__vs {
+  display: flex;
+  flex: 1 0 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 1px;
+  height: 42px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: normal;
+  color: #b9b9b973;
+}
+
+/* Correct Score: "3 : 0" */
+.event__score {
+  display: flex;
+  flex: 1 0 0;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 1px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 34px;
+  font-weight: 800;
+  line-height: normal;
+  color: #434343;
+  text-align: center;
+}
+
+.event__score-num { width: 24px; }
+.event__score-colon { width: 13.467px; }
+
+.event--locked .event__score { opacity: 0.5; }
+
+/* btns */
+.event__btns {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* change-market: the empty middle, under the market-change-btn */
+.event__btns-gap {
+  flex: 1 0 0;
+  align-self: stretch;
+}
+
+/* team-btn */
+.event__team-btn {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 114px;
+  height: 34px;
+  padding: 2px 10px;
+  border: 1px solid #a7a7a7;
+  border-radius: 8px;
+  background: #ffffff80;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+  color: #2b2b2b;
+  text-align: center;
+}
+
+/* picked team */
+.event__team-btn.is-selected {
+  border-color: #ffffff26;
+  background: #19b14e;
+  box-shadow: 0 0 6px #19b14ebf;
+  color: #ffffff;
+  text-shadow: 0 0 3px #00000059;
+}
+
+/* picked team, Locked */
+.event--locked .event__team-btn.is-selected {
+  border-color: #19b14e;
+  background: #ffffff40;
+  box-shadow: none;
+  color: #2b2b2b;
+  text-shadow: none;
+}
+
+/* btns-left / btns-right: Correct Score's score arrows */
+.event__arrows {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+}
+
+/* arrow-btn */
+.event__arrow-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 34px;
+  border: 1px solid #a7a7a7;
+  border-radius: 8px;
+  background: #ffffff80;
+}
+
+/* chavron-default, 15 × 15 */
+.event__arrow-icon {
+  position: relative;
+  width: 15px;
+  height: 15px;
+}
+
+.event__arrow-icon img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* the down chevron is the 15 × 8.44 icon layer inside the 15 × 15 frame */
+.event__arrow-icon--down img {
+  top: 22.92%;
+  bottom: 20.83%;
+  height: 56.25%;
+}
+
+/* market-change-btn */
+.event__market-btn {
+  position: absolute;
+  bottom: 2px;
+  left: 38.03%;
+  right: 38.03%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 50px;
+  background: #d4d4d4;
+}
+
+.event__market-btn img { flex-shrink: 0; }
+
+.event__market-text {
+  display: flex;
+  flex: 1 0 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 1px;
+  height: 22px;
+  overflow: hidden;
+  font-size: 11px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 11px;
+  color: #2b2b2b;
+  text-align: center;
+}
+
+/* Match Outcome, Locked: no icon, no gap, "Заключен за прогнози" at 75% */
+.event__market-btn.is-locked { gap: 0; }
+.event__market-btn.is-locked .event__market-text { opacity: 0.75; }
+
+/* trump-cards */
+.event__trump {
+  position: absolute;
+  top: -10px;
+  right: -7px;
+  width: 30px;
+  height: 40px;
+}
+
+.event__trump-blur {
+  position: absolute;
+  top: calc(50% - 4px);
+  left: 50%;
+  width: 60px;   /* 20px circle plus the SVG's blur room (inset -100%) */
+  height: 60px;
+  max-width: none;
+  transform: translate(-50%, -50%);
+}
+
+.event__trump-card {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.event__trump-card img {
+  flex: none;
+  object-fit: cover;
+  max-width: none;
+}
+
+.event__trump-card--1 { top: 0; left: 0.72px; width: 29.277px; height: 39.483px; }
+.event__trump-card--1 img { width: 24.22px; height: 36.33px; transform: rotate(8.42deg); }
+.event__trump-card--2 { top: 1.53px; left: 2.29px; width: 24.878px; height: 36.383px; }
+.event__trump-card--2 img { width: 23.769px; height: 35.653px; transform: rotate(1.8deg); }
+.event__trump-card--3 { top: 1.02px; left: 0; width: 29.131px; height: 38.977px; }
+.event__trump-card--3 img { width: 23.769px; height: 35.653px; transform: rotate(9.14deg); }

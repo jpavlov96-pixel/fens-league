@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Компоненти</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="components/event-container.css">
+  <script src="components/event-container.js"></script>
+  <style>
+    /* Showcase page only: the four variants of <event-container>, laid out like Figma's
+       component set (276:9189): 355px wide, 20px apart, 20px padding */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #171818;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      color: #929295;
+    }
+    .showcase {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 395px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .showcase h2 {
+      margin-bottom: 10px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="showcase">
+    <section>
+      <h2>Variant=Match Outcome, State=Default</h2>
+      <event-container variant="match-outcome" state="default" trump-card></event-container>
+    </section>
+    <section>
+      <h2>Variant=Correct Score, State=Default</h2>
+      <event-container variant="correct-score" state="default" trump-card></event-container>
+    </section>
+    <section>
+      <h2>Variant=Match Outcome, State=Locked</h2>
+      <event-container variant="match-outcome" state="locked" trump-card></event-container>
+    </section>
+    <section>
+      <h2>Variant=Correct Score, State=Locked</h2>
+      <event-container variant="correct-score" state="locked" trump-card></event-container>
+    </section>
+  </div>
+</body>
+</html>
