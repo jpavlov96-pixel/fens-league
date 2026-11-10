@@ -122,7 +122,8 @@
       <nav class="sub-header" aria-label="Main">
         <div class="sub-header__items">
           <a class="nav-link" href="#in-play">In Play</a>
-          <a class="nav-link is-active" href="#fen-league" aria-current="page">Fen League</a>
+          <!-- Figma says "Fen League"; the user renamed it -->
+          <a class="nav-link is-active" href="#fens-league" aria-current="page">Fens League</a>
           <a class="nav-link" href="#casino">Casino</a>
           <a class="nav-link" href="#live-casino">Live Casino</a>
           <a class="nav-link" href="#virtuals">Virtuals</a>
@@ -922,7 +923,11 @@
     // squashes on it; a soft shadow under it grows and darkens as it comes down;
     // each landing kicks its spin faster, sends a flat gold ring out along the
     // ground, and brings in the next content; the first landing jolts the hero.
+    var bounceTimers = []; // timers of the last run, cleared when it's replayed
+
     function introBounceRefined() {
+      bounceTimers.forEach(clearTimeout);
+      bounceTimers = [];
       var hero = document.querySelector('.hero-section');
       var ball = document.querySelector('.visual-primary');
       var ballVideo = document.querySelector('.visual-primary__video');
@@ -993,7 +998,7 @@
       // above the hero's top edge)
       hero.style.overflow = 'visible';
       hero.style.zIndex = '1';
-      setTimeout(function () { hero.style.overflow = ''; hero.style.zIndex = ''; }, bounceTime);
+      bounceTimers.push(setTimeout(function () { hero.style.overflow = ''; hero.style.zIndex = ''; }, bounceTime));
 
       // The ball's shadow (part of the page, see .visual-primary-shadow): small, faint
       // and further right while the ball is high (the light comes from the top left),
@@ -1058,6 +1063,7 @@
         ballVideo.playbackRate = rate;
         if (t > bounceTime + 1500) { clearInterval(spinTimer); ballVideo.playbackRate = 1; }
       }, 50);
+      bounceTimers.push(spinTimer);
 
       // Content drops in with the landings
       function bringIn(selector, delay) {
@@ -1127,6 +1133,16 @@
       hero.style.zIndex = '';
       introVideo.playbackRate = 1;
     }
+
+    // Every tap on "Fens League" plays the intro (version 2) again from the start;
+    // a tap during it still skips to the end
+    function replayIntro() {
+      skipIntro();
+      document.querySelector('.hero-section').animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200 });
+      introBounceRefined();
+      document.addEventListener('pointerdown', skipIntro, { once: true });
+    }
+    document.querySelector('.nav-link[href="#fens-league"]').addEventListener('click', replayIntro);
 
     if (document.documentElement.classList.contains('intro-pending')) {
       if (introVideo.readyState >= 3) startIntro();
