@@ -1,4 +1,4 @@
-# Handoff — 2026-11-10 (evening, second laptop)
+# Handoff — 2026-11-10 (evening, second laptop) — end of day
 
 ## Done this session
 - Repo cloned on a second laptop into `~/Documents/fens-league` over HTTPS (the repo is publicly readable). It now has its own GitHub SSH key (`~/.ssh/id_ed25519_github`), so pushing works from both computers.
@@ -12,6 +12,12 @@
 ## Open
 - Trump card PNGs are ~2.5MB each for a 24px image.
 - Легенда has no open state in Figma.
+- Intro also: the grey prediction panel squashes on each landing (`panelGive` = [0.08, 0.04, 0.02, 0.008]); the red glow stays static. No blue tap flash anywhere.
+- `/endtheday` exists only on the other computer (personal command), not on this laptop.
+
+## First task next time
+- On the other computer: `git pull` first (it is 4 commits behind: everything from this laptop).
+- Still waiting on the user: the bottom-sheet pop-up ("2.21 - Prediction / Schedule / Season") from the older handoff below, once they share its Figma node.
 
 ---
 
