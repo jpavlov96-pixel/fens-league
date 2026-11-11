@@ -8,6 +8,8 @@ event-container {
   -webkit-tap-highlight-color: transparent; /* no blue flash when tapped on a phone */
 }
 
+event-container[hidden] { display: none; }
+
 .event {
   position: relative;
   display: flex;
@@ -57,7 +59,7 @@ event-container {
   gap: 10px;
   max-width: 250px;
   height: 18px;
-  padding: 8px 10px;
+  padding: 8px 16px; /* the user's choice (Figma: 10px), so the 12px date clears the sloped sides */
 }
 
 .event__time-bgr {
@@ -72,7 +74,7 @@ event-container {
   position: relative;
   flex: 1 0 0;
   overflow: hidden;
-  font-size: 11px;
+  font-size: 12px;
   font-style: italic;
   font-weight: 400;
   line-height: 12px;
@@ -97,6 +99,9 @@ event-container {
   height: 68px;
   object-fit: fill; /* like Figma: the square image is stretched to the 114 × 68 slot */
 }
+
+/* Locked: Figma gives the home crest a soft shadow (it follows the crest's shape) */
+.event--locked .event__crest:first-child { filter: drop-shadow(0 0 8px #00000033); }
 
 /* Figma shows standard Cyrillic letters; with lang="bg" Montserrat would switch to its Bulgarian forms */
 .event__vs,
@@ -171,6 +176,7 @@ event-container {
   line-height: 14px;
   color: #2b2b2b;
   text-align: center;
+  white-space: pre-line; /* a line break in the name is kept, as in Figma's "Ботев / Пловдив" */
 }
 
 /* picked team */
@@ -189,6 +195,13 @@ event-container {
   box-shadow: none;
   color: #2b2b2b;
   text-shadow: none;
+}
+
+/* the other team, Locked: no border or fill, the name at 75% */
+.event--locked .event__team-btn:not(.is-selected) {
+  border-color: transparent;
+  background: none;
+  color: #2b2b2bbf;
 }
 
 /* btns-left / btns-right: Correct Score's score arrows */
@@ -210,6 +223,14 @@ event-container {
   border-radius: 8px;
   background: #ffffff80;
 }
+
+/* down arrow at a score of 0 */
+.event__arrow-btn:disabled {
+  border-color: #a7a7a7cc;
+  background: #ffffff40;
+}
+
+.event__arrow-btn:disabled .event__arrow-icon { opacity: 0.6; }
 
 /* chavron-default, 15 × 15 */
 .event__arrow-icon {
@@ -240,8 +261,8 @@ event-container {
   right: 38.03%;
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 5px 10px;
+  gap: 4px;
+  padding: 5px 8px;
   border-radius: 50px;
   background: #d4d4d4;
 }
@@ -264,7 +285,7 @@ event-container {
   text-align: center;
 }
 
-/* Match Outcome, Locked: no icon, no gap, "Заключен за прогнози" at 75% */
+/* Locked: no icon, no gap, "Заключен за прогнози" at 75% */
 .event__market-btn.is-locked { gap: 0; }
 .event__market-btn.is-locked .event__market-text { opacity: 0.75; }
 

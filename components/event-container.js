@@ -5,13 +5,14 @@
 //   variant="match-outcome" state="default"  pick a team (tap a team button)
 //   variant="correct-score" state="default"  set the score with the arrow buttons
 //   variant="match-outcome" state="locked"   "Заключен за прогнози": the pick is shown, nothing can change
-//   variant="correct-score" state="locked"   the score is greyed out, the pick is shown
+//   variant="correct-score" state="locked"   "Заключен за прогнози": the score is greyed out, the pick is shown
 //
 // Attributes (all optional; the defaults are Figma's):
 //   variant      "match-outcome" | "correct-score"            (default "match-outcome")
 //   state        "default" | "locked"                         (default "default")
 //   date         time-stamp text                              (default "Четвъртък, 22/11 13:00ч.")
-//   home, away   team names on the buttons                    (default "ЦСКА", "Лудогорец Разград")
+//   home, away   team names on the buttons; a line break      (default "ЦСКА", "Лудогорец Разград")
+//                (&#10;) in the name is kept
 //   home-crest, away-crest   crest image URLs                 (default the two Figma crests)
 //   home-score, away-score   Correct Score numbers            (default 3 and 0)
 //   pick         "home" | "away" | "" (no pick)               (default "home")
@@ -76,9 +77,12 @@
           ' aria-pressed="' + picked + '"' + dis + '>' + esc(name) + '</button>';
       }
 
+      // at 0 the down arrow is greyed out, as Figma shows it for the away team's 0
+      var self = this;
       function arrows(side, name) {
+        var atZero = self._score(side + '-score', side === 'home' ? 3 : 0) === 0;
         return '<div class="event__arrows">' +
-          '<button class="event__arrow-btn" type="button" data-score="' + side + '" data-step="-1" aria-label="' + esc(name) + ': по-малко голове">' +
+          '<button class="event__arrow-btn" type="button" data-score="' + side + '" data-step="-1" aria-label="' + esc(name) + ': по-малко голове"' + (atZero ? ' disabled' : '') + '>' +
             '<span class="event__arrow-icon event__arrow-icon--down"><img src="' + ASSETS + 'arrow-btn-chevron-down.svg" alt=""></span></button>' +
           '<button class="event__arrow-btn" type="button" data-score="' + side + '" data-step="1" aria-label="' + esc(name) + ': повече голове">' +
             '<span class="event__arrow-icon"><img src="' + ASSETS + 'arrow-btn-chevron-up.svg" alt=""></span></button>' +
@@ -98,11 +102,11 @@
         ? arrows('home', home) + '<span class="event__btns-gap"></span>' + arrows('away', away)
         : teamBtn('home', home) + '<span class="event__btns-gap"></span>' + teamBtn('away', away);
 
-      // market-change-btn: offers the other variant; Match Outcome, Locked says it's locked
-      var market = !correctScore && locked
+      // market-change-btn: offers the other variant; Locked (both variants) says it's locked
+      var market = locked
         ? '<button class="event__market-btn is-locked" type="button" disabled>' +
             '<span class="event__market-text">Заключен<br>за прогнози</span></button>'
-        : '<button class="event__market-btn" type="button" data-switch' + dis + '>' +
+        : '<button class="event__market-btn" type="button" data-switch>' +
             '<img src="' + ASSETS + 'icon-view-more.svg" alt="" width="14" height="14">' +
             '<span class="event__market-text">' + (correctScore ? 'Изход от мача' : 'Точен Резултат') + '</span></button>';
 
@@ -178,8 +182,9 @@
         ], { duration: outTime, easing: easeIn, fill: 'forwards' });
       });
       var icon = this.querySelector('.event__market-btn img');
-      // the icon turns anticlockwise (the user's choice)
-      if (icon) icon.animate([{ transform: 'rotate(0deg)' }, { transform: 'rotate(-180deg)' }],
+      // the icon turns half a turn anticlockwise (the user's choice), a quarter out and a
+      // quarter in; the arrows look the same at 180°, so it rests back at 0° unseen
+      if (icon) icon.animate([{ transform: 'rotate(0deg)' }, { transform: 'rotate(-90deg)' }],
         { duration: outTime, easing: easeIn, fill: 'forwards' });
 
       outs[0].finished.then(function () {
@@ -201,7 +206,7 @@
           { opacity: 1, transform: 'none' }
         ], { duration: 240, delay: 20, easing: easeOut, fill: 'backwards' });
         var newIcon = self.querySelector('.event__market-btn img');
-        if (newIcon) newIcon.animate([{ transform: 'rotate(-180deg)' }, { transform: 'rotate(-360deg)' }],
+        if (newIcon) newIcon.animate([{ transform: 'rotate(-90deg)' }, { transform: 'rotate(-180deg)' }],
           { duration: 280, easing: easeOut });
         setTimeout(function () { self._switching = false; }, 320);
         self.dispatchEvent(new Event('change', { bubbles: true }));

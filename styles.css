@@ -512,6 +512,141 @@ img { display: block; }
   margin: -4px -2.5px;
 }
 
+.info-bottom[hidden] { display: none; }
+
+/* Кръг 6: active-trump-label over the card (Figma 273:8185) */
+.round-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+}
+
+.round-stack[hidden] { display: none; }
+
+/* active-trump-label (273:8186) */
+.trump-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  padding: 5px;
+  border-radius: 8px;
+  background: #dddddd;
+  overflow: hidden;
+}
+
+/* the three stacked trump cards, 14 × 18 */
+.trump-label__cards {
+  position: relative;
+  flex-shrink: 0;
+  width: 14px;
+  height: 18px;
+}
+
+.trump-label__card {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trump-label__card img {
+  flex: none;
+  max-width: none;
+  object-fit: cover;
+}
+
+.trump-label__card--1 { top: 0; left: 0.65px; width: 13.347px; height: 18px; }
+.trump-label__card--1 img { width: 11.042px; height: 16.562px; transform: rotate(8.42deg); }
+.trump-label__card--2 { top: 0.54px; left: 1.17px; width: 11.4px; height: 16.673px; }
+.trump-label__card--2 img { width: 10.892px; height: 16.338px; transform: rotate(1.8deg); }
+.trump-label__card--3 { top: 0.14px; left: 0; width: 13.349px; height: 17.861px; }
+.trump-label__card--3 img { width: 10.892px; height: 16.338px; transform: rotate(9.14deg); }
+
+.trump-label__text {
+  display: flex;
+  flex: 1 0 0;
+  align-items: center;
+  gap: 2px;
+  min-width: 1px;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: normal;
+  color: #2b2b2b;
+  white-space: nowrap;
+}
+
+.trump-label__text strong { font-weight: 700; }
+
+/* remove-btn */
+.trump-label__remove {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 12px;
+  color: #2b2b2b;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+/* Close, 10 × 10, the icon inset 4.16% */
+.trump-label__close {
+  position: relative;
+  width: 10px;
+  height: 10px;
+}
+
+.trump-label__close img {
+  position: absolute;
+  top: 4.16%;
+  left: 4.16%;
+  width: 9.167px;
+  height: 9.167px;
+}
+
+/* Locked: gold instead of green */
+.info-bottom__icon--locked {
+  border-color: #f5d58426;
+  box-shadow: inset 0 0 3px #f5d58440;
+}
+
+/* lock, 18 × 18, the 12 × 15.75 icon inside it, glowing */
+.info-bottom__lock {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  filter: drop-shadow(0 0 2px #f5d584bf);
+}
+
+.info-bottom__icon .info-bottom__lock img {
+  position: absolute;
+  top: 4.17%;
+  left: 16.67%;
+  width: 12px;
+  height: 15.75px;
+  margin: 0;
+}
+
+.info-bottom__locked-title {
+  width: 100%;
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 500;
+  color: #ffffff;
+  text-overflow: ellipsis;
+}
+
 .info-bottom__text {
   display: flex;
   flex: 1 0 0;
@@ -532,13 +667,13 @@ img { display: block; }
 }
 
 .info-bottom__title {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: #ffffff;
 }
 
 .info-bottom__note {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 400;
   color: #dbdbdb;
   opacity: 0.5;
@@ -668,12 +803,14 @@ img { display: block; }
   flex-direction: column;
   align-items: flex-end;
   gap: 2px;
-  width: 77px;
+  min-width: 77px; /* Figma's width; a longer rank ("#132 от 13 083") widens it to the left */
   text-align: right;
 }
 
+/* Figma "points" (289:8497): "29" and "т." side by side, "т." at the bottom */
 .leaderboard__points {
-  width: 100%;
+  display: flex;
+  gap: 2px;
   font-family: "Montserrat", sans-serif;
   font-size: 36px;
   font-weight: 800;
@@ -681,7 +818,12 @@ img { display: block; }
   color: #f5d584;
 }
 
-.leaderboard__points span { font-size: 13px; }
+.leaderboard__unit {
+  align-self: flex-end;
+  width: 11px;
+  font-size: 13px;
+  line-height: normal;
+}
 
 .leaderboard__rank {
   width: 100%;
@@ -718,6 +860,8 @@ img { display: block; }
   width: 100%;
   padding: 0 10px;
 }
+
+.awards[hidden] { display: none; }
 
 .awards__place {
   display: flex;
@@ -785,6 +929,8 @@ img { display: block; }
   width: 100%;
   font-size: 13px;
 }
+
+.prize-table__rows[hidden] { display: none; }
 
 .prize-table__row > span:first-child {
   font-weight: 400;
