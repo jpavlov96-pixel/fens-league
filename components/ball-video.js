@@ -6,16 +6,23 @@
 // seeked freely. The page's <video> names its two files in data-src-mov (HEVC with alpha,
 // for Safari) and data-src-webm (everything else). If the load fails, the ball simply
 // plays from its start. The ball fades in once it's at its random point (see the
-// "is-ready" rule in styles.css). Load this right after the page's content.
+// "is-ready" rule in styles.css). window.ballReady is a promise that resolves at that
+// moment, so the intro and the page slide can wait for a ball that's really there. Load
+// this right after the page's content, before the scripts that use window.ballReady.
 
 (function () {
   var video = document.querySelector('.sport-header__video');
-  if (!video) return;
+  var resolveReady;
+  window.ballReady = new Promise(function (resolve) { resolveReady = resolve; });
+  if (!video) return resolveReady();
   var mov = video.getAttribute('data-src-mov');
   var webm = video.getAttribute('data-src-webm');
   var url = mov && video.canPlayType('video/quicktime; codecs="hvc1"') ? mov : webm;
 
-  function ready() { video.classList.add('is-ready'); }
+  function ready() {
+    video.classList.add('is-ready');
+    resolveReady();
+  }
 
   video.addEventListener('loadedmetadata', function () {
     if (video.seekable.length && isFinite(video.duration) && video.duration > 0) {

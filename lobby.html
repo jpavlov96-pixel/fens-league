@@ -110,9 +110,11 @@
               <span class="trump-label__card trump-label__card--3"><img src="assets/lobby-main/trump-card-a.png" alt=""></span>
             </span>
             <p class="trump-label__text"><span>Активен коз:</span> <strong>“Чиста Мрежа”</strong></p>
-            <!-- no "Премахни" here: the trump card can only be removed in the next round (Следващ),
-                 where the label would end with
+            <!-- remove-btn as "Инфо" (273:8195): no "Премахни" here, the trump card can only be
+                 removed in the next round (Следващ). Figma's note: it will open the card with its
+                 condition (not built yet). In Следващ the label would end with
                  <button class="trump-label__remove" type="button">Премахни <span class="trump-label__close"><img src="assets/lobby-main/icon-close.svg" alt=""></span></button> -->
+            <button class="trump-label__remove trump-label__info" type="button">Инфо <img src="assets/lobby-main/icon-info.svg" alt="" width="12" height="12"></button>
           </div>
           <event-container variant="correct-score" state="locked" date="Понеделник 19/11 20:30ч."
             home="Локомотив&#10;София" away="Ботев&#10;Пловдив"
@@ -998,11 +1000,11 @@
     document.querySelector('.nav-link[href="#fens-league"]').addEventListener('click', replayIntro);
 
     if (document.documentElement.classList.contains('intro-pending')) {
-      if (ballVideo.readyState >= 3) startIntro();
-      else {
-        ballVideo.addEventListener('canplay', startIntro, { once: true });
-        setTimeout(startIntro, 2500);
-      }
+      // wait for the ball's video to be at its starting point (components/ball-video.js)
+      if (window.ballReady) window.ballReady.then(startIntro);
+      else if (ballVideo.readyState >= 3) startIntro();
+      else ballVideo.addEventListener('canplay', startIntro, { once: true });
+      setTimeout(startIntro, 2500);
     }
   </script>
 </body>

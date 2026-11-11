@@ -212,11 +212,11 @@
   }
 
   if (document.documentElement.classList.contains('intro-pending')) {
-    if (ballVideo.readyState >= 3) startIntro();
-    else {
-      ballVideo.addEventListener('canplay', startIntro, { once: true });
-      setTimeout(startIntro, 2500);
-    }
+    // wait for the ball's video to be at its starting point (components/ball-video.js)
+    if (window.ballReady) window.ballReady.then(startIntro);
+    else if (ballVideo.readyState >= 3) startIntro();
+    else ballVideo.addEventListener('canplay', startIntro, { once: true });
+    setTimeout(startIntro, 2500);
   } else {
     // no intro: after the slide-in from another page (page-motion.js), or straight away
     (window.pageArrival || Promise.resolve()).then(countAfterSubtitle);

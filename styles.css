@@ -630,6 +630,12 @@ img { display: block; }
   cursor: pointer;
 }
 
+/* "Инфо" (273:8195): 11px text, 3px from the 12px info icon */
+.trump-label__info {
+  gap: 3px;
+  font-size: 11px;
+}
+
 /* Close, 10 × 10, the icon inset 4.16% */
 .trump-label__close {
   position: relative;
@@ -1260,6 +1266,13 @@ img { display: block; }
   background: linear-gradient(180deg, #efefef26 0%, #89898926 100%);
   transition: left 0.32s cubic-bezier(0.2, 0.7, 0.2, 1), width 0.32s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
+
+/* The pill is under the page's own tab from the very first frame, before tab-nav.js runs
+   (otherwise a frame painted early could show it under Начало, then jump) */
+.tab-nav:has(.tab-nav__item--2.is-active) .tab-nav__active { left: 70px; width: 74px; }
+.tab-nav:has(.tab-nav__item--3.is-active) .tab-nav__active { left: 144px; width: 74px; }
+.tab-nav:has(.tab-nav__item--4.is-active) .tab-nav__active { left: 218px; width: 66px; }
+.tab-nav:has(.tab-nav__item--5.is-active) .tab-nav__active { left: 284px; width: 66px; }
 
 .tab-nav__active::before { background: linear-gradient(315deg, #ffffff05 6.9%, #99999900 93.1%); }
 

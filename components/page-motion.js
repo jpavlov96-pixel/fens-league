@@ -15,6 +15,7 @@
   var EASE_OUT = 'cubic-bezier(0.2, 0.7, 0.2, 1)';
   var LEAVE = 260; // ms
   var ARRIVE = 520; // ms
+  var BALL_WAIT = 1000; // ms, the longest the ball waits for its video before sliding in
 
   function leftBlocks() {
     return Array.prototype.slice.call(document.querySelectorAll('.sport-header__content, .page-hero__title, .page-hero__subtitle'));
@@ -66,9 +67,17 @@
         return el.animate([{ transform: 'translateX(' + offLeft(el) + 'px)' }, { transform: 'none' }],
           { duration: ARRIVE, delay: i * 40, easing: EASE_OUT, fill: 'backwards' });
       });
+      // The ball waits off screen until its video is at its starting point (at most
+      // BALL_WAIT), so it never slides in empty and fills in afterwards
       var b = ball();
-      if (b) anims.push(b.animate([{ transform: 'translateX(' + offRight(b) + 'px)' }, { transform: 'none' }],
-        { duration: ARRIVE, delay: 60, easing: EASE_OUT, fill: 'backwards' }));
+      if (b) {
+        var ballIn = b.animate([{ transform: 'translateX(' + offRight(b) + 'px)' }, { transform: 'none' }],
+          { duration: ARRIVE, delay: 60, easing: EASE_OUT, fill: 'backwards' });
+        ballIn.pause();
+        var go = function () { if (ballIn.playState === 'paused') ballIn.play(); };
+        (window.ballReady || Promise.resolve()).then(go);
+        setTimeout(go, BALL_WAIT);
+      }
       root.classList.remove('arrive-pending');
       Promise.all(anims.map(function (a) { return a.finished; })).then(resolve, resolve);
     }

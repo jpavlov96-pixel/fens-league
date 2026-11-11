@@ -119,7 +119,7 @@ event-container[hidden] { display: none; }
   font-size: 32px;
   font-weight: 800;
   line-height: normal;
-  color: #b9b9b973;
+  color: #afafaf73; /* Figma 316:15852 */
 }
 
 /* Correct Score: "3 : 0" */
