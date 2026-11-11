@@ -1,10 +1,12 @@
 # Handoff — 2026-11-11 — end of day
 
-## Done today (all on `main` and live, last feature commit 9814897)
+## Done today (all on `main` and live, last feature commit 2b36eed)
 - Match card: half-turn swap icon, stronger intro squash, Кръг 6 shows the Locked variant with "Активен коз", Correct Score starts 1:0 for the picked team, disabled down arrow without fill, market-button text centred on its letters (`text-box: trim-both cap alphabetic`, button fixed at 32px), and a draw warning (Figma 316:13024) that replaces the date after a level score has held for 2s.
 - New pages: Прогнози (`predictions.html`, 308:9440) and Класиране (`rankings.html`, 308:9739), with counters that count up after the subtitle comes in.
 - Floating tab bar (299:9412) on every page. Changing pages slides the ball out right and the text out left, then back in. The intro plays only when entering the product from outside (`page-boot.js`); while it waits for the ball video, `.intro-pending` hides the header, the content and the tab bar.
 - Lobby: Отбори, Козове (looping 6-card carousel, blurred sides) and Подвизи cards. The ball video starts at a random point.
+- Ball video: `ball-video.js` exposes `window.ballReady`; the page-change slide (ball waits at most 1s) and the intros (at most 2.5s) wait for it, so the ball never arrives empty. Tab bar pill placed by CSS (`:has`) from the active tab, against a rare first-frame jump.
+- Кръг 6 active trump label ends with "Инфо" + info icon (Figma 273:8195; its note: it will open the card with its condition, not built yet). "vs" is #afafaf73 (Figma 316:15852).
 - Lobby filters: inactive items have no side padding (vertical 5px kept so the row height holds); the pill's padding and colours ease over 0.2s so the push is smooth. A version where the pill grew outward without moving the words was tried and rejected.
 - `index.html` is now the Sport demo landing page (329:12817). The lobby moved to `lobby.html` (live at `/lobby`). "Fens League" draws the tap: white word, gold sweep, pop, bouncing NEW badge.
 
@@ -12,6 +14,8 @@
 - Прогнози and Класиране only have the header and hero; the rest isn't designed yet.
 - Not tested on a real iPhone: the .mov ball in Safari, the carousel feel and the page slide smoothness.
 - Bottom-sheet pop-up "2.21 - Prediction / Schedule / Season": still waiting for its Figma node.
+
+- If the tab bar still flickers on page change: Cloudflare revalidates assets on every load, so its icons may arrive a moment after the first paint on a slow phone. A `_headers` file with longer caching for `assets/` would fix that; not done (ask first).
 
 ## Decisions and gotchas
 - View transitions between pages were tried and reverted (flicker, white flashes). Don't retry them.
