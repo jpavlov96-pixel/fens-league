@@ -6,7 +6,7 @@
   <title>Фенска Лига</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Montserrat:ital,wght@0,700;0,800;0,900;1,800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="components/event-container.css">
   <script src="components/event-container.js"></script>
@@ -74,12 +74,10 @@
         <div class="sport-header__image" aria-hidden="true">
           <img class="sport-header__shadow" src="assets/lobby-main/ball-shadow.svg" alt="">
           <!-- Figma's 330×330 ball GIF, as the user's ball video (same ball): Safari can't show
-               WebM transparency, so it takes the HEVC-with-alpha .mov; other browsers skip it -->
+               WebM transparency, so it takes the HEVC-with-alpha .mov; other browsers the .webm.
+               Loaded by components/ball-video.js, which starts it from a random point -->
           <div class="sport-header__ball">
-            <video class="sport-header__video" autoplay muted loop playsinline>
-              <source src="assets/visual-primary.mov" type='video/quicktime; codecs="hvc1"'>
-              <source src="assets/visual-primary.webm" type="video/webm">
-            </video>
+            <video class="sport-header__video" autoplay muted loop playsinline data-src-mov="assets/visual-primary.mov" data-src-webm="assets/visual-primary.webm"></video>
           </div>
         </div>
       </div>
@@ -270,6 +268,199 @@
           </button>
         </div>
       </div>
+
+      <!-- Figma: group-03 (289:8693) and group-04 (309:10429), one container in its two
+           filter states: Налични (8 teams) and Използвани (4 used teams, K1–K4) -->
+      <div class="card teams-card">
+        <div class="card-head">
+          <div class="card-head__left">
+            <h2 class="card__title">Отбори</h2>
+            <div class="filter" role="tablist">
+              <button class="filter__item is-active" type="button" role="tab" aria-selected="true">Налични</button>
+              <img src="assets/lobby-main/filter-divider.svg" alt="" width="5" height="10">
+              <button class="filter__item" type="button" role="tab" aria-selected="false">Използвани</button>
+            </div>
+          </div>
+          <p class="card-head__count"><span class="count" data-counts="8 4">8</span></p>
+        </div>
+        <div class="card-body">
+          <div class="teams" data-state="0">
+            <div class="team-card"><img src="assets/lobby-main/crest-arda.png" alt=""><span>Арда<br>Кърджали</span></div>
+            <div class="team-card"><img src="assets/lobby-main/crest-ludogorets.png" alt=""><span>Лудогорец<br>Разград</span></div>
+            <div class="team-card"><img src="assets/lobby-main/crest-botev-plovdiv.png" alt=""><span>Ботев<br>Пловдив</span></div>
+            <div class="team-card"><img src="assets/lobby-main/crest-lokomotiv-sofia.png" alt=""><span>Локомотив<br>София</span></div>
+            <div class="team-card"><img src="assets/lobby-main/crest-cska.png" alt=""><span>ЦСКА</span></div>
+            <div class="team-card"><img src="assets/lobby-main/crest-cska-1948.png" alt=""><span>ЦСКА<br>1948</span></div>
+            <div class="team-card"><img src="assets/lobby-main/crest-lokomotiv-plovdiv.png" alt=""><span>Локомотив<br>Пловдив</span></div>
+            <div class="team-card"><img src="assets/lobby-main/crest-slavia.png" alt=""><span>Славия</span></div>
+          </div>
+          <div class="teams" data-state="1" hidden>
+            <div class="team-card is-used"><img src="assets/lobby-main/crest-arda.png" alt=""><span>Арда<br>Кърджали</span><i>K1</i></div>
+            <div class="team-card is-used"><img src="assets/lobby-main/crest-ludogorets.png" alt=""><span>Лудогорец<br>Разград</span><i>K2</i></div>
+            <div class="team-card is-used"><img src="assets/lobby-main/crest-botev-plovdiv.png" alt=""><span>Ботев<br>Пловдив</span><i>K3</i></div>
+            <div class="team-card is-used"><img src="assets/lobby-main/crest-cska.png" alt=""><span>ЦСКА</span><i>K4</i></div>
+          </div>
+          <div class="info-label">
+            <img src="assets/lobby-main/icon-refresh-gold.svg" alt="" width="16" height="16">
+            <p>Всичките отбори се подновяват след<br>края на Кръг 13 <span class="info-label__dot">•</span> 22 Януари, 2026г.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Figma: group-05 (289:9726). Figma's filter also has a third item labelled "Item"
+           (a placeholder), left out here -->
+      <div class="card trumps-card">
+        <div class="card-head">
+          <div class="card-head__left">
+            <h2 class="card__title">Козове</h2>
+            <div class="filter" role="tablist">
+              <button class="filter__item is-active" type="button" role="tab" aria-selected="true">Налични</button>
+              <img src="assets/lobby-main/filter-divider.svg" alt="" width="5" height="10">
+              <button class="filter__item" type="button" role="tab" aria-selected="false">Използвани</button>
+            </div>
+          </div>
+          <p class="card-head__count">6</p>
+        </div>
+        <div class="card-body">
+          <!-- cards-slider: the full collection (Figma 231:11202, artworks 317:11985), a swipeable
+               carousel (components/trump-carousel.js). The middle card is 193 × 290, the others
+               175 × 263; it opens on Голмайстор, the 3rd of the 6 dots, as in the lobby design -->
+          <div class="trumps" tabindex="0" aria-label="Козове" data-start="2">
+            <div class="trump">
+              <img class="trump__bgr" src="assets/lobby-main/trump-card-even.png" alt="" loading="lazy" draggable="false">
+              <div class="trump__info">X</div>
+              <div class="trump__content">
+                <div class="trump__text">
+                  <p class="trump__name">РАВЕНСТВО</p>
+                  <p class="trump__desc">Отключи прогноза за<br>равен краен резултат.</p>
+                </div>
+                <a class="trump__link" href="#trump-draw" draggable="false">Детайли <img src="assets/lobby-main/icon-arrow-gold.svg" alt="" width="10" height="10"></a>
+              </div>
+            </div>
+            <div class="trump">
+              <img class="trump__bgr" src="assets/lobby-main/trump-card-repeat.png" alt="" loading="lazy" draggable="false">
+              <div class="trump__info"><img src="assets/lobby-main/icon-card-swap.svg" alt="" width="14" height="14"></div>
+              <div class="trump__content">
+                <div class="trump__text">
+                  <p class="trump__name">ПОВТОРЕН<br>ИЗБОР</p>
+                  <p class="trump__desc">Избери вече използван<br>отбор отново.</p>
+                </div>
+                <a class="trump__link" href="#trump-repeat" draggable="false">Детайли <img src="assets/lobby-main/icon-arrow-gold.svg" alt="" width="10" height="10"></a>
+              </div>
+            </div>
+            <div class="trump">
+              <img class="trump__bgr" src="assets/lobby-main/trump-card-scorer.png" alt="" loading="lazy" draggable="false">
+              <div class="trump__info">x2</div>
+              <div class="trump__content">
+                <div class="trump__text">
+                  <p class="trump__name">ГОЛМАЙСТОР</p>
+                  <p class="trump__desc">Ако избран играч<br>отбележи - двойни точки.</p>
+                </div>
+                <a class="trump__link" href="#trump-scorer" draggable="false">Детайли <img src="assets/lobby-main/icon-arrow-gold.svg" alt="" width="10" height="10"></a>
+              </div>
+            </div>
+            <div class="trump">
+              <img class="trump__bgr" src="assets/lobby-main/trump-card-all-or-nothing.png" alt="" loading="lazy" draggable="false">
+              <div class="trump__info trump__info--small">6/0</div>
+              <div class="trump__content">
+                <div class="trump__text">
+                  <p class="trump__name">ВСИЧКО<br>ИЛИ НИЩО</p>
+                  <p class="trump__desc">Точен резултат: печелиш<br>шест точки или нула.</p>
+                </div>
+                <a class="trump__link" href="#trump-all-or-nothing" draggable="false">Детайли <img src="assets/lobby-main/icon-arrow-gold.svg" alt="" width="10" height="10"></a>
+              </div>
+            </div>
+            <div class="trump">
+              <img class="trump__bgr" src="assets/lobby-main/trump-card-rest.png" alt="" loading="lazy" draggable="false">
+              <div class="trump__info">+1</div>
+              <div class="trump__content">
+                <div class="trump__text">
+                  <p class="trump__name">ПОЧИВКА</p>
+                  <p class="trump__desc">Пропусни кръг, запази<br>серията, получи точка.</p>
+                </div>
+                <a class="trump__link" href="#trump-rest" draggable="false">Детайли <img src="assets/lobby-main/icon-arrow-gold.svg" alt="" width="10" height="10"></a>
+              </div>
+            </div>
+            <div class="trump">
+              <img class="trump__bgr" src="assets/lobby-main/trump-card-clean-sheet.png" alt="" loading="lazy" draggable="false">
+              <div class="trump__info">+2</div>
+              <div class="trump__content">
+                <div class="trump__text">
+                  <p class="trump__name">ЧИСТА<br>МРЕЖА</p>
+                  <p class="trump__desc">Победа без допуснат гол -<br>две допълнителни точки.</p>
+                </div>
+                <a class="trump__link" href="#trump-clean-sheet" draggable="false">Детайли <img src="assets/lobby-main/icon-arrow-gold.svg" alt="" width="10" height="10"></a>
+              </div>
+            </div>
+          </div>
+          <div class="pagination" aria-hidden="true">
+            <span></span><span></span><span class="is-active"></span><span></span><span></span><span></span>
+          </div>
+          <div class="info-label">
+            <img src="assets/lobby-main/icon-refresh-gold.svg" alt="" width="16" height="16">
+            <p>Всичките козове се подновяват след<br>края на Кръг 13 <span class="info-label__dot">•</span> 22 Януари, 2026г.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Figma: group-06 (309:12778) -->
+      <div class="card missions-card">
+        <div class="card-head">
+          <div class="card-head__left">
+            <h2 class="card__title">Подвизи</h2>
+            <div class="filter" role="tablist">
+              <button class="filter__item is-active" type="button" role="tab" aria-selected="true">В Процес</button>
+              <img src="assets/lobby-main/filter-divider.svg" alt="" width="5" height="10">
+              <button class="filter__item" type="button" role="tab" aria-selected="false">Изпълнени</button>
+            </div>
+          </div>
+          <p class="card-head__count">2</p>
+        </div>
+        <div class="card-body">
+          <div class="missions">
+            <div class="mission mission--analyst">
+              <img class="mission__bgr" src="assets/lobby-main/mission-analyst.png" alt="" loading="lazy">
+              <div class="mission__top">
+                <div class="mission__heading">
+                  <p class="mission__name">Експертен Анализатор</p>
+                  <p class="mission__info">
+                    <span class="mission__steps">3<img src="assets/lobby-main/slash.svg" alt="" width="4" height="8"><b>5</b><img src="assets/lobby-main/slash.svg" alt="" width="4" height="8">10</span>
+                    <span class="mission__what">познати точни резултата</span>
+                  </p>
+                </div>
+                <div class="mission__progress">
+                  <span class="mission__bar"><i class="is-done"></i><i class="is-done"></i><i class="is-done"></i><i class="is-done"></i><i></i></span>
+                  <span class="mission__count">4 от 5</span>
+                </div>
+              </div>
+              <p class="mission__award"><span>Награда:</span><span>€5 фрийбет</span></p>
+            </div>
+            <div class="mission mission--flawless">
+              <img class="mission__card-bgr" src="assets/lobby-main/mission-card-bgr.png" alt="" loading="lazy">
+              <img class="mission__bgr" src="assets/lobby-main/mission-flawless.png" alt="" loading="lazy">
+              <div class="mission__top">
+                <div class="mission__heading">
+                  <p class="mission__name">Безпогрешен</p>
+                  <p class="mission__info">
+                    <span class="mission__steps"><b>3</b><img src="assets/lobby-main/slash.svg" alt="" width="4" height="8">5<img src="assets/lobby-main/slash.svg" alt="" width="4" height="8">10</span>
+                    <span class="mission__what">поредни познати изхода</span>
+                  </p>
+                </div>
+                <div class="mission__progress">
+                  <span class="mission__bar"><i class="is-done"></i><i></i><i></i></span>
+                  <span class="mission__count">1 от 3</span>
+                </div>
+              </div>
+              <p class="mission__award"><span>Награда:</span><span>€5 фрийбет</span></p>
+            </div>
+          </div>
+          <div class="info-label info-label--blue">
+            <img src="assets/lobby-main/icon-refresh-blue.svg" alt="" width="16" height="16">
+            <p>Подвизите са изпълними веднъж за сезон и<br>прогресът им не се нулира на полусезеона.</p>
+          </div>
+          <a class="primary-btn" href="#missions">Виж Всички</a>
+        </div>
+      </div>
     </section>
 
     <!-- Figma: bottom tab bar, "Frame 181" (299:9412). Floats over the page with a light
@@ -307,12 +498,19 @@
     </nav>
   </div>
 
+  <!-- loads the ball video and starts it from a random point -->
+  <script src="components/ball-video.js"></script>
+  <!-- the Козове carousel -->
+  <script src="components/trump-carousel.js"></script>
+  <!-- the ball and title slide off / on when moving between the product's pages -->
+  <script src="components/page-motion.js"></script>
   <script src="components/tab-nav.js"></script>
   <script>
     // One active item per group, switched on tap
+    // (each group is the items sharing a parent, so every card's filter switches on its own)
     function single(selector, activeClass, attr) {
-      var items = document.querySelectorAll(selector);
-      items.forEach(function (item) {
+      document.querySelectorAll(selector).forEach(function (item) {
+        var items = item.parentElement.querySelectorAll(':scope > ' + selector);
         item.addEventListener('click', function (e) {
           if (item.tagName === 'A') e.preventDefault();
           items.forEach(function (i) {
@@ -335,7 +533,7 @@
 
     // Сезон / Полусезон: each shows its own prizes (data-awards = the filter's index); the
     // old ones sink and fade, the new ones rise onto the podium one after another, 1st first
-    var awardFilters = document.querySelectorAll('.filter__item');
+    var awardFilters = document.querySelectorAll('.leaderboard .filter__item');
     var shownAwards = 0;
 
     // The points and position count from one filter's numbers to the other's (data-counts),
@@ -442,6 +640,47 @@
               { opacity: 1, transform: 'translateY(-2px) scale(1.02)', offset: 0.6 },
               { opacity: 1, transform: 'none' }
             ], { duration: 360, delay: order * 60, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'backwards' });
+          });
+        };
+      });
+    });
+
+    // Отбори: Налични / Използвани show their own teams (data-state = the filter's index) and
+    // the count goes 8 ↔ 4 the same way as the points above; the old cards fade out, the new
+    // ones come in one after another
+    var teamFilters = document.querySelectorAll('.teams-card .filter__item');
+    var shownTeams = 0;
+    teamFilters.forEach(function (filter, i) {
+      filter.addEventListener('click', function () {
+        if (i === shownTeams) return;
+        var current = document.querySelector('.teams[data-state="' + shownTeams + '"]');
+        var next = document.querySelector('.teams[data-state="' + i + '"]');
+        shownTeams = i;
+        document.querySelectorAll('.teams-card .count').forEach(function (el) {
+          countTo(el, parseInt(el.dataset.counts.split(' ')[i], 10));
+        });
+        document.querySelectorAll('.teams .team-card').forEach(function (el) {
+          el.getAnimations().forEach(function (a) { a.cancel(); });
+        });
+        document.querySelectorAll('.teams').forEach(function (el) { el.hidden = el !== current; });
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !Element.prototype.animate) {
+          current.hidden = true;
+          next.hidden = false;
+          return;
+        }
+        var outs = Array.prototype.map.call(current.children, function (el) {
+          return el.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(0.94)' }],
+            { duration: 150, easing: 'cubic-bezier(0.4, 0, 1, 1)', fill: 'forwards' });
+        });
+        outs[0].onfinish = function () {
+          outs.forEach(function (a) { a.cancel(); });
+          current.hidden = true;
+          next.hidden = false;
+          Array.prototype.forEach.call(next.children, function (el, n) {
+            el.animate([
+              { opacity: 0, transform: 'translateY(6px) scale(0.94)' },
+              { opacity: 1, transform: 'none' }
+            ], { duration: 280, delay: n * 30, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'backwards' });
           });
         };
       });
@@ -707,6 +946,9 @@
       var unseenBounce = 100;
       bringIn('.leaderboard', landings[3] + unseenBounce);
       bringIn('.season', landings[3] + unseenBounce + 60);
+      bringIn('.teams-card', landings[3] + unseenBounce + 120);
+      bringIn('.trumps-card', landings[3] + unseenBounce + 180);
+      bringIn('.missions-card', landings[3] + unseenBounce + 240);
       // the tab bar rises from below the screen just after the last card (not when you
       // came here from another tab: then it stays put, see components/tab-nav.js)
       if (!window.tabNavArrived) document.querySelector('.tab-nav').animate([

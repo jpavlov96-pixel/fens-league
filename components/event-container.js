@@ -19,7 +19,7 @@
 //   trump-card   present = the trump cards show in the top right corner
 //
 // When not locked, the "Точен Резултат" / "Изход от мача" button switches between the two
-// variants. Every change the user makes updates the attributes and fires a "change" event.
+// variants; switching to Correct Score starts the score at 1 : 0 for the picked team. Every change the user makes updates the attributes and fires a "change" event.
 
 (function () {
   var ASSETS = 'assets/lobby-main/';
@@ -46,7 +46,7 @@
     }
 
     attributeChangedCallback() {
-      if (this.isConnected) this._render();
+      if (this.isConnected && !this._quiet) this._render();
     }
 
     _get(name, fallback) {
@@ -159,6 +159,15 @@
     _switchVariant() {
       var self = this;
       var target = this._get('variant', 'match-outcome') === 'correct-score' ? 'match-outcome' : 'correct-score';
+      // Correct Score starts at 1 : 0 for the team picked to win (the green button), 0 : 0
+      // with no pick. Set quietly: Match Outcome doesn't show the score, so nothing is redrawn
+      if (target === 'correct-score') {
+        var pick = this._get('pick', 'home');
+        this._quiet = true;
+        this.setAttribute('home-score', pick === 'home' ? 1 : 0);
+        this.setAttribute('away-score', pick === 'away' ? 1 : 0);
+        this._quiet = false;
+      }
       var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduced || !Element.prototype.animate) {
         this.setAttribute('variant', target);

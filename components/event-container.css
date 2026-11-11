@@ -224,10 +224,10 @@ event-container[hidden] { display: none; }
   background: #ffffff80;
 }
 
-/* down arrow at a score of 0 */
+/* down arrow at a score of 0: Figma's border, no fill (the user's choice; Figma has a 25% white fill) */
 .event__arrow-btn:disabled {
   border-color: #a7a7a7cc;
-  background: #ffffff40;
+  background: none;
 }
 
 .event__arrow-btn:disabled .event__arrow-icon { opacity: 0.6; }

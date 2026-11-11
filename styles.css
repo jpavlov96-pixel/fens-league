@@ -17,6 +17,16 @@ body {
   overflow-x: hidden;
 }
 
+/* No visible page scrollbar on phones and tablets (touch, no mouse); the page still
+   scrolls by swiping. Kept with a mouse, where it's needed. */
+@media (hover: none) and (pointer: coarse) {
+  html,
+  body { scrollbar-width: none; }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar { display: none; }
+}
+
 a { color: inherit; text-decoration: none; }
 
 /* No blue flash over links and buttons when they are tapped on a phone */
@@ -36,7 +46,11 @@ img { display: block; }
 /* Figma shows standard Cyrillic letters; with lang="bg" Montserrat would switch to its Bulgarian forms */
 .sport-header__title,
 .card__title,
-.leaderboard__points { font-feature-settings: "locl" 0; }
+.leaderboard__points,
+.page-hero__title,
+.card-head__count,
+.trump__name,
+.mission__name { font-feature-settings: "locl" 0; }
 
 .lobby-main {
   position: relative;
@@ -411,7 +425,12 @@ img { display: block; }
   width: 112.24%;
   height: 100%;
   max-width: none;
+  opacity: 0;
+  transition: opacity 0.2s;
 }
+
+/* shown once components/ball-video.js has it at its random starting point */
+.sport-header__video.is-ready { opacity: 1; }
 
 /* Entry animation: the header section stays hidden until its intro starts (class set
    in <head>), so it never shows while the ball video loads */
@@ -1256,20 +1275,19 @@ img { display: block; }
 .tab-nav__item--4 { left: 218px; width: 66px; }
 .tab-nav__item--5 { left: 284px; width: 66px; }
 
+/* icon and label centred in their tab (Figma's offsets were 0.5–2px off centre; the user
+   asked for them centred) */
 .tab-nav__icon {
   position: absolute;
   top: 5px;
+  left: calc(50% - 10px);
   width: 20px;
   height: 20px;
 }
 
-.tab-nav__item--1 .tab-nav__icon { left: 24px; }
-.tab-nav__item--2 .tab-nav__icon { left: 25px; }
-.tab-nav__item--3 .tab-nav__icon { left: 27px; }
-/* Подвизи and Правила swapped places (the user's choice; Figma has Правила 4th), each
-   keeping its own icon and label offsets */
-.tab-nav__item--4 .tab-nav__icon { left: 24px; }
-.tab-nav__item--5 .tab-nav__icon { left: 23px; top: 6px; }
+/* Правила's icon sits 1px lower, as in Figma (Подвизи and Правила swapped places at the
+   user's request; Figma has Правила 4th) */
+.tab-nav__item--5 .tab-nav__icon { top: 6px; }
 
 /* the active tab is full white, icon and label (the user's choice). The other icons come
    from Figma at 75%: the active one is brought back to 100% by the alpha filter in
@@ -1280,6 +1298,7 @@ img { display: block; }
 .tab-nav__label {
   position: absolute;
   top: 27.5px;
+  left: calc(50% - 30.5px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1297,17 +1316,13 @@ img { display: block; }
 
 .tab-nav__item.is-active .tab-nav__label { color: #ffffff; }
 
-.tab-nav__item--1 .tab-nav__label { left: 2.5px; }
-.tab-nav__item--2 .tab-nav__label { left: 4.5px; }
-.tab-nav__item--3 .tab-nav__label { left: 6.5px; }
-.tab-nav__item--4 .tab-nav__label { left: 3px; }
-.tab-nav__item--5 .tab-nav__label { left: 2.5px; }
+
 
 /* Подвизи's gold dot (Ellipse 19): something new there */
 .tab-nav__dot {
   position: absolute;
   top: 5px;
-  left: 45px;
+  left: calc(50% + 11px); /* 1px past the icon's right edge, as in Figma */
   width: 4px;
   height: 4px;
   border-radius: 50%;
@@ -1381,3 +1396,439 @@ img { display: block; }
 }
 
 .intro-pending .page-hero { visibility: hidden; }
+
+/* Arriving from another page of the product: the parts that slide in stay hidden until the
+   slide starts (components/page-boot.js, page-motion.js) */
+.arrive-pending .sport-header__content,
+.arrive-pending .page-hero__title,
+.arrive-pending .page-hero__subtitle,
+.arrive-pending .sport-header__image { visibility: hidden; }
+
+/* ---------- content-bottom: Отбори, Козове, Подвизи (lobby groups 03–06) ---------- */
+/* The same sport-container card as above (.card); each sets its own background angle */
+.teams-card { background: linear-gradient(114.5493630912959deg, #18181833 0%, #6d6d6d40 100%); }
+.trumps-card { background: linear-gradient(107.43053004573036deg, #18181833 0%, #6d6d6d40 100%); overflow: hidden; }
+.missions-card { background: linear-gradient(109.0341034720779deg, #18181833 0%, #6d6d6d40 100%); }
+
+/* content-top: title and filter on the left, the gold count on the right */
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+}
+
+.card-head__left {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 1px;
+}
+
+.card-head__left .card__title { width: 100%; }
+
+.card-head__count {
+  flex-shrink: 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 36px;
+  color: #f5d584;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* content-bottom */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+/* info-label: an icon and a note on a dark, gold-edged strip */
+.info-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #f5d58459;
+  border-radius: 12px;
+  background: #0000004d;
+}
+
+.info-label--blue { border-color: #477db959; }
+
+.info-label img { flex-shrink: 0; }
+
+.info-label p {
+  flex: 1 0 0;
+  min-width: 1px;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 15px;
+  color: #929295;
+}
+
+.info-label__dot { font-size: 16px; line-height: 0; } /* the bigger dot doesn't stretch its 15px line */
+
+/* Отбори: teams, 5 per row, 160px tall in both states */
+.teams {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-auto-rows: max-content;
+  align-content: start;
+  gap: 4px;
+  width: 100%;
+  height: 160px;
+}
+
+.teams[hidden] { display: none; }
+
+/* team-card, Active */
+.team-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid #909090;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #ffffff 0%, #c9c9c9 100%);
+}
+
+.team-card img {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+  filter: drop-shadow(0 0 8px #00000033);
+}
+
+.team-card span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 22px;
+  overflow: hidden;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 10px;
+  color: #2b2b2b;
+  text-align: center;
+}
+
+/* team-card, used: dark, the crest greyed into the card, and its K number */
+.team-card.is-used {
+  border-color: #4a4a4a59;
+  background: #17181880;
+}
+
+.team-card.is-used img {
+  mix-blend-mode: luminosity;
+  opacity: 0.5;
+}
+
+.team-card.is-used span { color: #929295; }
+
+.team-card i {
+  position: absolute;
+  top: 1px;
+  right: 1.4px;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 10px;
+  color: #929295;
+}
+
+/* Козове: cards-slider, a swipeable carousel of the six power cards. The script
+   (components/trump-carousel.js) places and sizes each card: 193 × 290 in the middle,
+   175 × 263 either side, 10px apart; the outer ones are cut off by the card's edge. */
+.trumps {
+  position: relative;
+  width: 100%;
+  height: 290px;
+  touch-action: pan-y; /* sideways drags move the carousel, vertical ones scroll the page */
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+  outline: none;
+}
+
+.trumps.is-dragging { cursor: grabbing; }
+
+.trump {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  width: 175px;
+  height: 263px;
+  padding: 12px; /* the user's choice (Figma: 10px) */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.trump__bgr {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.trump__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+}
+
+.trump__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+
+.trump__name {
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  color: #ffffff;
+}
+
+
+.trump__desc {
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: normal;
+  color: #dbdbdb;
+  white-space: nowrap; /* stays on its own lines; the carousel shrinks it a touch if a line won't fit */
+}
+
+
+.trump__link {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 16px;
+  font-size: 12px; /* the user's choice (Figma: 13px) */
+  font-style: italic;
+  font-weight: 500;
+  line-height: normal;
+  color: #f5d584;
+}
+
+/* card-info: top right, an icon or "x2" / "6/0" */
+.trump__info {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 18px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: normal;
+  color: #c5c5c5;
+}
+
+.trump__info--small { font-size: 16px; }
+
+/* Pagination: the active dot is a 24px gold pill */
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.pagination span {
+  width: 6px;
+  height: 6px;
+  border-radius: 10px;
+  background: #dbdbdb;
+}
+
+.pagination .is-active {
+  width: 24px;
+  background: #f5d584;
+}
+
+/* Подвизи: mission-card, picture on the left, text from 110px in */
+.missions {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.mission {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 110px;
+  padding: 8px 8px 8px 110px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.mission--analyst { filter: drop-shadow(0 0 3px #00000080); }
+.mission--flawless { box-shadow: 0 0 6px #00000080; }
+
+.mission__card-bgr {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* bgr-image: 355px wide from the left edge, as in Figma (wider than the card) */
+.mission__bgr {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 355px;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+
+.mission__top {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 58px;
+  width: 100%;
+}
+
+.mission__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.mission__name {
+  overflow: hidden;
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: 18px;
+  color: #ffffff;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mission__info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: normal;
+  color: #929295;
+  white-space: nowrap;
+}
+
+.mission__steps {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 5px;
+}
+
+.mission__steps b {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.mission__what {
+  flex: 1 0 0;
+  min-width: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mission__progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.mission__bar {
+  display: flex;
+  flex: 1 0 0;
+  gap: 2px;
+  min-width: 1px;
+}
+
+.mission__bar i {
+  flex: 1 0 0;
+  height: 8px;
+  border-radius: 2px;
+  background: #ffffff;
+}
+
+.mission__bar i.is-done {
+  border: 1px solid #ffffff59;
+  background: #19b14e;
+}
+
+.mission__count {
+  font-size: 11px;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 11px;
+  color: #929295;
+  white-space: nowrap;
+}
+
+.mission__award {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 16px;
+  font-style: italic;
+  line-height: normal;
+}
+
+.mission__award span:first-child {
+  flex: 1 0 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: #929295;
+}
+
+.mission__award span:last-child {
+  flex: 1 0 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #f5d584;
+  text-align: right;
+}

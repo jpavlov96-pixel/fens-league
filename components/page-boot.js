@@ -17,7 +17,17 @@
   } catch (e) { /* no usable referrer: treated as coming from outside */ }
   window.cameFromProduct = fromInside;
 
-  if (!fromInside && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!fromInside && !reduced) {
     document.documentElement.classList.add('intro-pending');
+  }
+
+  // From inside the product the ball and title slide in (page-motion.js). Hide them from the
+  // first frame until that starts, so the page is never drawn with them already in place
+  // and then snapped off screen; a timer shows them if the slide never starts.
+  if (fromInside && !reduced) {
+    var root = document.documentElement;
+    root.classList.add('arrive-pending');
+    setTimeout(function () { root.classList.remove('arrive-pending'); }, 1500);
   }
 })();

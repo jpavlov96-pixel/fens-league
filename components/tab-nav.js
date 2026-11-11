@@ -3,9 +3,9 @@
 // styles.css. The page marks its own tab with "is-active".
 //
 // Tapping a tab moves the active pill under it. A tab that links to another page slides
-// the pill first and then opens the page; that page starts the pill under the tab you
-// came from and slides it home, and skips the bar's own entrance in its intro
-// (window.tabNavArrived is true then).
+// the pill (and the page's ball and title off screen, see page-motion.js) and then opens
+// it; that page starts the pill under the tab you came from and slides it home, and skips
+// the bar's own entrance in its intro (window.tabNavArrived is true then).
 
 (function () {
   var nav = document.querySelector('.tab-nav');
@@ -62,7 +62,10 @@
       var href = item.getAttribute('href');
       if (href.charAt(0) === '#') return; // no page for this tab yet
       try { sessionStorage.setItem(STORE, String(items.indexOf(current))); } catch (err) { /* no slide on arrival */ }
-      setTimeout(function () { window.location.href = href; }, 220); // let the pill move first
+      // the ball and title slide off (components/page-motion.js) while the pill moves, then go
+      var go = function () { window.location.href = href; };
+      if (window.pageMotionLeave) window.pageMotionLeave(go);
+      else setTimeout(go, 220);
     });
   });
 })();

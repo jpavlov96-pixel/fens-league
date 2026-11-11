@@ -16,15 +16,34 @@
   var ballImage = document.querySelector('.sport-header__image');
   if (!section || !ballVideo) return;
 
-  // The subtitle's gold number ("4т.", "#53") counts up from 0 as the page shows, the way
-  // the lobby's points count between Сезон and Полусезон: fast at first, settling on the
-  // value. The real number is in the markup, so it just shows without scripts or motion.
+  // The subtitle's gold number ("4т.", "#53") counts up from 0, the way the lobby's points
+  // count between Сезон and Полусезон: fast at first, settling on the value. It starts once
+  // the subtitle has finished coming in (the intro's, or the slide-in from another page of
+  // the product, see page-motion.js). The real number is in the markup, so it just shows
+  // without scripts or motion.
   var counters = Array.prototype.slice.call(document.querySelectorAll('.page-hero .count-up'));
   var countMotion = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (countMotion) counters.forEach(function (el) { el.textContent = '0'; });
+  // each number keeps its final width while it counts, so the rest of the line stays put
+  if (countMotion) counters.forEach(function (el) {
+    el.style.display = 'inline-block';
+    el.style.minWidth = el.getBoundingClientRect().width + 'px';
+    el.style.textAlign = 'right';
+    el.textContent = '0';
+  });
 
+  // once whatever brings the subtitle in has finished
+  function countAfterSubtitle() {
+    var subtitle = document.querySelector('.page-hero__subtitle');
+    var entering = subtitle ? subtitle.getAnimations() : [];
+    if (!entering.length) return countUp(0);
+    Promise.all(entering.map(function (a) { return a.finished; }))
+      .then(function () { countUp(0); }, function () { countUp(0); });
+  }
+
+  var counted = false;
   function countUp(delay) {
-    if (!countMotion) return;
+    if (!countMotion || counted) return;
+    counted = true;
     counters.forEach(function (el) {
       var to = parseInt(el.getAttribute('data-count'), 10) || 0;
       setTimeout(function () {
@@ -162,7 +181,7 @@
     }
     bringIn('.page-hero__title', landings[0]);
     bringIn('.page-hero__subtitle', landings[1]);
-    countUp(landings[1] + 100); // while the subtitle comes in
+    countAfterSubtitle();
     // the tab bar rises in last, unless you came from another tab (then it stays put)
     var nav = document.querySelector('.tab-nav');
     if (nav && !window.tabNavArrived) nav.animate([
@@ -199,6 +218,7 @@
       setTimeout(startIntro, 2500);
     }
   } else {
-    countUp(150); // no intro (you came from inside the product): count a moment after the page shows
+    // no intro: after the slide-in from another page (page-motion.js), or straight away
+    (window.pageArrival || Promise.resolve()).then(countAfterSubtitle);
   }
 })();
