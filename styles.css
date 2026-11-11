@@ -3,7 +3,12 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { overflow-x: hidden; }
+/* the page colour all the way back (not the browser's white), so nothing can ever flash
+   white behind the page */
+html {
+  overflow-x: hidden;
+  background: #171818;
+}
 
 body {
   background: #171818;
@@ -377,6 +382,10 @@ img { display: block; }
   width: 98px;
   height: 110px;
 }
+
+/* 3px lower than the flex layout puts it (y 113, not 110): the ball's spot on the
+   Прогнози and Класиране pages, so it doesn't move when you switch pages */
+.header .sport-header__image { top: 3px; }
 
 .sport-header__shadow {
   position: absolute;
@@ -1304,3 +1313,71 @@ img { display: block; }
   border-radius: 50%;
   background: #f5d584;
 }
+
+/* ---------- page hero: the top block of the tab bar's pages ---------- */
+/* Прогнози "2.1 - Prediction / Schedule / Next Round" (308:9440) and Класиране
+   "3.1 - Ranking / Seasonal" (308:9739) share it: the lobby's app header, red glow and
+   ball, over Figma's "Frame 15", a 143px panel fading in from the page colour, rounded at
+   the bottom. Figma places the content absolutely; it's measured here from the panel's
+   top (y 100) and is identical on both pages, so the title and ball stay put when you
+   switch between them. */
+.page-hero {
+  position: relative;
+  width: 100%;
+  height: 143px;
+  border-radius: 0 0 24px 24px;
+  background: linear-gradient(180deg, #17181800 10.833%, #272727 100%);
+}
+
+.page-hero__title {
+  position: absolute;
+  top: 20px;
+  left: 13px;
+  width: 248px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 34px;
+  font-weight: 900;
+  line-height: 36px;
+  color: #ffffff;
+  text-shadow: 0 0 12px #30303099;
+}
+
+/* One line under the title: Прогнози's is at y 197 (18px tall, its "4т." is 15px),
+   Класиране's at y 198 (17px, its "#53" is 14px). Both are set on the same 18px line
+   at 197, so the line doesn't shift between the pages. */
+.page-hero__subtitle {
+  position: absolute;
+  top: 97px;
+  left: 13px;
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 18px;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.page-hero__subtitle strong {
+  font-weight: 700;
+  line-height: 0; /* the bigger gold word doesn't stretch the 18px line */
+  color: #f5d584;
+}
+
+.page-hero__subtitle--points strong { font-size: 15px; }  /* Прогнози: "4т." */
+.page-hero__subtitle--rank strong { font-size: 14px; }    /* Класиране: "#53" */
+
+/* the ball (Frame 192): 98 × 110, flush with the right edge, 13px below the panel's top */
+.page-hero .sport-header__image {
+  position: absolute;
+  top: 13px;
+  right: 0;
+}
+
+/* these frames crop the ball a touch differently from the lobby's */
+.page-hero .sport-header__video {
+  top: -0.88%;
+  left: 0;
+  height: 101.76%;
+}
+
+.intro-pending .page-hero { visibility: hidden; }

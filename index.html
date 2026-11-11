@@ -10,13 +10,8 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="components/event-container.css">
   <script src="components/event-container.js"></script>
-  <script>
-    // Hide the header section from the first paint until the ball's bounce intro
-    // starts (see the end of the page). Skipped with reduced motion.
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      document.documentElement.classList.add('intro-pending');
-    }
-  </script>
+  <!-- Hides the header section until the ball's bounce intro starts (see the end of the page) -->
+  <script src="components/page-boot.js"></script>
 </head>
 <body>
   <!-- Figma: "1.0 - Lobby Main" (238:6770). Layers below are in Figma's order. -->
@@ -288,15 +283,15 @@
         </filter>
       </svg>
       <span class="tab-nav__active" aria-hidden="true"></span>
-      <a class="tab-nav__item tab-nav__item--1 is-active" href="#home" aria-current="page">
+      <a class="tab-nav__item tab-nav__item--1 is-active" href="index.html" aria-current="page">
         <img class="tab-nav__icon" src="assets/lobby-main/nav-home.svg" alt="">
         <span class="tab-nav__label">Начало</span>
       </a>
-      <a class="tab-nav__item tab-nav__item--2" href="#predictions">
+      <a class="tab-nav__item tab-nav__item--2" href="predictions.html">
         <img class="tab-nav__icon" src="assets/lobby-main/nav-predictions.svg" alt="">
         <span class="tab-nav__label">Прогнози</span>
       </a>
-      <a class="tab-nav__item tab-nav__item--3" href="#rankings">
+      <a class="tab-nav__item tab-nav__item--3" href="rankings.html">
         <img class="tab-nav__icon" src="assets/lobby-main/nav-rankings.svg" alt="">
         <span class="tab-nav__label">Класиране</span>
       </a>
@@ -312,6 +307,7 @@
     </nav>
   </div>
 
+  <script src="components/tab-nav.js"></script>
   <script>
     // One active item per group, switched on tap
     function single(selector, activeClass, attr) {
@@ -448,21 +444,6 @@
             ], { duration: 360, delay: order * 60, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'backwards' });
           });
         };
-      });
-    });
-
-    // Bottom tab bar: the tapped tab becomes active and the pill slides under it
-    var navPill = document.querySelector('.tab-nav__active');
-    document.querySelectorAll('.tab-nav__item').forEach(function (item, i, items) {
-      item.addEventListener('click', function (e) {
-        e.preventDefault();
-        items.forEach(function (other) {
-          other.classList.toggle('is-active', other === item);
-          if (other === item) other.setAttribute('aria-current', 'page');
-          else other.removeAttribute('aria-current');
-        });
-        navPill.style.left = item.offsetLeft + 'px';
-        navPill.style.width = item.offsetWidth + 'px';
       });
     });
 
@@ -726,8 +707,9 @@
       var unseenBounce = 100;
       bringIn('.leaderboard', landings[3] + unseenBounce);
       bringIn('.season', landings[3] + unseenBounce + 60);
-      // the tab bar rises from below the screen just after the last card
-      document.querySelector('.tab-nav').animate([
+      // the tab bar rises from below the screen just after the last card (not when you
+      // came here from another tab: then it stays put, see components/tab-nav.js)
+      if (!window.tabNavArrived) document.querySelector('.tab-nav').animate([
         { opacity: 0, transform: 'translateY(24px)' },
         { opacity: 1, transform: 'none' }
       ], { duration: 450, delay: landings[3] + unseenBounce + 120, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'backwards' });

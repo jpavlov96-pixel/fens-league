@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Твоята Прогноза · Фенска Лига</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Hides the top block until the ball's bounce intro starts -->
+  <script src="components/page-boot.js"></script>
+</head>
+<body>
+  <!-- Figma: "2.1 - Prediction / Schedule / Next Round" (308:9440). The page opened by
+       "Прогнози" in the tab bar; the rest of it is still to be designed. -->
+  <div class="lobby-main">
+
+    <!-- Figma: gradient-bgr (308:9443), the same red glow as the lobby -->
+    <div class="gradient-bgr" aria-hidden="true"></div>
+
+    <!-- Figma: header (308:9449) -->
+    <header class="mobile-header">
+      <div class="app-header">
+        <div class="app-header__left">
+          <a class="promo-item" href="#offers">Offers</a>
+        </div>
+        <div class="app-header__right">
+          <a class="sign-up" href="#signup">Sign up</a>
+          <a class="sign-in" href="#signin">Sign In</a>
+        </div>
+        <a class="logo" href="index.html" aria-label="EGT Digital">
+          <span class="brand-logo"><img src="assets/lobby-main/egt-digital-logo.svg" alt="EGT Digital"></span>
+        </a>
+      </div>
+
+      <!-- This frame's header has "In Play" first and no NEW badge (the lobby's has "Sport"
+           and the badge); "Fen League" is the user's "Fens League" and leads to the lobby -->
+      <nav class="sub-header" aria-label="Main">
+        <div class="sub-header__items">
+          <a class="nav-link" href="#in-play">In Play</a>
+          <a class="nav-link is-active" href="index.html" aria-current="page">Fens League</a>
+          <a class="nav-link" href="#casino">Casino</a>
+          <a class="nav-link" href="#live-casino">Live Casino</a>
+          <a class="nav-link" href="#virtuals">Virtuals</a>
+          <a class="nav-link" href="#esport">eSport</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Figma: Frame 15 (308:9446) with Frame 193 (308:9662) and the subtitle (308:9522) -->
+    <section class="page-hero">
+      <h1 class="page-hero__title">Твоята<br>Прогноза</h1>
+      <p class="page-hero__subtitle page-hero__subtitle--points">За до <strong><span class="count-up" data-count="4">4</span>т.</strong> при познат точен резултат.</p>
+
+      <!-- Frame 192: Figma's ball screenshot, as the ball video (as on the lobby) -->
+      <div class="sport-header__image" aria-hidden="true">
+        <img class="sport-header__shadow" src="assets/lobby-main/ball-shadow.svg" alt="">
+        <div class="sport-header__ball">
+          <video class="sport-header__video" autoplay muted loop playsinline>
+            <source src="assets/visual-primary.mov" type='video/quicktime; codecs="hvc1"'>
+            <source src="assets/visual-primary.webm" type="video/webm">
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <!-- Figma: bottom tab bar, "Frame 181" (299:9412); Прогнози is this page -->
+    <nav class="tab-nav" aria-label="Главно меню">
+      <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+        <filter id="tab-nav-full-alpha" color-interpolation-filters="sRGB">
+          <feComponentTransfer><feFuncA type="linear" slope="1.33333"/></feComponentTransfer>
+        </filter>
+      </svg>
+      <span class="tab-nav__active" aria-hidden="true" style="left: 70px; width: 74px"></span>
+      <a class="tab-nav__item tab-nav__item--1" href="index.html">
+        <img class="tab-nav__icon" src="assets/lobby-main/nav-home.svg" alt="">
+        <span class="tab-nav__label">Начало</span>
+      </a>
+      <a class="tab-nav__item tab-nav__item--2 is-active" href="predictions.html" aria-current="page">
+        <img class="tab-nav__icon" src="assets/lobby-main/nav-predictions.svg" alt="">
+        <span class="tab-nav__label">Прогнози</span>
+      </a>
+      <a class="tab-nav__item tab-nav__item--3" href="rankings.html">
+        <img class="tab-nav__icon" src="assets/lobby-main/nav-rankings.svg" alt="">
+        <span class="tab-nav__label">Класиране</span>
+      </a>
+      <a class="tab-nav__item tab-nav__item--4" href="#achievements">
+        <img class="tab-nav__icon" src="assets/lobby-main/nav-achievements.svg" alt="">
+        <span class="tab-nav__label">Подвизи</span>
+        <span class="tab-nav__dot" aria-hidden="true"></span>
+      </a>
+      <a class="tab-nav__item tab-nav__item--5" href="#rules">
+        <img class="tab-nav__icon" src="assets/lobby-main/nav-rules.svg" alt="">
+        <span class="tab-nav__label">Правила</span>
+      </a>
+    </nav>
+  </div>
+
+  <script src="components/tab-nav.js"></script>
+  <script src="components/hero-intro.js"></script>
+</body>
+</html>
