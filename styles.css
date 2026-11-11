@@ -432,10 +432,11 @@ img { display: block; }
 /* shown once components/ball-video.js has it at its random starting point */
 .sport-header__video.is-ready { opacity: 1; }
 
-/* Entry animation: the header section stays hidden until its intro starts (class set
-   in <head>), so it never shows while the ball video loads */
+/* Entry animation: the header section, the content and the tab bar stay hidden until the
+   intro starts (class set in <head>), so they never show while the ball video loads */
 .intro-pending .header,
-.intro-pending .content-bottom {
+.intro-pending .content-bottom,
+.intro-pending .tab-nav {
   visibility: hidden;
 }
 
