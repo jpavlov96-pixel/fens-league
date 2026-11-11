@@ -270,6 +270,8 @@ event-container[hidden] { display: none; }
 .event__market-btn img { flex-shrink: 0; }
 
 .event__market-text {
+  position: relative;
+  top: -2px; /* the user's choice: 2px higher than Figma */
   display: flex;
   flex: 1 0 0;
   align-items: center;
@@ -327,3 +329,20 @@ event-container[hidden] { display: none; }
 .event__trump-card--2 img { width: 23.769px; height: 35.653px; transform: rotate(1.8deg); }
 .event__trump-card--3 { top: 1.02px; left: 0; width: 29.131px; height: 38.977px; }
 .event__trump-card--3 img { width: 23.769px; height: 35.653px; transform: rotate(9.14deg); }
+
+/* time-stamp, draw warning (Figma 316:13024): a level score in Correct Score. A gold strip
+   rounded at the bottom, up to 320px wide, in place of the date */
+.event__time--warning {
+  max-width: 320px;
+  border-radius: 0 0 50px 50px;
+  background: #f5d584;
+}
+
+.event__time--warning .event__time-text {
+  flex: none;
+  line-height: 10px;
+  color: #434343;
+  opacity: 1;
+}
+
+.event__time--warning b { font-weight: 700; }

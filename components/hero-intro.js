@@ -1,5 +1,5 @@
 // The ball's bounce intro, introBounceRefined(), for the pages with a .page-hero block
-// (Прогнози, Класиране); the lobby has its own fuller version in index.html, which has
+// (Прогнози, Класиране); the lobby has its own fuller version in lobby.html, which has
 // the full notes. The ball drops from above the screen and bounces three times into its
 // spot, stretching before and squashing on each landing, its shadow growing as it comes
 // down, each landing kicking its spin and sending a gold ring along the ground. The title

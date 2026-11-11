@@ -4,8 +4,9 @@
 //
 // Tapping a tab moves the active pill under it. A tab that links to another page slides
 // the pill (and the page's ball and title off screen, see page-motion.js) and then opens
-// it; that page starts the pill under the tab you came from and slides it home, and skips
-// the bar's own entrance in its intro (window.tabNavArrived is true then).
+// it; there the pill is already under its tab (it moved on the page you left, so it
+// doesn't slide again), and the bar's own entrance in the intro is skipped
+// (window.tabNavArrived is true then).
 
 (function () {
   var nav = document.querySelector('.tab-nav');
@@ -28,24 +29,19 @@
     place(item);
   }
 
-  // Arriving from another tab's page: start the pill where it was, then slide it here
+  // The pill starts under this page's tab, without sliding: when you came from another tab,
+  // it already slid there on the page you left
   var active = nav.querySelector('.tab-nav__item.is-active') || items[0];
   var from = null;
   try {
     from = sessionStorage.getItem(STORE);
     sessionStorage.removeItem(STORE);
-  } catch (e) { /* storage blocked: no slide, the pill just starts in place */ }
+  } catch (e) { /* storage blocked */ }
   window.tabNavArrived = from !== null;
-  var fromItem = from !== null ? items[parseInt(from, 10)] : null;
-  if (fromItem && fromItem !== active) {
-    pill.style.transition = 'none';
-    place(fromItem);
-    void pill.offsetWidth; // lay out the start position, so the move below slides from it
-    pill.style.transition = '';
-    place(active);
-  } else {
-    place(active);
-  }
+  pill.style.transition = 'none';
+  place(active);
+  void pill.offsetWidth; // lay it out in place before the slide is switched back on
+  pill.style.transition = '';
 
   // Coming back to this page from the browser's back/forward cache, its tab was handed
   // over as it was left: put it back

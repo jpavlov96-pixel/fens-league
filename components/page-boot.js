@@ -4,8 +4,9 @@
 // the product from outside it: from another site (the main Sport or Casino pages), a
 // bookmark, a typed address or a new tab. Moving between the product's own pages (the tab
 // bar, the header's "Fens League", the logo, back/forward) shows the page straight away.
-// "From inside" means the previous page (document.referrer) is on this same site, which
-// only hosts the product. A reload keeps the original referrer, so it behaves the same.
+// "From inside" means the previous page (document.referrer) is on this same site, apart
+// from the landing page (index.html), which stands in for the rest of the site. A reload
+// keeps the original referrer, so it behaves the same.
 //
 // When the intro will play, this hides the top section until it starts, so the finished
 // page never flashes before it. Skipped with reduced motion.
@@ -13,7 +14,10 @@
 (function () {
   var fromInside = false;
   try {
-    fromInside = !!document.referrer && new URL(document.referrer).origin === window.location.origin;
+    var ref = document.referrer && new URL(document.referrer);
+    // the landing page (index.html, the site's root) stands in for the rest of the site
+    // (Sport, Casino…): coming from there is coming from outside the product
+    fromInside = !!ref && ref.origin === window.location.origin && !/^\/(index(\.html)?)?$/.test(ref.pathname);
   } catch (e) { /* no usable referrer: treated as coming from outside */ }
   window.cameFromProduct = fromInside;
 

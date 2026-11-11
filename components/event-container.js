@@ -148,9 +148,91 @@
           current.querySelector(selector).replaceWith(next.querySelector(selector));
         });
         current.className = next.firstChild.className;
+        this._drawWarning();
         return;
       }
       this.innerHTML = html;
+      this._drawWarning();
+    }
+
+    // A level score in Correct Score (Figma 316:13024) isn't a valid pick: after the score has
+    // stayed level for 2 seconds (not just passed through on the way to another score), the
+    // date strip gives way to the gold warning "Невалиден залог. Използвайте коз за
+    // “Равенство”.", easing in. Once the score isn't level the warning eases out straight
+    // away (no wait) and the date comes back.
+    _drawWarning() {
+      var self = this;
+      clearTimeout(this._warnTimer);
+      var level = this._get('variant', 'match-outcome') === 'correct-score' &&
+        this._get('state', 'default') !== 'locked' &&
+        this._score('home-score', 3) === this._score('away-score', 0);
+      var time = this.querySelector('.event__time');
+      if (!time) return;
+      var motion = !!time.animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function dateStrip() {
+        var d = document.createElement('div');
+        d.className = 'event__time';
+        d.innerHTML = '<img class="event__time-bgr" src="' + ASSETS + 'time-stamp-bgr.svg" alt="">' +
+          '<span class="event__time-text">' + esc(self._get('date', 'Четвъртък, 22/11 13:00ч.')) + '</span>';
+        return d;
+      }
+      function warningStrip() {
+        var w = document.createElement('div');
+        w.className = 'event__time event__time--warning';
+        w.setAttribute('role', 'status');
+        w.innerHTML = '<span class="event__time-text">Невалиден залог. Използвайте коз за <b>“Равенство”.</b></span>';
+        return w;
+      }
+
+      if (!level) {
+        if (!this._warningShown) return;
+        this._warningShown = false;
+        // the card may just have been redrawn with the date: put the warning back for its exit
+        var leaving = time;
+        if (!leaving.classList.contains('event__time--warning')) {
+          leaving = warningStrip();
+          time.replaceWith(leaving);
+        }
+        if (!motion) return leaving.replaceWith(dateStrip());
+        // A crossfade: the date goes back in its place underneath straight away and fades in,
+        // while the warning, lifted over it, fades out and rises a touch; then it's removed
+        var d = dateStrip();
+        var top = leaving.offsetTop; // where it is now, so it doesn't move when lifted out
+        leaving.before(d);
+        leaving.style.position = 'absolute';
+        leaving.style.top = top + 'px';
+        leaving.style.left = '50%';
+        leaving.style.zIndex = '1';
+        var ease = 'cubic-bezier(0.25, 0.1, 0.25, 1)';
+        d.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 320, easing: ease });
+        var remove = function () { if (leaving.isConnected) leaving.remove(); };
+        leaving.animate([
+          { opacity: 1, transform: 'translateX(-50%)' },
+          { opacity: 0, transform: 'translateX(-50%) translateY(-3px)' }
+        ], { duration: 320, easing: ease, fill: 'forwards' }).onfinish = remove;
+        setTimeout(remove, 500); // gone even if the animation is paused (a hidden tab)
+        return;
+      }
+
+      if (this._warningShown) {
+        // still level after a redraw (e.g. 1 : 1 → 2 : 2): keep the warning, no new wait
+        if (!time.classList.contains('event__time--warning')) time.replaceWith(warningStrip());
+        return;
+      }
+      this._warnTimer = setTimeout(function () {
+        var t = self.querySelector('.event__time');
+        if (!t) return;
+        var warning = warningStrip();
+        t.replaceWith(warning);
+        self._warningShown = true;
+        if (motion) {
+          warning.animate([
+            { opacity: 0, transform: 'translateY(-4px)' },
+            { opacity: 1, transform: 'none' }
+          ], { duration: 260, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)' });
+        }
+      }, 2000);
     }
 
     // Switching Match Outcome ↔ Correct Score: the middle ("vs" / score), the buttons row
