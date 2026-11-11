@@ -262,6 +262,7 @@ event-container[hidden] { display: none; }
   display: flex;
   align-items: center;
   gap: 4px;
+  height: 32px; /* Figma's 22px text slot plus the 5px padding, kept now that the text is trimmed */
   padding: 5px 8px;
   border-radius: 50px;
   background: #d4d4d4;
@@ -269,16 +270,13 @@ event-container[hidden] { display: none; }
 
 .event__market-btn img { flex-shrink: 0; }
 
+/* The text is centred on its letters, not its line box (the user's request): text-box trims
+   the box to the capitals' top and the last baseline, and the button centres that. Without
+   text-box support it falls back to the line box, Figma's 22px slot. */
 .event__market-text {
-  position: relative;
-  top: -2px; /* the user's choice: 2px higher than Figma */
-  display: flex;
   flex: 1 0 0;
-  align-items: center;
-  justify-content: center;
   min-width: 1px;
-  height: 22px;
-  overflow: hidden;
+  text-box: trim-both cap alphabetic;
   font-size: 11px;
   font-style: italic;
   font-weight: 400;
