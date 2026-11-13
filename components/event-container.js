@@ -1,7 +1,10 @@
 // <event-container>: the match card from the Figma component set "event-container"
 // (276:9189, file "Last Fan"), as a reusable custom element. Styles: event-container.css.
 //
-// Four variants, as in Figma:
+// Five variants, as in Figma:
+//   variant="no-match"                       "Топката е в твоето поле." with a green "Прогнозирай"
+//                                            (Variant=No Match Selected, State=Empty, 352:10051);
+//                                            optional note="…" replaces "Избери един мач от Кръг 7."
 //   variant="match-outcome" state="default"  pick a team (tap a team button)
 //   variant="correct-score" state="default"  set the score with the arrow buttons
 //   variant="match-outcome" state="locked"   "Заключен за прогнози": the pick is shown, nothing can change
@@ -34,7 +37,7 @@
   class EventContainer extends HTMLElement {
     static get observedAttributes() {
       return ['variant', 'state', 'date', 'home', 'away', 'home-crest', 'away-crest',
-        'home-score', 'away-score', 'pick', 'trump-card'];
+        'home-score', 'away-score', 'pick', 'trump-card', 'note'];
     }
 
     connectedCallback() {
@@ -60,6 +63,19 @@
     }
 
     _render() {
+      // Variant=No Match Selected, State=Empty (352:10051): no match picked for the round yet
+      if (this._get('variant', 'match-outcome') === 'no-match') {
+        this.innerHTML =
+          '<div class="event event--empty">' +
+            '<img class="event__empty-bgr" src="' + ASSETS + 'event-empty-bgr.png" alt="">' +
+            '<div class="event__empty-head">' +
+              '<p class="event__empty-title">Топката е в твоето поле.</p>' +
+              '<p class="event__empty-note">' + esc(this._get('note', 'Избери един мач от Кръг 7.')) + '</p>' +
+            '</div>' +
+            '<button class="event__primary-btn" type="button" data-predict>Прогнозирай</button>' +
+          '</div>';
+        return;
+      }
       var correctScore = this._get('variant', 'match-outcome') === 'correct-score';
       var locked = this._get('state', 'default') === 'locked';
       var home = this._get('home', 'ЦСКА');
@@ -128,9 +144,9 @@
               '<span class="event__time-text">' + esc(this._get('date', 'Четвъртък, 22/11 13:00ч.')) + '</span>' +
             '</div>' +
             '<div class="event__teams">' +
-              crest(this._get('home-crest', ASSETS + 'team-cska.png'), home) +
+              crest(this._get('home-crest', 'assets/crests/cska.png'), home) +
               middle +
-              crest(this._get('away-crest', ASSETS + 'team-ludogorets.png'), away) +
+              crest(this._get('away-crest', 'assets/crests/ludogorets.png'), away) +
             '</div>' +
           '</div>' +
           '<div class="event__btns">' + buttons + '</div>' +
@@ -307,6 +323,11 @@
     _onClick(e) {
       var btn = e.target.closest('button');
       if (!btn || btn.disabled || !this.contains(btn)) return;
+      if (btn.hasAttribute('data-predict')) {
+        // No Match Selected: the page decides where "Прогнозирай" leads
+        this.dispatchEvent(new CustomEvent('predict', { bubbles: true }));
+        return;
+      }
       if (btn.hasAttribute('data-pick')) {
         this.setAttribute('pick', btn.getAttribute('data-pick'));
       } else if (btn.hasAttribute('data-score')) {

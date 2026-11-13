@@ -6,51 +6,439 @@
   <title>Компоненти</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,700;1,400&family=Montserrat:ital,wght@0,700;0,800;0,900;1,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="components/event-container.css">
   <script src="components/event-container.js"></script>
   <style>
-    /* Showcase page only: the four variants of <event-container>, laid out like Figma's
-       component set (276:9189): 355px wide, 20px apart, 20px padding */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #171818;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      color: #929295;
-    }
+    /* Showcase page only: every component of the Figma page "Components" (238:8706) that
+       the lobby and Прогнози use, each with all of its Figma states, 355px wide like the
+       phone layout */
     .showcase {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 40px;
       max-width: 395px;
       margin: 0 auto;
       padding: 20px;
+      color: #929295;
+    }
+    .showcase > section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .showcase h1 {
+      padding-bottom: 8px;
+      border-bottom: 1px solid #ffffff1a;
+      font-size: 16px;
+      font-weight: 500;
+      color: #ffffff;
     }
     .showcase h2 {
       margin-bottom: 10px;
       font-size: 12px;
       font-weight: 500;
     }
+    .showcase .row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    .showcase .light-bg { padding: 10px; border-radius: 8px; background: #d9d9d9; }
   </style>
 </head>
 <body>
   <div class="showcase">
+
+    <!-- event-container (276:9189) -->
     <section>
-      <h2>Variant=Match Outcome, State=Default</h2>
-      <event-container variant="match-outcome" state="default" trump-card></event-container>
+      <h1>event-container</h1>
+      <div>
+        <h2>Variant=Match Outcome, State=Default</h2>
+        <event-container variant="match-outcome" state="default" trump-card></event-container>
+      </div>
+      <div>
+        <h2>Variant=Correct Score, State=Default</h2>
+        <event-container variant="correct-score" state="default" trump-card></event-container>
+      </div>
+      <div>
+        <h2>Variant=Match Outcome, State=Locked</h2>
+        <event-container variant="match-outcome" state="locked" trump-card></event-container>
+      </div>
+      <div>
+        <h2>Variant=Correct Score, State=Locked</h2>
+        <event-container variant="correct-score" state="locked" trump-card></event-container>
+      </div>
+      <div>
+        <h2>Variant=No Match Selected, State=Empty</h2>
+        <event-container variant="no-match"></event-container>
+      </div>
     </section>
+
+    <!-- prediction-container (260:10687) -->
     <section>
-      <h2>Variant=Correct Score, State=Default</h2>
-      <event-container variant="correct-score" state="default" trump-card></event-container>
+      <h1>prediction-container</h1>
+      <div>
+        <h2>State=Lobby</h2>
+        <div class="prediction">
+          <div class="tab-list">
+            <span class="tab-item is-active"><span class="tab-item__content">Следващ <img class="tab-item__dot" src="assets/lobby-main/dot-active.svg" alt=""> Кръг 7</span><span class="tab-item__highlighter"></span></span>
+            <span class="tab-item"><span class="tab-item__content">Текущ <img class="tab-item__dot" src="assets/lobby-main/dot-inactive.svg" alt=""> Кръг 6</span><span class="tab-item__highlighter"></span></span>
+          </div>
+          <event-container variant="match-outcome" state="default" trump-card></event-container>
+          <div class="info-bottom">
+            <div class="info-bottom__left">
+              <span class="info-bottom__icon"><img src="assets/lobby-main/icon-timer.svg" alt=""></span>
+              <div class="info-bottom__text">
+                <p class="info-bottom__title">Прогнози до 19 Ноември, 18:00ч.</p>
+                <p class="info-bottom__note">Заключва се при старт на кръга</p>
+              </div>
+            </div>
+            <button class="edit-btn" type="button"><span class="edit-btn__icon"><img src="assets/lobby-main/icon-edit.svg" alt=""></span>Промени</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h2>State=Inner Page</h2>
+        <div class="prediction prediction--inner">
+          <div class="tab-list">
+            <span class="tab-item is-active"><span class="tab-item__content">Следващ <img class="tab-item__dot" src="assets/lobby-main/dot-active.svg" alt=""> Кръг 7</span><span class="tab-item__highlighter"></span></span>
+            <span class="tab-item"><span class="tab-item__content">Текущ <img class="tab-item__dot" src="assets/lobby-main/dot-inactive.svg" alt=""> Кръг 6</span><span class="tab-item__highlighter"></span></span>
+          </div>
+          <div class="round-stack">
+            <div class="trump-label">
+              <span class="trump-label__cards" aria-hidden="true">
+                <span class="trump-label__card trump-label__card--1"><img src="assets/trump-cards/a-small.png" alt=""></span>
+                <span class="trump-label__card trump-label__card--2"><img src="assets/trump-cards/a-small.png" alt=""></span>
+                <span class="trump-label__card trump-label__card--3"><img src="assets/trump-cards/a-small.png" alt=""></span>
+              </span>
+              <p class="trump-label__text"><span>Активен коз:</span> <strong>“Чиста Мрежа”</strong></p>
+              <span class="trump-label__remove">Премахни <span class="trump-label__close"><img src="assets/lobby-main/icon-close.svg" alt=""></span></span>
+            </div>
+            <event-container variant="correct-score" state="default" home-crest="assets/crests/cska.png" away-crest="assets/crests/ludogorets.png"></event-container>
+          </div>
+          <div class="info-bottom">
+            <div class="info-bottom__left">
+              <span class="info-bottom__icon"><img src="assets/lobby-main/icon-timer.svg" alt=""></span>
+              <div class="info-bottom__text">
+                <p class="info-bottom__title">Прогнози до 19 Ноември, 18:00ч.</p>
+                <p class="info-bottom__note">Заключва се при старт на кръга.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h2>State=Locked</h2>
+        <div class="prediction prediction--locked">
+          <div class="tab-list">
+            <span class="tab-item is-active"><span class="tab-item__content">Следващ <img class="tab-item__dot" src="assets/lobby-main/dot-active.svg" alt=""> Кръг 7</span><span class="tab-item__highlighter"></span></span>
+            <span class="tab-item"><span class="tab-item__content">Текущ <img class="tab-item__dot" src="assets/lobby-main/dot-inactive.svg" alt=""> Кръг 6</span><span class="tab-item__highlighter"></span></span>
+          </div>
+          <div class="round-stack">
+            <div class="trump-label">
+              <span class="trump-label__cards" aria-hidden="true">
+                <span class="trump-label__card trump-label__card--1"><img src="assets/trump-cards/a-small.png" alt=""></span>
+                <span class="trump-label__card trump-label__card--2"><img src="assets/trump-cards/a-small.png" alt=""></span>
+                <span class="trump-label__card trump-label__card--3"><img src="assets/trump-cards/a-small.png" alt=""></span>
+              </span>
+              <p class="trump-label__text"><span>Активен коз:</span> <strong>“Чиста Мрежа”</strong></p>
+              <span class="trump-label__remove trump-label__info">Инфо <img src="assets/lobby-main/icon-info.svg" alt="" width="12" height="12"></span>
+            </div>
+            <event-container variant="match-outcome" state="locked" home-crest="assets/crests/cska.png" away-crest="assets/crests/ludogorets.png"></event-container>
+          </div>
+          <div class="info-bottom">
+            <div class="info-bottom__left">
+              <span class="info-bottom__icon info-bottom__icon--locked"><span class="info-bottom__lock"><img src="assets/lobby-main/icon-lock.svg" alt=""></span></span>
+              <div class="info-bottom__text"><p class="info-bottom__locked-title">Заключен за прогнози.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
+
+    <!-- time-stamp (316:12876) -->
     <section>
-      <h2>Variant=Match Outcome, State=Locked</h2>
-      <event-container variant="match-outcome" state="locked" trump-card></event-container>
+      <h1>time-stamp</h1>
+      <div class="light-bg">
+        <h2>State=Light, Variant=Center</h2>
+        <div class="time-stamp" style="width: 211px"><span>Четвъртък, 22/11 13:00ч.</span></div>
+      </div>
+      <div>
+        <h2>State=Dark, Variant=Center</h2>
+        <div class="time-stamp time-stamp--dark" style="width: 211px"><span>Четвъртък, 22/11 13:00ч.</span></div>
+      </div>
+      <div>
+        <h2>State=Highlighted, Variant=Center</h2>
+        <div class="time-stamp time-stamp--highlighted" style="width: 211px"><span>Четвъртък, 22/11 13:00ч.</span></div>
+      </div>
+      <div>
+        <h2>State=State4, Variant=Left (with the round)</h2>
+        <div class="time-stamp time-stamp--left"><span>Кръг 1</span><img src="assets/lobby-main/ellipse-divider.svg" alt=""><span>Четвъртък, 22/11 13:00ч.</span></div>
+      </div>
     </section>
+
+    <!-- team-logo (316:16285) -->
     <section>
-      <h2>Variant=Correct Score, State=Locked</h2>
-      <event-container variant="correct-score" state="locked" trump-card></event-container>
+      <h1>team-logo</h1>
+      <div class="row">
+        <div>
+          <h2>Default, Layout=01</h2>
+          <div class="team-logo"><img src="assets/crests/cska.png" alt=""></div>
+        </div>
+        <div>
+          <h2>Disabled, Layout=01</h2>
+          <div class="team-logo team-logo--disabled"><img src="assets/crests/cska.png" alt=""><span class="team-logo__round">К3</span></div>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <h2>Default, Layout=02</h2>
+          <div class="team-logo team-logo--02"><img src="assets/crests/cska-small.png" alt=""><span class="team-logo__name">ЦСКА</span></div>
+        </div>
+        <div>
+          <h2>Disabled, Layout=02</h2>
+          <div class="team-logo team-logo--02 team-logo--disabled"><img src="assets/crests/cska-small.png" alt=""><span class="team-logo__name">ЦСКА</span><span class="team-logo__used">К3</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- tab-list (244:9072) and item (244:9046) -->
+    <section>
+      <h1>tab-list / item</h1>
+      <div>
+        <h2>tab-list Layout=01 (item Layout=01: Active, Default)</h2>
+        <div class="tab-list">
+          <span class="tab-item is-active"><span class="tab-item__content">Следващ <img class="tab-item__dot" src="assets/lobby-main/dot-active.svg" alt=""> Кръг 7</span><span class="tab-item__highlighter"></span></span>
+          <span class="tab-item"><span class="tab-item__content">Текущ <img class="tab-item__dot" src="assets/lobby-main/dot-inactive.svg" alt=""> Кръг 6</span><span class="tab-item__highlighter"></span></span>
+        </div>
+      </div>
+      <div>
+        <h2>tab-list Layout=02 (item Layout=02: Active, Default, Default with icon)</h2>
+        <div class="tab-list-02">
+          <span class="tab-item-02 is-active"><span class="tab-item-02__content">Следващ <img src="assets/lobby-main/dot-active.svg" alt=""> Кръг 7</span></span>
+          <span class="tab-item-02"><span class="tab-item-02__content">Текущ <img src="assets/lobby-main/dot-inactive.svg" alt=""> Кръг 6</span></span>
+          <span class="tab-item-02 tab-item-02--icon"><span class="tab-item-02__calendar"><img src="assets/lobby-main/icon-calendar.svg" alt=""></span><span class="tab-item-02__content">Сезон</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- tab_list_primary + trump-cards-btn (356:10296) -->
+    <section>
+      <h1>tab_list_primary / trump-cards-btn</h1>
+      <div class="tab-primary-row">
+        <div class="tab-primary">
+          <span class="tab-primary__item is-active">График</span>
+          <span class="tab-primary__item">Отбори</span>
+          <span class="tab-primary__item">История</span>
+        </div>
+        <span class="trump-cards-btn">
+          <span class="trump-cards-btn__icon" aria-hidden="true">
+            <span class="trump-cards-btn__blur"><img src="assets/lobby-main/trump-btn-blur.svg" alt=""></span>
+            <span class="trump-cards-btn__card--1"><img src="assets/trump-cards/a-small.png" alt=""></span>
+            <span class="trump-cards-btn__card--2"><img src="assets/trump-cards/a-small.png" alt=""></span>
+            <span class="trump-cards-btn__card--3"><img src="assets/trump-cards/b-small.png" alt=""></span>
+          </span>
+        </span>
+      </div>
+    </section>
+
+    <!-- match-card (361:11019) -->
+    <section>
+      <h1>match-card</h1>
+      <div>
+        <h2>Prediction available, with the "Дерби" badge</h2>
+        <div class="match-card">
+          <div class="time-stamp time-stamp--dark"><span>Четвъртък, 22/11 13:00ч.</span></div>
+          <div class="match-card__teams">
+            <div class="team-logo team-logo--02"><img src="assets/crests/cska-small.png" alt=""><span class="team-logo__name">ЦСКА</span></div>
+            <div class="match-card__middle"><span class="match-card__vs">vs</span><span class="secondary-btn">Прогнозирай</span></div>
+            <div class="team-logo team-logo--02"><img src="assets/crests/ludogorets-small.png" alt=""><span class="team-logo__name">Лудогорец<br>Разград</span></div>
+          </div>
+          <span class="match-card__badge">Дерби <span class="match-card__fire"><img src="assets/lobby-main/icon-fire.svg" alt=""></span></span>
+        </div>
+      </div>
+      <div>
+        <h2>Prediction available, one team used</h2>
+        <div class="match-card">
+          <div class="time-stamp time-stamp--dark"><span>Сряда, 28/11 20:00ч.</span></div>
+          <div class="match-card__teams">
+            <div class="team-logo team-logo--02 team-logo--disabled"><img src="assets/crests/lokomotiv-sofia-small.png" alt=""><span class="team-logo__name">Локомотив София</span><span class="team-logo__used team-logo__used--left">К2</span></div>
+            <div class="match-card__middle"><span class="match-card__vs">vs</span><span class="secondary-btn">Прогнозирай</span></div>
+            <div class="team-logo team-logo--02"><img src="assets/crests/septemvri-small.png" alt=""><span class="team-logo__name">Септември</span></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h2>Prediction unavailable (both teams used)</h2>
+        <div class="match-card">
+          <div class="time-stamp time-stamp--dark"><span>Петък, 23/11 14:30ч.</span></div>
+          <div class="match-card__teams">
+            <div class="team-logo team-logo--02 team-logo--disabled"><img src="assets/crests/arda-small.png" alt=""><span class="team-logo__name">Aрда Кърджали</span><span class="team-logo__used team-logo__used--left">К3</span></div>
+            <div class="match-card__middle match-card__middle--unavailable"><p class="match-card__note">И двата отбора са използвани.</p></div>
+            <div class="team-logo team-logo--02 team-logo--disabled"><img src="assets/crests/botev-vratsa-small.png" alt=""><span class="team-logo__name">Ботев Враца</span><span class="team-logo__used">К5</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- feature-panel (366:11897) -->
+    <section>
+      <h1>feature-panel</h1>
+      <div class="feature-panel">
+        <img class="feature-panel__image" src="assets/trump-cards/rest-small.png" alt="">
+        <div class="feature-panel__text">
+          <p class="feature-panel__title">ПОЧИВКА</p>
+          <p class="feature-panel__body">Пропускаш кръга и получаваш<br><strong>1 точка</strong>, без да изразходваш отбор.</p>
+        </div>
+        <span class="feature-panel__btn">Използвай</span>
+      </div>
+    </section>
+
+    <!-- team-card (289:8051) and teams-section (372:12913) -->
+    <section>
+      <h1>team-card / teams-section</h1>
+      <div class="row">
+        <div>
+          <h2>Active, Layout=01</h2>
+          <div class="teams" style="grid-template-columns: 66px; width: 66px; height: auto"><div class="team-card"><img src="assets/crests/cska-small.png" alt=""><span>ЦСКА</span></div></div>
+        </div>
+        <div>
+          <h2>Used, Layout=01</h2>
+          <div class="teams" style="grid-template-columns: 66px; width: 66px; height: auto"><div class="team-card is-used"><img src="assets/crests/cska-small.png" alt=""><span>ЦСКА</span><i>K1</i></div></div>
+        </div>
+        <div>
+          <h2>Active, Layout=02</h2>
+          <div class="team-card-02" style="width: 80px; height: 105px"><img src="assets/crests/cska-small.png" alt=""><span class="team-card-02__name">ЦСКА</span></div>
+        </div>
+        <div>
+          <h2>Used, Layout=02</h2>
+          <div class="team-card-02 team-card-02--used" style="width: 80px; height: 105px"><img src="assets/crests/cska-small.png" alt=""><span class="team-card-02__name">ЦСКА</span><span class="team-card-02__round">K1</span></div>
+        </div>
+      </div>
+      <div>
+        <h2>teams-section, State=Available</h2>
+        <div class="teams-section">
+          <p class="teams-section__title">Налични Отбори (8)</p>
+          <div class="teams-section__grid">
+            <div class="team-card-02"><img src="assets/crests/arda-small.png" alt=""><span class="team-card-02__name">Арда<br>Кърджали</span></div>
+            <div class="team-card-02"><img src="assets/crests/ludogorets-small.png" alt=""><span class="team-card-02__name">Лудогорец<br>Разград</span></div>
+            <div class="team-card-02"><img src="assets/crests/botev-plovdiv-small.png" alt=""><span class="team-card-02__name">Ботев<br>Пловдив</span></div>
+            <div class="team-card-02"><img src="assets/crests/lokomotiv-sofia-small.png" alt=""><span class="team-card-02__name">Локомотив<br>София</span></div>
+            <div class="team-card-02"><img src="assets/crests/cska-small.png" alt=""><span class="team-card-02__name">ЦСКА</span></div>
+            <div class="team-card-02"><img src="assets/crests/cska-1948-small.png" alt=""><span class="team-card-02__name">ЦСКА<br>1948</span></div>
+            <div class="team-card-02"><img src="assets/crests/lokomotiv-plovdiv-small.png" alt=""><span class="team-card-02__name">Локомотив<br>Пловдив</span></div>
+            <div class="team-card-02"><img src="assets/crests/slavia-small.png" alt=""><span class="team-card-02__name">Славия</span></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h2>teams-section, State=Unavailable</h2>
+        <div class="teams-section">
+          <p class="teams-section__title">Използвани Отбори (6)</p>
+          <div class="teams-section__grid">
+            <div class="team-card-02 team-card-02--used"><img src="assets/crests/arda-small.png" alt=""><span class="team-card-02__name">Арда<br>Кърджали</span><span class="team-card-02__round">K1</span></div>
+            <div class="team-card-02 team-card-02--used"><img src="assets/crests/ludogorets-small.png" alt=""><span class="team-card-02__name">Лудогорец<br>Разград</span><span class="team-card-02__round">K2</span></div>
+            <div class="team-card-02 team-card-02--used"><img src="assets/crests/botev-plovdiv-small.png" alt=""><span class="team-card-02__name">Ботев<br>Пловдив</span><span class="team-card-02__round">K3</span></div>
+            <div class="team-card-02 team-card-02--used"><img src="assets/crests/lokomotiv-sofia-small.png" alt=""><span class="team-card-02__name">Локомотив<br>София</span><span class="team-card-02__round">K4</span></div>
+            <div class="team-card-02 team-card-02--used"><img src="assets/crests/cska-small.png" alt=""><span class="team-card-02__name">ЦСКА</span><span class="team-card-02__round">K5</span></div>
+            <div class="team-card-02 team-card-02--used"><img src="assets/crests/cska-1948-small.png" alt=""><span class="team-card-02__name">ЦСКА<br>1948</span><span class="team-card-02__round">K6</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- history-badge (375:13688) and history-section (375:13717) -->
+    <section>
+      <h1>history-badge / history-section</h1>
+      <div>
+        <h2>history-badge, State=Default</h2>
+        <div class="history-stat" style="width: 175px"><p class="history-stat__label">Toчки за<br>сезона:</p><p class="history-stat__points"><span class="history-stat__number">10</span><span class="history-stat__unit">т.</span></p></div>
+      </div>
+      <div>
+        <h2>history-section, State=Default</h2>
+        <div class="history-section">
+          <div class="history-stat"><p class="history-stat__label">Toчки за<br>сезона:</p><p class="history-stat__points"><span class="history-stat__number">10</span><span class="history-stat__unit">т.</span></p></div>
+          <div class="history-stat"><p class="history-stat__label">Точни<br>Резултати:</p><p class="history-stat__points"><span class="history-stat__number">3</span></p></div>
+          <div class="history-stat"><p class="history-stat__label">Познати<br>Прогнози:</p><p class="history-stat__points"><span class="history-stat__number">4</span></p></div>
+          <div class="history-stat"><p class="history-stat__label">Използвани<br>Козове:</p><p class="history-stat__points"><span class="history-stat__number">1</span></p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- history-badge (375:14012), info-message (378:14502), history-card (375:13991) -->
+    <section>
+      <h1>history-badge / info-message / history-card</h1>
+      <div class="row">
+        <div><h2>Correct</h2><span class="history-badge">Позната <span>(+2т.)</span></span></div>
+        <div><h2>Incorrect</h2><span class="history-badge history-badge--incorrect">Грешна <span>(+0т.)</span></span></div>
+        <div><h2>Missed</h2><span class="history-badge history-badge--missed">Пропуск <span>(+0т.)</span></span></div>
+        <div><h2>Break</h2><span class="history-badge history-badge--break">Почивка <span>(+1т.)</span></span></div>
+      </div>
+      <div>
+        <h2>info-message, State=Used Trump</h2>
+        <div class="info-message">
+          <img class="info-message__card" src="assets/trump-cards/even-small.png" alt="">
+          <p class="info-message__text"><span>Използван Коз:</span><strong>“Равенство”</strong></p>
+          <img class="info-message__info" src="assets/lobby-main/icon-info-light.svg" alt="">
+        </div>
+      </div>
+      <div>
+        <h2>info-message, State=Achievement Unlocked</h2>
+        <div class="info-message info-message--achievement">
+          <p class="info-message__text"><span>Oтключен Подвиг:</span><strong>“Експертен Анализатор”</strong></p>
+          <img class="info-message__info" src="assets/lobby-main/icon-info-light.svg" alt="">
+        </div>
+      </div>
+      <div>
+        <h2>history-card, State=Default (with an info-message)</h2>
+        <div class="history-card">
+          <div class="history-card__top">
+            <div class="time-stamp time-stamp--left"><span>Кръг 3</span><img src="assets/lobby-main/ellipse-divider.svg" alt=""><span>Петък, 25/11 18:00ч.</span></div>
+            <span class="history-badge">Позната <span>(+4т.)</span></span>
+          </div>
+          <div class="history-card__body">
+            <div class="history-card__teams">
+              <div class="history-card__team"><img src="assets/crests/cska-1948-small.png" alt=""><span class="history-card__name">ЦСКА 1948</span></div>
+              <span class="match-card__vs">vs</span>
+              <div class="history-card__team"><span class="history-card__name">Локомотив<br>София</span><img src="assets/crests/lokomotiv-sofia-small.png" alt=""></div>
+            </div>
+            <div class="history-card__divider"></div>
+            <div class="history-card__row"><span class="history-card__label">Твоята Прогноза:</span><span class="history-card__value">Равенство</span></div>
+            <div class="history-card__row"><span class="history-card__label">Краен Резултат:</span><span class="history-card__value">0-0</span></div>
+            <div class="info-message">
+              <img class="info-message__card" src="assets/trump-cards/even-small.png" alt="">
+              <p class="info-message__text"><span>Използван Коз:</span><strong>“Равенство”</strong></p>
+              <img class="info-message__info" src="assets/lobby-main/icon-info-light.svg" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h2>history-card, State=Missed</h2>
+        <div class="history-card">
+          <div class="history-card__top">
+            <div class="time-stamp time-stamp--left"><span>Кръг 1</span><img src="assets/lobby-main/ellipse-divider.svg" alt=""><span>Петък, 25/11 18:00ч.</span></div>
+            <span class="history-badge history-badge--missed">Пропуск <span>(+0т.)</span></span>
+          </div>
+          <div class="history-card__body history-card__body--missed"><p class="history-card__missed">Пропуснат</p></div>
+        </div>
+      </div>
+      <div>
+        <h2>history-card, State=Break</h2>
+        <div class="history-card history-card--break">
+          <div class="history-card__top">
+            <div class="time-stamp time-stamp--left"><span>Кръг 1</span><img src="assets/lobby-main/ellipse-divider.svg" alt=""><span>Петък, 25/11 18:00ч.</span></div>
+            <span class="history-badge history-badge--break">Почивка <span>(+1т.)</span></span>
+          </div>
+          <div class="history-card__body history-card__body--break">
+            <p class="history-card__break">Използван коз:<br>Почивка</p>
+            <img class="history-card__break-card" src="assets/trump-cards/rest-small.png" alt="">
+          </div>
+        </div>
+      </div>
     </section>
   </div>
 </body>

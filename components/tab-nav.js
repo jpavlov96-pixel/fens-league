@@ -59,9 +59,28 @@
       if (href.charAt(0) === '#') return; // no page for this tab yet
       try { sessionStorage.setItem(STORE, String(items.indexOf(current))); } catch (err) { /* no slide on arrival */ }
       // the ball and title slide off (components/page-motion.js) while the pill moves, then go
-      var go = function () { window.location.href = href; };
-      if (window.pageMotionLeave) window.pageMotionLeave(go);
-      else setTimeout(go, 220);
+      // The next page opens once both are over: the pill's slide is a little longer than
+      // the page's, and cut short it would finish with a small jump on the next page
+      var waiting = 2;
+      var gone = false;
+      var step = function () {
+        waiting -= 1;
+        if (waiting > 0 || gone) return;
+        gone = true;
+        window.location.href = href;
+      };
+      var pillDone = false;
+      var pillStep = function () {
+        if (pillDone) return;
+        pillDone = true;
+        step();
+      };
+      pill.addEventListener('transitionend', function (ev) {
+        if (ev.propertyName === 'left') pillStep();
+      });
+      setTimeout(pillStep, 360); // the slide is 320ms; also covers no slide at all (reduced motion)
+      if (window.pageMotionLeave) window.pageMotionLeave(step);
+      else setTimeout(step, 220);
     });
   });
 })();

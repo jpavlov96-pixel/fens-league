@@ -344,3 +344,81 @@ event-container[hidden] { display: none; }
 }
 
 .event__time--warning b { font-weight: 700; }
+
+/* ---------- Variant=No Match Selected, State=Empty (352:10051) ---------- */
+/* 140px tall; Figma's fill is a gradient over a pitch-lines image, with an inner shadow */
+.event--empty {
+  justify-content: center;
+  gap: 15px;
+  height: 140px;
+  padding: 8px;
+  border: 1px solid #4a4a4a40;
+  border-radius: 12px;
+  background: linear-gradient(111.52260130310431deg, #18181833 0%, #6d6d6d40 100%);
+  overflow: hidden;
+}
+
+.event__empty-bgr {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.event--empty::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 2px 12px #00000059;
+  pointer-events: none;
+}
+
+/* header */
+.event__empty-head {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-family: "Inter", sans-serif;
+  line-height: normal;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.event__empty-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.event__empty-note {
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 400;
+  color: #929295;
+}
+
+/* Primary-btn, Small (60:30): 140 × 28, green with its glow (Figma's variables, not the
+   mint fallback in its generated code) */
+:where(.event) .event__primary-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 28px;
+  padding: 10px 5px;
+  border: 1px solid #ffffff26;
+  border-radius: 60px;
+  background: #19b14e;
+  filter: drop-shadow(0 0 3px #19b14ebf);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+  color: #ffffff;
+  white-space: nowrap;
+}
