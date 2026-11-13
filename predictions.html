@@ -502,10 +502,16 @@
         list('[data-panel]').forEach(function (panel) {
           panel.hidden = panel.getAttribute('data-panel') !== item.getAttribute('data-tab');
         });
+        if (tabInstant) { tabInstant = false; return; } // the page's arrival animates it
         if (item.getAttribute('data-tab') === 'teams') teamsIn();
         if (item.getAttribute('data-tab') === 'schedule') scheduleIn(true);
-        if (item.getAttribute('data-tab') === 'history') riseIn(list('[data-panel="history"] .history-stat, [data-panel="history"] .history-card'));
+        if (item.getAttribute('data-tab') === 'history') historyIn();
       });
+      var tabInstant = false; // set for the switch made while the page opens
+
+      function historyIn(after) {
+        riseIn(list('[data-panel="history"] .history-stat, [data-panel="history"] .history-card'), after);
+      }
 
       // График and История: their content rises in quickly, one card after another (the user's request:
       // fast and clean): on opening the tab the round tabs too, on a round switch only the
@@ -613,11 +619,24 @@
         list('.tab-item-02')[1].click();
       }
 
-      // the page opens on График: its content comes in on arrival too. Coming from another
-      // page, it starts with the slide-in (components/page-motion.js), after the prediction
-      // panel and the tab row rise in
+      // Opened from the lobby's "Виж Историята" (Ход на сезона): show История
+      var tab = null;
+      try {
+        tab = sessionStorage.getItem('fens-predictions-tab');
+        sessionStorage.removeItem('fens-predictions-tab');
+      } catch (e) { /* storage blocked */ }
+      if (tab === 'history') {
+        tabInstant = true;
+        document.querySelector('.tab-primary__item[data-tab="history"]').click();
+      }
+
+      // the page opens on График (or История, above): its content comes in on arrival too.
+      // Coming from another page, it starts with the slide-in (components/page-motion.js), after
+      // the prediction panel and the tab row rise in
       (window.pageArriveStart || Promise.resolve()).then(function () {
-        scheduleIn(true, window.cameFromProduct ? 180 : 0); // ms: after the panel (80) and tab row (130)
+        var after = window.cameFromProduct ? 180 : 0; // ms: after the panel (80) and tab row (130)
+        if (tab === 'history') historyIn(after);
+        else scheduleIn(true, after);
       });
     })();
   </script>

@@ -215,7 +215,7 @@
       <div class="card season">
         <div class="season__top">
           <h2 class="card__title">Ход на сезона</h2>
-          <a class="season__link" href="#history">Виж Историята <span class="season__chevron"><img src="assets/lobby-main/chevron-right.svg" alt=""></span></a>
+          <a class="season__link" href="predictions.html" data-open-tab="history">Виж Историята <span class="season__chevron"><img src="assets/lobby-main/chevron-right.svg" alt=""></span></a>
         </div>
 
         <div class="season__bottom">
@@ -1026,6 +1026,18 @@
         var open = head.getAttribute('aria-expanded') !== 'true';
         head.setAttribute('aria-expanded', String(open));
         head.closest('.legend').classList.toggle('is-open', open);
+      });
+    });
+
+    // Ход на сезона's "Виж Историята": opens Прогнози on История, through the tab bar's
+    // Прогнози tab like a tab change (predictions.html reads the tab from sessionStorage)
+    document.querySelectorAll('[data-open-tab]').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        try { sessionStorage.setItem('fens-predictions-tab', link.getAttribute('data-open-tab')); } catch (err) { /* opens on График */ }
+        var tab = document.querySelector('.tab-nav__item[href="predictions.html"]');
+        if (tab) tab.click();
+        else window.location.href = link.getAttribute('href');
       });
     });
 

@@ -231,6 +231,59 @@
     });
   });
 
+  // Drag down to close (the user's request): the sheet follows the finger down (not up), the
+  // dimmed page lightens with it; let go past 120px, or with a quick flick, and it closes from
+  // where it is, otherwise it springs back. A drag never counts as a tap on what's under it.
+  var sheet = q('.team-modal__sheet');
+  var backdrop = q('.team-modal__backdrop');
+  var drag = null;
+  var draggedAt = 0; // when the last drag ended: the click right after it is swallowed
+  sheet.addEventListener('pointerdown', function (e) {
+    if (e.button !== 0 || root.classList.contains('is-closing')) return;
+    drag = { id: e.pointerId, y: e.clientY, dy: 0, t: e.timeStamp, v: 0, moving: false };
+  });
+  sheet.addEventListener('pointermove', function (e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    var dy = Math.max(0, e.clientY - drag.y);
+    if (!drag.moving) {
+      if (dy < 6) return; // a tap, not a drag yet
+      drag.moving = true;
+      try { sheet.setPointerCapture(e.pointerId); } catch (err) { /* already gone */ }
+      sheet.style.transition = 'none';
+      backdrop.style.transition = 'none';
+    }
+    var dt = e.timeStamp - drag.t;
+    if (dt > 0) drag.v = (dy - drag.dy) / dt; // px per ms, for the flick
+    drag.dy = dy;
+    drag.t = e.timeStamp;
+    sheet.style.transform = 'translate(-50%, ' + dy + 'px)';
+    backdrop.style.opacity = String(Math.max(0, 1 - dy / sheet.offsetHeight));
+  });
+  function release(e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    var d = drag;
+    drag = null;
+    if (!d.moving) return;
+    draggedAt = performance.now();
+    sheet.style.transition = '';
+    backdrop.style.transition = '';
+    var shut = d.dy > 120 || d.v > 0.5;
+    // the class transitions take over from where the finger left it
+    void sheet.offsetWidth;
+    sheet.style.transform = '';
+    backdrop.style.opacity = '';
+    if (shut) close();
+  }
+  sheet.addEventListener('pointerup', release);
+  sheet.addEventListener('pointercancel', release);
+  // swallow the click that follows a drag
+  sheet.addEventListener('click', function (e) {
+    if (performance.now() - draggedAt > 300) return;
+    draggedAt = 0;
+    e.stopPropagation();
+    e.preventDefault();
+  }, true);
+
   root.addEventListener('click', function (e) {
     if (e.target.closest('[data-close]')) { close(); return; }
     var step = e.target.closest('[data-step]');
