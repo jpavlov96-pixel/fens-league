@@ -109,9 +109,9 @@
           <!-- active-trump-label (273:8186) -->
           <div class="trump-label">
             <span class="trump-label__cards" aria-hidden="true">
-              <span class="trump-label__card trump-label__card--1"><img src="assets/trump-cards/a-small.png" alt=""></span>
-              <span class="trump-label__card trump-label__card--2"><img src="assets/trump-cards/a-small.png" alt=""></span>
-              <span class="trump-label__card trump-label__card--3"><img src="assets/trump-cards/a-small.png" alt=""></span>
+              <span class="trump-label__card trump-label__card--1"><img src="assets/trump-cards/a-small.webp" alt=""></span>
+              <span class="trump-label__card trump-label__card--2"><img src="assets/trump-cards/a-small.webp" alt=""></span>
+              <span class="trump-label__card trump-label__card--3"><img src="assets/trump-cards/a-small.webp" alt=""></span>
             </span>
             <p class="trump-label__text"><span>Активен коз:</span> <strong>“Чиста Мрежа”</strong></p>
             <!-- remove-btn as "Инфо" (273:8195): no "Премахни" here, the trump card can only be
@@ -122,7 +122,7 @@
           </div>
           <event-container variant="correct-score" state="locked" date="Понеделник 19/11 20:30ч."
             home="Локомотив&#10;София" away="Ботев&#10;Пловдив"
-            home-crest="assets/crests/lokomotiv-sofia.png" away-crest="assets/crests/botev-plovdiv.png"></event-container>
+            home-crest="assets/crests/lokomotiv-sofia.webp" away-crest="assets/crests/botev-plovdiv.webp"></event-container>
         </div>
 
         <!-- info-bottom -->
@@ -243,7 +243,7 @@
             </div>
           </div>
 
-          <!-- season-panel: second half -->
+          <!-- season-panel: second half (the legend, Figma 276:9763, follows it) -->
           <div class="season-panel">
             <p class="season-panel__head">Втори Полусезон <img src="assets/lobby-main/ellipse-divider.svg" alt="" width="4" height="4"> Кръгoве 14 - 26</p>
             <div class="rounds">
@@ -267,11 +267,29 @@
             </div>
           </div>
 
-          <!-- Figma: legend (276:10133), state Closed -->
-          <button class="legend" type="button" aria-expanded="false">
-            <span>Легенда:</span>
-            <span class="legend__chevron"><img src="assets/lobby-main/chevron-down.svg" alt=""></span>
-          </button>
+          <!-- Figma: legend (276:9763), Closed (276:10133) / Open (276:9764): the header opens it -->
+          <div class="legend">
+            <button class="legend__head" type="button" aria-expanded="false" aria-controls="season-legend">
+              <span>Легенда:</span>
+              <span class="legend__chevron" aria-hidden="true">
+                <img class="legend__chevron-down" src="assets/lobby-main/chevron-down.svg" alt="">
+                <img class="legend__chevron-up" src="assets/lobby-main/legend-chevron-up.svg" alt="">
+              </span>
+            </button>
+            <div class="legend__body" id="season-legend">
+              <div class="legend__clip">
+              <div class="legend__content">
+                <p class="legend__item"><span class="legend__swatch legend__swatch--win"></span><img class="legend__dash" src="assets/lobby-main/legend-dash.svg" alt="" width="4" height="1">Познат изход.</p>
+                <p class="legend__item"><span class="legend__swatch legend__swatch--current"></span><img class="legend__dash" src="assets/lobby-main/legend-dash.svg" alt="" width="4" height="1">Текущ кръг.</p>
+                <p class="legend__item"><span class="legend__swatch legend__swatch--loss"></span><img class="legend__dash" src="assets/lobby-main/legend-dash.svg" alt="" width="4" height="1">Грешен изход.</p>
+                <p class="legend__item"><span class="legend__swatch legend__swatch--missed"><img src="assets/lobby-main/legend-missed.svg" alt=""></span><img class="legend__dash" src="assets/lobby-main/legend-dash.svg" alt="" width="4" height="1">Пропуснат кръг.</p>
+                <p class="legend__item"><span class="legend__swatch legend__swatch--win legend__swatch--icon"><img class="legend__plus" src="assets/lobby-main/icon-plus.svg" alt=""></span><img class="legend__dash" src="assets/lobby-main/legend-dash.svg" alt="" width="4" height="1">Познат резултат.</p>
+                <p class="legend__item"><img class="legend__swatch" src="assets/lobby-main/legend-postponed.svg" alt=""><img class="legend__dash" src="assets/lobby-main/legend-dash.svg" alt="" width="4" height="1">Отложен кръг.</p>
+                <p class="legend__item legend__item--wide"><span class="legend__swatch legend__swatch--win legend__swatch--icon"><img class="legend__minus" src="assets/lobby-main/icon-minus.svg" alt=""></span><img class="legend__dash" src="assets/lobby-main/legend-dash.svg" alt="" width="4" height="1">Познат изход, грешен резултат.</p>
+              </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -291,20 +309,20 @@
         </div>
         <div class="card-body">
           <div class="teams" data-state="0" data-team-list="0">
-            <div class="team-card"><img src="assets/crests/arda-small.png" alt=""><span>Арда<br>Кърджали</span></div>
-            <div class="team-card"><img src="assets/crests/ludogorets-small.png" alt=""><span>Лудогорец<br>Разград</span></div>
-            <div class="team-card"><img src="assets/crests/botev-plovdiv-small.png" alt=""><span>Ботев<br>Пловдив</span></div>
-            <div class="team-card"><img src="assets/crests/lokomotiv-sofia-small.png" alt=""><span>Локомотив<br>София</span></div>
-            <div class="team-card"><img src="assets/crests/cska-small.png" alt=""><span>ЦСКА</span></div>
-            <div class="team-card"><img src="assets/crests/cska-1948-small.png" alt=""><span>ЦСКА<br>1948</span></div>
-            <div class="team-card"><img src="assets/crests/lokomotiv-plovdiv-small.png" alt=""><span>Локомотив<br>Пловдив</span></div>
-            <div class="team-card"><img src="assets/crests/slavia-small.png" alt=""><span>Славия</span></div>
+            <div class="team-card"><img src="assets/crests/arda-small.webp" alt=""><span>Арда<br>Кърджали</span></div>
+            <div class="team-card"><img src="assets/crests/ludogorets-small.webp" alt=""><span>Лудогорец<br>Разград</span></div>
+            <div class="team-card"><img src="assets/crests/botev-plovdiv-small.webp" alt=""><span>Ботев<br>Пловдив</span></div>
+            <div class="team-card"><img src="assets/crests/lokomotiv-sofia-small.webp" alt=""><span>Локомотив<br>София</span></div>
+            <div class="team-card"><img src="assets/crests/cska-small.webp" alt=""><span>ЦСКА</span></div>
+            <div class="team-card"><img src="assets/crests/cska-1948-small.webp" alt=""><span>ЦСКА<br>1948</span></div>
+            <div class="team-card"><img src="assets/crests/lokomotiv-plovdiv-small.webp" alt=""><span>Локомотив<br>Пловдив</span></div>
+            <div class="team-card"><img src="assets/crests/slavia-small.webp" alt=""><span>Славия</span></div>
           </div>
           <div class="teams" data-state="1" data-team-list="1" hidden>
-            <div class="team-card is-used"><img src="assets/crests/arda-small.png" alt=""><span>Арда<br>Кърджали</span><i>K1</i></div>
-            <div class="team-card is-used"><img src="assets/crests/ludogorets-small.png" alt=""><span>Лудогорец<br>Разград</span><i>K2</i></div>
-            <div class="team-card is-used"><img src="assets/crests/botev-plovdiv-small.png" alt=""><span>Ботев<br>Пловдив</span><i>K3</i></div>
-            <div class="team-card is-used"><img src="assets/crests/cska-small.png" alt=""><span>ЦСКА</span><i>K4</i></div>
+            <div class="team-card is-used"><img src="assets/crests/arda-small.webp" alt=""><span>Арда<br>Кърджали</span><i>K1</i></div>
+            <div class="team-card is-used"><img src="assets/crests/ludogorets-small.webp" alt=""><span>Лудогорец<br>Разград</span><i>K2</i></div>
+            <div class="team-card is-used"><img src="assets/crests/botev-plovdiv-small.webp" alt=""><span>Ботев<br>Пловдив</span><i>K3</i></div>
+            <div class="team-card is-used"><img src="assets/crests/cska-small.webp" alt=""><span>ЦСКА</span><i>K4</i></div>
           </div>
           <div class="info-label">
             <img src="assets/lobby-main/icon-refresh-gold.svg" alt="" width="16" height="16">
@@ -333,7 +351,7 @@
                175 × 263; it opens on Голмайстор, the 3rd of the 6 dots, as in the lobby design -->
           <div class="trumps" tabindex="0" aria-label="Козове" data-start="2">
             <div class="trump">
-              <img class="trump__bgr" src="assets/trump-cards/even.png" alt="" loading="lazy" draggable="false">
+              <img class="trump__bgr" src="assets/trump-cards/even.webp" alt="" loading="lazy" draggable="false">
               <div class="trump__info">X</div>
               <div class="trump__content">
                 <div class="trump__text">
@@ -344,7 +362,7 @@
               </div>
             </div>
             <div class="trump">
-              <img class="trump__bgr" src="assets/trump-cards/repeat.png" alt="" loading="lazy" draggable="false">
+              <img class="trump__bgr" src="assets/trump-cards/repeat.webp" alt="" loading="lazy" draggable="false">
               <div class="trump__info"><img src="assets/lobby-main/icon-card-swap.svg" alt="" width="14" height="14"></div>
               <div class="trump__content">
                 <div class="trump__text">
@@ -355,7 +373,7 @@
               </div>
             </div>
             <div class="trump">
-              <img class="trump__bgr" src="assets/trump-cards/scorer.png" alt="" loading="lazy" draggable="false">
+              <img class="trump__bgr" src="assets/trump-cards/scorer.webp" alt="" loading="lazy" draggable="false">
               <div class="trump__info">x2</div>
               <div class="trump__content">
                 <div class="trump__text">
@@ -366,7 +384,7 @@
               </div>
             </div>
             <div class="trump">
-              <img class="trump__bgr" src="assets/trump-cards/all-or-nothing.png" alt="" loading="lazy" draggable="false">
+              <img class="trump__bgr" src="assets/trump-cards/all-or-nothing.webp" alt="" loading="lazy" draggable="false">
               <div class="trump__info trump__info--small">6/0</div>
               <div class="trump__content">
                 <div class="trump__text">
@@ -377,7 +395,7 @@
               </div>
             </div>
             <div class="trump">
-              <img class="trump__bgr" src="assets/trump-cards/rest.png" alt="" loading="lazy" draggable="false">
+              <img class="trump__bgr" src="assets/trump-cards/rest.webp" alt="" loading="lazy" draggable="false">
               <div class="trump__info">+1</div>
               <div class="trump__content">
                 <div class="trump__text">
@@ -388,7 +406,7 @@
               </div>
             </div>
             <div class="trump">
-              <img class="trump__bgr" src="assets/trump-cards/clean-sheet.png" alt="" loading="lazy" draggable="false">
+              <img class="trump__bgr" src="assets/trump-cards/clean-sheet.webp" alt="" loading="lazy" draggable="false">
               <div class="trump__info">+2</div>
               <div class="trump__content">
                 <div class="trump__text">
@@ -425,7 +443,7 @@
         <div class="card-body">
           <div class="missions">
             <div class="mission mission--analyst">
-              <img class="mission__bgr" src="assets/achievements/precise-analyst.png" alt="" loading="lazy">
+              <img class="mission__bgr" src="assets/achievements/precise-analyst.webp" alt="" loading="lazy">
               <div class="mission__top">
                 <div class="mission__heading">
                   <p class="mission__name">Експертен Анализатор</p>
@@ -443,7 +461,7 @@
             </div>
             <div class="mission mission--flawless">
               <img class="mission__card-bgr" src="assets/lobby-main/mission-card-bgr.png" alt="" loading="lazy">
-              <img class="mission__bgr" src="assets/achievements/flawless.png" alt="" loading="lazy">
+              <img class="mission__bgr" src="assets/achievements/flawless.webp" alt="" loading="lazy">
               <div class="mission__top">
                 <div class="mission__heading">
                   <p class="mission__name">Безпогрешен</p>
@@ -461,7 +479,8 @@
             </div>
           </div>
           <div class="info-label info-label--blue">
-            <img src="assets/lobby-main/icon-refresh-blue.svg" alt="" width="16" height="16">
+            <!-- Info (Figma 378:14468) -->
+            <img src="assets/lobby-main/icon-info-blue.svg" alt="" width="16" height="16">
             <p>Подвизите са изпълними веднъж за сезон и<br>прогресът им не се нулира на полусезеона.</p>
           </div>
           <a class="primary-btn" href="#missions">Виж Всички</a>
@@ -999,6 +1018,16 @@
       document.addEventListener('pointerdown', skipIntro, { once: true });
     }
     document.querySelector('.nav-link[href="#fens-league"]').addEventListener('click', replayIntro);
+
+    // Ход на сезона's legend: the header opens and closes it (the CSS animates the height, the
+    // items and the chevron)
+    document.querySelectorAll('.legend__head').forEach(function (head) {
+      head.addEventListener('click', function () {
+        var open = head.getAttribute('aria-expanded') !== 'true';
+        head.setAttribute('aria-expanded', String(open));
+        head.closest('.legend').classList.toggle('is-open', open);
+      });
+    });
 
     // Empty state's "Прогнозирай": opens Прогнози on Текущ кръг. It goes through the tab bar's
     // Прогнози tab, so the page leaves the same way as a tab change (pill slide, ball and title

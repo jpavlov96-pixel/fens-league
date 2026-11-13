@@ -93,17 +93,17 @@
         '<div class="match-card" data-for="0">' +
           '<div class="time-stamp time-stamp--dark"><span>Четвъртък, 22/11 13:00ч.</span></div>' +
           '<div class="match-card__teams">' +
-            '<div class="team-logo team-logo--02"><img src="assets/crests/cska-small.png" alt=""><span class="team-logo__name">ЦСКА</span></div>' +
-            '<div class="match-card__middle"><span class="match-card__vs">vs</span><button class="secondary-btn" type="button">Прогнозирай</button></div>' +
-            '<div class="team-logo team-logo--02"><img src="assets/crests/ludogorets-small.png" alt=""><span class="team-logo__name">Лудогорец<br>Разград</span></div>' +
+            '<div class="team-logo team-logo--02"><img src="assets/crests/cska-small.webp" alt=""><span class="team-logo__name">ЦСКА</span></div>' +
+            '<div class="match-card__middle match-card__middle--action"><button class="secondary-btn" type="button">Прогнозирай</button></div>' +
+            '<div class="team-logo team-logo--02"><img src="assets/crests/ludogorets-small.webp" alt=""><span class="team-logo__name">Лудогорец<br>Разград</span></div>' +
           '</div>' +
         '</div>' +
         '<div class="match-card" data-for="1">' +
           '<div class="time-stamp time-stamp--dark"><span>Петък, 23/11 14:30ч.</span></div>' +
           '<div class="match-card__teams">' +
-            '<div class="team-logo team-logo--02 team-logo--disabled"><img src="assets/crests/arda-small.png" alt=""><span class="team-logo__name">Aрда Кърджали</span><span class="team-logo__used team-logo__used--left">К3</span></div>' +
+            '<div class="team-logo team-logo--02 team-logo--disabled"><img src="assets/crests/arda-small.webp" alt=""><span class="team-logo__name">Aрда Кърджали</span><span class="team-logo__used team-logo__used--left">К3</span></div>' +
             '<div class="match-card__middle match-card__middle--unavailable"><p class="match-card__note">И двата отбора са използвани.</p></div>' +
-            '<div class="team-logo team-logo--02 team-logo--disabled"><img src="assets/crests/botev-vratsa-small.png" alt=""><span class="team-logo__name">Ботев Враца</span><span class="team-logo__used">К5</span></div>' +
+            '<div class="team-logo team-logo--02 team-logo--disabled"><img src="assets/crests/botev-vratsa-small.webp" alt=""><span class="team-logo__name">Ботев Враца</span><span class="team-logo__used">К5</span></div>' +
           '</div>' +
         '</div>' +
       '</div>' +
@@ -120,7 +120,7 @@
   var FIGMA_ORDER = ['cska', 'ludogorets', 'slavia'];
   var FIGMA_START = 'ludogorets';
 
-  function key(team) { return team.crest.split('/').pop().replace('.png', ''); }
+  function key(team) { return team.crest.split('/').pop().replace('.webp', ''); }
 
   // the teams of each filter state, read from the lobby card
   function teams(s) {
@@ -128,7 +128,7 @@
     var all = Array.prototype.map.call(list.querySelectorAll(CARD), function (card) {
       var img = card.querySelector('img');
       return {
-        crest: img.getAttribute('src').replace('-small.png', '.png'),
+        crest: img.getAttribute('src').replace('-small.webp', '.webp'),
         name: card.querySelector('span').innerHTML.replace(/<br\s*\/?>/g, ' ')
       };
     });
@@ -226,7 +226,7 @@
   cards.forEach(function (list) {
     var s = parseInt(list.getAttribute('data-team-list'), 10);
     list.querySelectorAll(CARD).forEach(function (card) {
-      var k = card.querySelector('img').getAttribute('src').split('/').pop().replace('-small.png', '');
+      var k = card.querySelector('img').getAttribute('src').split('/').pop().replace('-small.webp', '');
       card.addEventListener('click', function () { open(s, indexOf(s, k)); });
     });
   });

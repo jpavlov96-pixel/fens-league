@@ -625,7 +625,7 @@ img { display: block; }
   font-style: italic;
   font-weight: 400;
   line-height: 12px;
-  color: #2b2b2b;
+  color: #000000; /* Figma 273:7816 / 273:8195: black, the button at 60% */
   opacity: 0.6;
   cursor: pointer;
 }
@@ -1187,36 +1187,124 @@ img { display: block; }
 /* legend (276:10133), Closed */
 .legend {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  flex-direction: column;
   width: 100%;
   padding: 5px 8px;
   border-radius: 8px;
   background: linear-gradient(168.89336194552408deg, #6d6d6d08 0%, #6d6d6d1a 100%);
   overflow: hidden;
+}
+
+/* Open: Figma's fill at its own angle */
+.legend.is-open { background: linear-gradient(136.8342693315254deg, #6d6d6d08 0%, #6d6d6d1a 100%); }
+
+/* header: "Легенда:" and the chevron, the whole row taps */
+.legend__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: inherit;
   font-size: 14px;
   font-weight: 500;
   line-height: normal;
   color: #dbdbdb;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.3s;
 }
 
-.legend > span:first-child { flex: 1 0 0; min-width: 1px; }
+.legend__head > span:first-child { flex: 1 0 0; min-width: 1px; }
+.legend.is-open .legend__head { color: #ffffff; }
 
+/* chavron-default, 10 × 10: Closed shows the #dbdbdb down chevron (its icon inset 22.92%),
+   Open the white up one. Both turn with the box and cross-fade, so it rests on Figma's icons */
 .legend__chevron {
   position: relative;
   flex-shrink: 0;
   width: 10px;
   height: 10px;
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-.legend__chevron img {
-  position: absolute;
-  top: 22.92%;
-  left: 0;
-  width: 100%;
-  height: 56.25%;
+.legend__chevron img { position: absolute; transition: opacity 0.35s; }
+.legend__chevron-down { top: 22.92%; left: 0; width: 100%; height: 56.25%; }
+.legend__chevron-up { inset: 0; width: 100%; height: 100%; opacity: 0; transform: rotate(180deg); }
+
+.legend.is-open .legend__chevron { transform: rotate(180deg); }
+.legend.is-open .legend__chevron-down { opacity: 0; }
+.legend.is-open .legend__chevron-up { opacity: 1; }
+
+/* content: 10px under the header, opening by easing its height from 0 (grid rows 0fr → 1fr),
+   the items fading and rising in a beat behind */
+.legend__body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.38s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
+
+.legend.is-open .legend__body { grid-template-rows: 1fr; }
+
+/* the clip collapses to nothing; the 10px gap under the header lives inside it */
+.legend__clip { min-height: 0; overflow: hidden; }
+
+.legend__content {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 20px;
+  padding-top: 10px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.legend.is-open .legend__content {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.3s 0.08s, transform 0.35s 0.08s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* item: 16px swatch, a 4px dash, the label */
+.legend__item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 12px;
+  color: #d2d2d2;
+  white-space: nowrap;
+}
+
+.legend__item--wide { grid-column: span 2; }
+.legend__dash { flex-shrink: 0; width: 4px; height: 1px; }
+
+.legend__swatch {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.legend__swatch--win { border: 1px solid #ffffff33; background: #19b14e; }
+.legend__swatch--loss { border: 1px solid #ffffff33; background: #e42313; }
+.legend__swatch--current { border: 1px solid #f5d584; background: #ffffff26; }
+.legend__swatch--missed { border: 1px solid #3d3e3e; background: #1e1e1e; }
+
+/* Close, 8px: its icon inset 4.17% */
+.legend__swatch--missed img { width: 7.333px; height: 7.333px; }
+
+/* plus / minus, 12px with a soft shadow: the icons at Figma's insets */
+.legend__swatch--icon img { filter: drop-shadow(0 0 1.5px #00000080); }
+.legend__plus { width: 8px; height: 8px; }
+.legend__minus { width: 7.5px; height: 1.5px; margin-left: -0.5px; }
 
 /* ---------- bottom tab bar, "Frame 181" (299:9412) ---------- */
 /* Fixed over the page, 10px above the bottom edge (the same as its side margins on a
@@ -2339,6 +2427,20 @@ img { display: block; }
   color: #434343;
 }
 
+/* prediction-available (Figma 361:11017, 2026-11-13): no "vs" any more; Прогнозирай (or the
+   "Предстои" badge) alone, centred across the card, in a 53px box 17px down the teams row */
+.match-card__teams { position: relative; }
+
+.match-card__middle--action {
+  position: absolute;
+  top: 17px;
+  left: 50%;
+  justify-content: center;
+  width: 100px;
+  height: 53px;
+  transform: translateX(-50%);
+}
+
 /* "Прогнозирай", XS (361:10829): 100 × 22. Green since 2026-11-13 (Figma 386:11749): the primary
    button's variables #19b14e / border #ffffff26 with its glow, the text medium #e9ecef with a
    soft shadow */
@@ -2466,6 +2568,8 @@ img { display: block; }
 
 /* the schedule's two round lists: the one not picked is hidden */
 [data-round-list][hidden] { display: none; }
+/* the round cross-fade's size shift grows from the top of the list */
+[data-round-list] { transform-origin: 50% 0; }
 
 /* ---------- feature-panel (366:11896) ---------- */
 .feature-panel {
@@ -2483,9 +2587,10 @@ img { display: block; }
 
 .feature-panel__image {
   flex-shrink: 0;
-  width: 50px;
+  /* the official card is 2:3: 44 × 66, centred in Figma's 50px-wide slot, so it isn't cut */
+  width: 44px;
   height: 66px;
-  object-fit: cover;
+  margin: 0 3px;
 }
 
 .feature-panel__text {
@@ -2856,9 +2961,10 @@ img { display: block; }
 
 .history-card__break-card {
   flex-shrink: 0;
-  width: 49px;
+  /* 2:3 like the official card: 43.33 × 65, centred in Figma's 49px-wide slot */
+  width: 43.333px;
   height: 65px;
-  object-fit: cover;
+  margin: 0 2.833px;
 }
 
 /* ---------- info-message (378:14502): State=Used Trump / Achievement Unlocked ---------- */
@@ -2877,9 +2983,10 @@ img { display: block; }
 
 .info-message__card {
   flex-shrink: 0;
-  width: 14px;
+  /* 2:3 like the official card: 12 × 18, centred in Figma's 14px-wide slot */
+  width: 12px;
   height: 18px;
-  object-fit: cover;
+  margin: 0 1px;
 }
 
 .info-message__text {
@@ -3221,7 +3328,7 @@ html.team-modal-open body { overflow: hidden; }
 
 .team-modal__kit {
   position: absolute;
-  top: 60.07px;
+  top: 70.07px; /* Figma 396:19990 (moved down 10px since the first build) */
   left: 30.17px;
   display: flex;
   align-items: center;
@@ -3237,20 +3344,38 @@ html.team-modal-open body { overflow: hidden; }
 }
 
 .team-modal__kit > * {
+  position: relative;
   display: flex;
   flex: 1 0 0;
   align-items: center;
   justify-content: center;
   min-width: 1px;
   padding: 2.386px 5.964px;
-  border: 1.193px solid #ffffff80;
-  background: #ffffff4d;
+  border: 1.193px solid transparent;
+  background: #ffffff4d padding-box;
   -webkit-backdrop-filter: blur(4.771px);
   backdrop-filter: blur(4.771px);
 }
 
+/* each half's 1.19px outline is a gradient, white 50% on its outer end fading to nothing
+   towards the middle (Figma's gradient strokes), drawn as a masked ring */
+.team-modal__kit > *::before {
+  content: "";
+  position: absolute;
+  inset: -1.193px;
+  padding: 1.193px;
+  border-radius: inherit;
+  background: linear-gradient(to right, #ffffff80, #ffffff00);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  pointer-events: none;
+}
+
+.team-modal__kit strong::before { background: linear-gradient(to left, #ffffff80, #ffffff00); }
+
 .team-modal__kit span { height: 21.47px; border-radius: 11.928px 0 0 11.928px; font-weight: 500; line-height: 11.928px; }
-.team-modal__kit strong { border-radius: 0 11.928px 11.928px 0; font-weight: 700; line-height: 13.12px; }
+.team-modal__kit strong { height: 21.157px; border-radius: 0 11.928px 11.928px 0; font-weight: 700; line-height: 13.12px; }
 
 /* Rectangle 15 */
 .team-modal__divider {

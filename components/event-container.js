@@ -145,9 +145,9 @@
               '<span class="event__time-text">' + esc(this._get('date', 'Четвъртък, 22/11 13:00ч.')) + '</span>' +
             '</div>' +
             '<div class="event__teams">' +
-              crest(this._get('home-crest', 'assets/crests/cska.png'), home) +
+              crest(this._get('home-crest', 'assets/crests/cska.webp'), home) +
               middle +
-              crest(this._get('away-crest', 'assets/crests/ludogorets.png'), away) +
+              crest(this._get('away-crest', 'assets/crests/ludogorets.webp'), away) +
             '</div>' +
           '</div>' +
           '<div class="event__btns">' + buttons + '</div>' +

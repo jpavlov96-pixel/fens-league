@@ -5,8 +5,10 @@ Needs Pillow. Use a throwaway environment rather than installing it system-wide:
     python3 -m venv /tmp/fens-venv && /tmp/fens-venv/bin/pip install pillow
     /tmp/fens-venv/bin/python tools/optimize-resources.py
 
-Every copy is resized to 3x its largest on-screen size, then re-encoded as a 256-colour
-PNG with transparency and dithering (5-15x smaller, no visible difference at that size).
+Every copy is resized to 3x its largest on-screen size, then saved as WebP (quality 90, with
+transparency). Until 2026-11-13 they were 256-colour PNGs, which broke the artwork's
+gradients into bands; full-colour PNGs would be about 8x heavier, WebP keeps them smooth at
+about the old size.
 """
 import os
 from PIL import Image
@@ -50,7 +52,6 @@ for src_dir, out_dir, variants in SETS:
         base = os.path.splitext(web_name(name))[0]
         for suffix, how in variants:
             im = resize(original, how)
-            q = im.quantize(colors=256, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.FLOYDSTEINBERG)
-            out = os.path.join(out_path, base + suffix + ".png")
-            q.save(out, optimize=True)
-            print(f"{out_dir}/{base}{suffix}.png  {im.size[0]}x{im.size[1]}  {os.path.getsize(out) // 1024} KB")
+            out = os.path.join(out_path, base + suffix + ".webp")
+            im.save(out, "WEBP", quality=90, method=6)
+            print(f"{out_dir}/{base}{suffix}.webp  {im.size[0]}x{im.size[1]}  {os.path.getsize(out) // 1024} KB")

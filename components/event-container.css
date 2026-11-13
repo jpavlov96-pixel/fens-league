@@ -366,10 +366,10 @@ event-container[hidden] { display: none; }
   gap: 15px;
   height: 140px;
   padding: 8px;
-  border: 1px solid #4a4a4a40;
+  /* the 1px border's room; the line itself is drawn on top by ::after */
+  border: 1px solid transparent;
   border-radius: 12px;
-  background: linear-gradient(111.52260130310431deg, #18181833 0%, #6d6d6d40 100%);
-  overflow: hidden;
+  background: linear-gradient(111.52260130310431deg, #18181833 0%, #6d6d6d40 100%) padding-box;
 }
 
 .event__empty-bgr {
@@ -377,17 +377,36 @@ event-container[hidden] { display: none; }
   inset: 0;
   width: 100%;
   height: 100%;
-  border-radius: 12px;
+  border-radius: 11px;
   object-fit: cover;
 }
 
+/* On top of the image (so it can never cover them, even while the panel animates on a phone):
+   Figma's inner shadow (::before) and its border (::after). The border is a gradient stroke,
+   #4a4a4a → #afafaf at 12% (the lobby's instance 356:10163), corner to corner at about 111°;
+   CSS borders can't take a gradient, so it's a 1px masked ring */
+.event--empty::before,
 .event--empty::after {
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: inset 0 2px 12px #00000059;
+  z-index: 1;
   pointer-events: none;
+}
+
+.event--empty::before {
+  inset: 0;
+  border-radius: 11px;
+  box-shadow: inset -2px -2px 12px #00000080;
+}
+
+.event--empty::after {
+  inset: -1px;
+  padding: 1px;
+  border-radius: 12px;
+  background: linear-gradient(111.2deg, #4a4a4a1f 0%, #afafaf1f 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
 }
 
 /* header */
@@ -431,7 +450,7 @@ event-container[hidden] { display: none; }
   background: #19b14e;
   filter: drop-shadow(0 0 3px #19b14ebf);
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500; /* medium, like the match cards' Прогнозирай (the user's request) */
   line-height: normal;
   color: #ffffff;
   white-space: nowrap;
