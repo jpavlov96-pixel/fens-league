@@ -6,7 +6,7 @@
   <title>Фенска Лига</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Montserrat:ital,wght@0,700;0,800;0,900;1,800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Montserrat:ital,wght@0,700;0,800;0,900;1,500;1,700;1,800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="components/event-container.css">
   <script src="components/event-container.js"></script>
@@ -99,7 +99,11 @@
         <!-- Figma: event-container (276:9188): the reusable component, see components/event-container.js.
              One card per round tab: "Следващ • Кръг 7" is open for picks; "Текущ • Кръг 6" is
              variant 4 of the set (Correct Score, Locked, 276:9578) with its Figma teams -->
-        <event-container data-round="0" variant="match-outcome" state="default" trump-card></event-container>
+        <!-- Следващ shows the empty state, No Match Selected (Figma 356:10163 / 352:10051; the user's
+             request 2026-11-13): "Прогнозирай" opens Прогнози on Текущ кръг (see the script below).
+             The picked-match card it replaces, for when a pick exists:
+             <event-container data-round="0" variant="match-outcome" state="default" trump-card></event-container> -->
+        <event-container data-round="0" variant="no-match" data-predict-to="predictions.html"></event-container>
         <!-- Кръг 6: the active-trump-label over the card, 5px apart (Figma 273:8185) -->
         <div class="round-stack" data-round="1" hidden>
           <!-- active-trump-label (273:8186) -->
@@ -286,7 +290,7 @@
           <p class="card-head__count"><span class="count" data-counts="8 4">8</span></p>
         </div>
         <div class="card-body">
-          <div class="teams" data-state="0">
+          <div class="teams" data-state="0" data-team-list="0">
             <div class="team-card"><img src="assets/crests/arda-small.png" alt=""><span>Арда<br>Кърджали</span></div>
             <div class="team-card"><img src="assets/crests/ludogorets-small.png" alt=""><span>Лудогорец<br>Разград</span></div>
             <div class="team-card"><img src="assets/crests/botev-plovdiv-small.png" alt=""><span>Ботев<br>Пловдив</span></div>
@@ -296,7 +300,7 @@
             <div class="team-card"><img src="assets/crests/lokomotiv-plovdiv-small.png" alt=""><span>Локомотив<br>Пловдив</span></div>
             <div class="team-card"><img src="assets/crests/slavia-small.png" alt=""><span>Славия</span></div>
           </div>
-          <div class="teams" data-state="1" hidden>
+          <div class="teams" data-state="1" data-team-list="1" hidden>
             <div class="team-card is-used"><img src="assets/crests/arda-small.png" alt=""><span>Арда<br>Кърджали</span><i>K1</i></div>
             <div class="team-card is-used"><img src="assets/crests/ludogorets-small.png" alt=""><span>Лудогорец<br>Разград</span><i>K2</i></div>
             <div class="team-card is-used"><img src="assets/crests/botev-plovdiv-small.png" alt=""><span>Ботев<br>Пловдив</span><i>K3</i></div>
@@ -502,6 +506,8 @@
   <!-- the ball and title slide off / on when moving between the product's pages -->
   <script src="components/page-motion.js"></script>
   <script src="components/tab-nav.js"></script>
+  <!-- Team Modal (396:19940 / 396:20047): opens on a tap on the Отбори card's team cards -->
+  <script src="components/team-modal.js"></script>
   <script>
     // One active item per group, switched on tap
     // (each group is the items sharing a parent, so every card's filter switches on its own)
@@ -993,6 +999,16 @@
       document.addEventListener('pointerdown', skipIntro, { once: true });
     }
     document.querySelector('.nav-link[href="#fens-league"]').addEventListener('click', replayIntro);
+
+    // Empty state's "Прогнозирай": opens Прогнози on Текущ кръг. It goes through the tab bar's
+    // Прогнози tab, so the page leaves the same way as a tab change (pill slide, ball and title
+    // off); predictions.html reads the round from sessionStorage
+    document.addEventListener('predict', function () {
+      try { sessionStorage.setItem('fens-predictions-round', '1'); } catch (e) { /* opens on Следващ */ }
+      var tab = document.querySelector('.tab-nav__item[href="predictions.html"]');
+      if (tab) tab.click();
+      else window.location.href = 'predictions.html';
+    });
 
     if (document.documentElement.classList.contains('intro-pending')) {
       // wait for the ball's video to be at its starting point (components/ball-video.js)

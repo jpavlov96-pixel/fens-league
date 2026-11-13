@@ -6,7 +6,7 @@
   <title>Твоята Прогноза · Фенска Лига</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Montserrat:ital,wght@0,700;0,800;0,900;1,800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Montserrat:ital,wght@0,700;0,800;0,900;1,500;1,700;1,800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="components/event-container.css">
   <!-- Hides the top block until the ball's bounce intro starts -->
@@ -167,8 +167,8 @@
           </button>
         </div>
 
-        <!-- group-03: match-card × 7 (361:11708–361:11714) -->
-        <div class="predictions-group">
+        <!-- group-03: match-card × 7 (361:11708–361:11714); data-round-list = the tab-list item -->
+        <div class="predictions-group" data-round-list="0">
           <div class="match-card">
             <div class="time-stamp time-stamp--dark"><span>Четвъртък, 22/11 13:00ч.</span></div>
             <div class="match-card__teams">
@@ -229,8 +229,69 @@
           </div>
         </div>
 
-        <!-- group-04: feature-panel (366:11912) -->
-        <div class="feature-panel">
+        <!-- "2.2 - Prediction / Schedule / Current Round" (396:20998), group-03 (396:21015):
+             finished, live and upcoming matches; no feature-panel under it -->
+        <div class="predictions-group" data-round-list="1" hidden>
+          <div class="match-card">
+            <div class="time-stamp time-stamp--dark"><span>Четвъртък, 22/11 13:00ч.</span></div>
+            <div class="match-card__teams">
+              <div class="team-logo team-logo--02"><img src="assets/crests/cska-small.png" alt=""><span class="team-logo__name">ЦСКА</span></div>
+              <div class="match-card__middle"><span class="match-card__score"><img class="match-card__goal" src="assets/lobby-main/goal-arrow-left.svg" alt="">3 : 1<span class="match-card__goal"></span></span><span class="status-badge">Приключил</span></div>
+              <div class="team-logo team-logo--02"><img src="assets/crests/ludogorets-small.png" alt=""><span class="team-logo__name">Лудогорец<br>Разград</span></div>
+            </div>
+          </div>
+          <div class="match-card">
+            <div class="time-stamp time-stamp--dark"><span>Петък, 23/11 14:30ч.</span></div>
+            <div class="match-card__teams">
+              <div class="team-logo team-logo--02 team-logo--disabled"><img src="assets/crests/arda-small.png" alt=""><span class="team-logo__name">Aрда Кърджали</span><span class="team-logo__used team-logo__used--left">К3</span></div>
+              <div class="match-card__middle"><span class="match-card__score"><span class="match-card__goal"></span>0 : 0<span class="match-card__goal"></span></span><span class="status-badge">Приключил</span></div>
+              <div class="team-logo team-logo--02 team-logo--disabled"><img src="assets/crests/botev-vratsa-small.png" alt=""><span class="team-logo__name">Ботев Враца</span><span class="team-logo__used">К5</span></div>
+            </div>
+          </div>
+          <div class="match-card">
+            <div class="time-stamp time-stamp--dark"><span>Неделя, 25/11 18:00ч.</span></div>
+            <div class="match-card__teams">
+              <div class="team-logo team-logo--02 team-logo--disabled"><img src="assets/crests/botev-plovdiv-small.png" alt=""><span class="team-logo__name">Ботев Пловдив</span><span class="team-logo__used team-logo__used--left">К1</span></div>
+              <div class="match-card__middle"><span class="match-card__score"><img class="match-card__goal" src="assets/lobby-main/goal-arrow-left.svg" alt="">1 : 2<span class="match-card__goal"></span></span><span class="status-badge">Приключил</span></div>
+              <div class="team-logo team-logo--02 team-logo--disabled"><img src="assets/crests/dunav-small.png" alt=""><span class="team-logo__name">Дунав Русе</span><span class="team-logo__used">К7</span></div>
+            </div>
+          </div>
+          <div class="match-card">
+            <div class="time-stamp time-stamp--dark time-stamp--live"><span>Първо Полувреме, 14:32</span></div>
+            <div class="match-card__teams">
+              <div class="team-logo team-logo--02"><img src="assets/crests/levski-small.png" alt=""><span class="team-logo__name">Левски</span></div>
+              <div class="match-card__middle"><span class="match-card__score match-card__score--live">0 : 0</span><span class="status-badge status-badge--live"><img src="assets/lobby-main/live-indicator.svg" alt="">LIVE</span></div>
+              <div class="team-logo team-logo--02"><img src="assets/crests/lokomotiv-plovdiv-small.png" alt=""><span class="team-logo__name">Локомотив<br>Пловдив</span></div>
+            </div>
+          </div>
+          <div class="match-card">
+            <div class="time-stamp time-stamp--dark"><span>Сряда, 28/11 20:00ч.</span></div>
+            <div class="match-card__teams">
+              <div class="team-logo team-logo--02 team-logo--disabled"><img src="assets/crests/lokomotiv-sofia-small.png" alt=""><span class="team-logo__name">Локомотив София</span><span class="team-logo__used team-logo__used--left">К2</span></div>
+              <div class="match-card__middle"><span class="match-card__vs">vs</span><span class="status-badge">Предстои</span></div>
+              <div class="team-logo team-logo--02"><img src="assets/crests/septemvri-small.png" alt=""><span class="team-logo__name">Септември</span></div>
+            </div>
+          </div>
+          <div class="match-card">
+            <div class="time-stamp time-stamp--dark"><span>Петък, 30/11 18:30ч.</span></div>
+            <div class="match-card__teams">
+              <div class="team-logo team-logo--02"><img src="assets/crests/slavia-small.png" alt=""><span class="team-logo__name">Славия</span></div>
+              <div class="match-card__middle"><span class="match-card__vs">vs</span><span class="status-badge">Предстои</span></div>
+              <div class="team-logo team-logo--02"><img src="assets/crests/cska-1948-small.png" alt=""><span class="team-logo__name">ЦСКА 1948</span></div>
+            </div>
+          </div>
+          <div class="match-card">
+            <div class="time-stamp time-stamp--dark"><span>Петък, 30/11 20:00ч.</span></div>
+            <div class="match-card__teams">
+              <div class="team-logo team-logo--02"><img src="assets/crests/cherno-more-small.png" alt=""><span class="team-logo__name">Черно Море Варна</span></div>
+              <div class="match-card__middle"><span class="match-card__vs">vs</span><span class="status-badge">Предстои</span></div>
+              <div class="team-logo team-logo--02 team-logo--disabled"><img src="assets/crests/spartak-varna-small.png" alt=""><span class="team-logo__name">Спартак Варна</span><span class="team-logo__used">К4</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- group-04: feature-panel (366:11912), Next Round only -->
+        <div class="feature-panel" data-round-list="0">
           <img class="feature-panel__image" src="assets/trump-cards/rest-small.png" alt="">
           <div class="feature-panel__text">
             <p class="feature-panel__title">ПОЧИВКА</p>
@@ -245,7 +306,7 @@
         <!-- teams-section, State=Available (372:12994) -->
         <div class="teams-section">
           <p class="teams-section__title">Налични Отбори (8)</p>
-          <div class="teams-section__grid">
+          <div class="teams-section__grid" data-team-list="0">
             <div class="team-card-02"><img src="assets/crests/arda-small.png" alt=""><span class="team-card-02__name">Арда<br>Кърджали</span></div>
             <div class="team-card-02"><img src="assets/crests/ludogorets-small.png" alt=""><span class="team-card-02__name">Лудогорец<br>Разград</span></div>
             <div class="team-card-02"><img src="assets/crests/botev-plovdiv-small.png" alt=""><span class="team-card-02__name">Ботев<br>Пловдив</span></div>
@@ -259,7 +320,7 @@
         <!-- teams-section, State=Unavailable (372:13023) -->
         <div class="teams-section">
           <p class="teams-section__title">Използвани Отбори (6)</p>
-          <div class="teams-section__grid">
+          <div class="teams-section__grid" data-team-list="1">
             <div class="team-card-02 team-card-02--used"><img src="assets/crests/arda-small.png" alt=""><span class="team-card-02__name">Арда<br>Кърджали</span><span class="team-card-02__round">K1</span></div>
             <div class="team-card-02 team-card-02--used"><img src="assets/crests/ludogorets-small.png" alt=""><span class="team-card-02__name">Лудогорец<br>Разград</span><span class="team-card-02__round">K2</span></div>
             <div class="team-card-02 team-card-02--used"><img src="assets/crests/botev-plovdiv-small.png" alt=""><span class="team-card-02__name">Ботев<br>Пловдив</span><span class="team-card-02__round">K3</span></div>
@@ -416,6 +477,8 @@
   <script src="components/tab-nav.js"></script>
   <script src="components/hero-intro.js"></script>
   <script src="components/event-container.js"></script>
+  <!-- Team Modal (396:19940 / 396:20047): opens on a tap on the Отбори tab's team cards -->
+  <script src="components/team-modal.js"></script>
   <script>
     // Прогнози's own switches: the three tabs (График / Отбори / История), the round tabs
     // of the schedule, the prediction-container's two rounds and the trump label's "Премахни"
@@ -439,10 +502,58 @@
         list('[data-panel]').forEach(function (panel) {
           panel.hidden = panel.getAttribute('data-panel') !== item.getAttribute('data-tab');
         });
+        if (item.getAttribute('data-tab') === 'teams') teamsIn();
+        if (item.getAttribute('data-tab') === 'schedule') scheduleIn(true);
+        if (item.getAttribute('data-tab') === 'history') riseIn(list('[data-panel="history"] .history-stat, [data-panel="history"] .history-card'));
       });
 
-      // tab-list Layout 02 (only Следващ has matches in Figma, so the list stays)
-      single(list('.tab-item-02'));
+      // График and История: their content rises in quickly, one card after another (the user's request:
+      // fast and clean): on opening the tab the round tabs too, on a round switch only the
+      // shown round's cards (and the feature-panel under Следващ)
+      function scheduleIn(withTabs, after) {
+        var els = list('[data-round-list]:not([hidden]) > .match-card, .feature-panel[data-round-list]:not([hidden])');
+        if (withTabs) els = list('[data-panel="schedule"] .tab-list-02').concat(els);
+        riseIn(els, after);
+      }
+
+      // the shared "fast and clean" entry (График, История): each element rises 10px and fades
+      // in, 340ms, 45ms after the one before (the stagger stops growing after the 8th)
+      function riseIn(els, after) {
+        if (!Element.prototype.animate || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        els.forEach(function (el, n) {
+          el.getAnimations().forEach(function (a) { a.cancel(); });
+          el.animate([
+            { opacity: 0, transform: 'translateY(10px)' },
+            { opacity: 1, transform: 'none' }
+          ], { duration: 340, delay: (after || 0) + Math.min(n, 7) * 45, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'backwards' });
+        });
+      }
+
+      // Отбори: the team cards come in one after another, as on the lobby's Отбори card when
+      // its filter switches (same keyframes and timing), through both sections in order
+      function teamsIn() {
+        if (!Element.prototype.animate || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        list('[data-panel="teams"] .team-card-02').forEach(function (el, n) {
+          el.getAnimations().forEach(function (a) { a.cancel(); });
+          el.animate([
+            { opacity: 0, transform: 'translateY(6px) scale(0.94)' },
+            { opacity: 1, transform: 'none' }
+          ], { duration: 280, delay: n * 30, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'backwards' });
+        });
+      }
+
+      // tab-list Layout 02: Следващ = Next Round's matches, Текущ = Current Round's (396:20998);
+      // Сезон is still waiting for its bottom sheet, so the list stays as it is for it
+      single(list('.tab-item-02'), function (item, i) {
+        list('.tab-item-02__content img').forEach(function (dot) {
+          dot.src = 'assets/lobby-main/' + (dot.closest('.tab-item-02') === item ? 'dot-active.svg' : 'dot-inactive.svg');
+        });
+        if (i > 1) return;
+        list('[data-round-list]').forEach(function (el) {
+          el.hidden = el.getAttribute('data-round-list') !== String(i);
+        });
+        // switching rounds just shows the other round's cards, no animation (the user's request)
+      });
 
       // prediction-container: Следващ = Inner Page, Текущ = Locked
       var box = document.querySelector('[data-prediction]');
@@ -460,6 +571,21 @@
       // "Премахни" takes the active trump card off this round
       list('.trump-label__remove:not(.trump-label__info)').forEach(function (btn) {
         btn.addEventListener('click', function () { btn.closest('.trump-label').remove(); });
+      });
+
+      // Opened from the lobby's empty state ("Прогнозирай"): show Текущ кръг
+      var round = null;
+      try {
+        round = sessionStorage.getItem('fens-predictions-round');
+        sessionStorage.removeItem('fens-predictions-round');
+      } catch (e) { /* storage blocked */ }
+      if (round === '1') list('.tab-item-02')[1].click();
+
+      // the page opens on График: its content comes in on arrival too. Coming from another
+      // page, it starts with the slide-in (components/page-motion.js), after the prediction
+      // panel and the tab row rise in
+      (window.pageArriveStart || Promise.resolve()).then(function () {
+        scheduleIn(true, window.cameFromProduct ? 180 : 0); // ms: after the panel (80) and tab row (130)
       });
     })();
   </script>

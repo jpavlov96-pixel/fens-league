@@ -93,11 +93,24 @@ event-container[hidden] { display: none; }
   width: 100%;
 }
 
+/* The crests keep their shape, centred in the 114 × 68 slot (the user's choice, 2026-11-13;
+   Figma stretches them). The image's own box is sized to the crest's proportions (max-width /
+   max-height with auto sizes) rather than filling the slot with object-fit: phones briefly drew
+   the image stretched to the slot on a page change before object-fit took effect. */
 .event__crest {
+  display: flex;
   flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
   width: 114px;
   height: 68px;
-  object-fit: fill; /* like Figma: the square image is stretched to the 114 × 68 slot */
+}
+
+.event__crest img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 /* Locked: Figma gives the home crest a soft shadow (it follows the crest's shape) */
@@ -120,6 +133,7 @@ event-container[hidden] { display: none; }
   font-weight: 800;
   line-height: normal;
   color: #afafaf73; /* Figma 316:15852 */
+  filter: url(#event-vs-inner-shadow); /* Figma's inner shadow (event-container.js draws it) */
 }
 
 /* Correct Score: "3 : 0" */

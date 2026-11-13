@@ -1424,6 +1424,11 @@ img { display: block; }
 .arrive-pending .page-hero__title,
 .arrive-pending .page-hero__subtitle,
 .arrive-pending .sport-header__image { visibility: hidden; }
+/* the content under it waits too, until it rises in (components/page-motion.js) */
+.arrive-pending .prediction,
+.arrive-pending .tab-primary-row,
+.arrive-pending .predictions-panel,
+.arrive-pending .content-bottom:not(.content-bottom--predictions) > * { opacity: 0; }
 
 /* ---------- content-bottom: Отбори, Козове, Подвизи (lobby groups 03–06) ---------- */
 /* The same sport-container card as above (.card); each sets its own background angle */
@@ -2081,15 +2086,16 @@ img { display: block; }
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  height: 26px;
+  height: 32px; /* Figma 386:11749: 32px, so a two-line name makes the card 86px */
   overflow: hidden;
-  font-size: 13px; /* the user's choice (Figma: 12px) */
+  font-size: 13px;
   font-weight: 500;
-  line-height: 13px;
+  line-height: normal;
   color: #ffffff;
   text-align: center;
 }
 
+/* Disabled: grey name in the same 32px box as Default (Figma 404:12606, 2026-11-13) */
 .team-logo--disabled .team-logo__name { color: #929295; }
 
 /* the round the team was used in ("К3"), in the top corner */
@@ -2260,7 +2266,7 @@ img { display: block; }
   justify-content: center;
   gap: 5px;
   height: 15px;
-  font-size: 12px;
+  font-size: 13px; /* Figma 386:11747 */
   font-weight: 400;
   line-height: normal;
   color: #dbdbdb;
@@ -2333,21 +2339,25 @@ img { display: block; }
   color: #434343;
 }
 
-/* Secondary-btn, XS (361:10829): 100 × 22, Figma's variables #4c4c4c / #e9ecef */
+/* "Прогнозирай", XS (361:10829): 100 × 22. Green since 2026-11-13 (Figma 386:11749): the primary
+   button's variables #19b14e / border #ffffff26 with its glow, the text medium #e9ecef with a
+   soft shadow */
 .secondary-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100px;
   height: 22px;
-  padding: 4px;
-  border: 1px solid #4c4c4c;
+  padding: 10px 5px;
+  border: 1px solid #ffffff26;
   border-radius: 60px;
-  background: #4c4c4c;
+  background: #19b14e;
+  filter: drop-shadow(0 0 3px #19b14ebf);
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 500;
   line-height: normal;
   color: #e9ecef;
+  text-shadow: 0 0 2px #00000073;
   white-space: nowrap;
 }
 
@@ -2403,6 +2413,59 @@ img { display: block; }
   height: 12px;
   transform: translateX(-50%);
 }
+
+/* match-card, State=Finished (396:21474) and the live / upcoming middles (396:21007):
+   the score sits over a 22px status badge, like the vs over Прогнозирай */
+.match-card__score {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 100%;
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: normal;
+  color: #dbdbdb;
+  white-space: nowrap;
+  font-feature-settings: "locl" 0;
+}
+
+/* indicator-left / -right: 16 × 16 slots, the goal arrow shows on the side that scored */
+.match-card__goal {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.match-card__score--live { color: #f5d584; }
+
+/* badge-finished / badge-upcoming (396:21544, 396:21798), badge-live (396:21569) */
+.status-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 100px;
+  height: 22px;
+  padding: 4px;
+  border: 1px solid #ffffff26;
+  border-radius: 60px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: normal;
+  color: #929295;
+  white-space: nowrap;
+}
+
+.status-badge--live { border-color: #19b14e40; }
+.status-badge--live img { width: 10px; height: 10px; }
+
+/* a live match's time-stamp text is white ("Първо Полувреме, 14:32") */
+.time-stamp--live { color: #ffffff; }
+
+/* the schedule's two round lists: the one not picked is hidden */
+[data-round-list][hidden] { display: none; }
 
 /* ---------- feature-panel (366:11896) ---------- */
 .feature-panel {
@@ -2645,7 +2708,7 @@ img { display: block; }
   width: 100%;
 }
 
-.history-card__top .time-stamp--left { border-top-left-radius: 11px; }
+.history-card__top .time-stamp--left { width: 233px; border-top-left-radius: 11px; } /* Figma 386:11797 */
 .history-card__top .history-badge { border-top-right-radius: 11px; }  /* follows the card's corner */
 
 /* history-badge (375:14012): Correct / Incorrect / Missed / Break */
@@ -2862,6 +2925,10 @@ img { display: block; }
 .prediction--inner .info-bottom__title { line-height: 16px; }
 .prediction--inner .info-bottom__note { line-height: 15px; }
 
+/* Locked's info row is one 32px line; held at the inner page's 33px so switching
+   Следващ ↔ Текущ doesn't make the container jump by a pixel */
+.prediction--locked .info-bottom { min-height: 33px; }
+
 /* On the inner page Figma doesn't stretch the crests (the lobby's 114 × 68 does): each team
    gets a third of the row with its 68 × 68 crest centred in it (team-01 / team-02, flex 1) */
 .prediction--inner .event__teams,
@@ -2873,5 +2940,460 @@ img { display: block; }
   min-width: 1px;
   width: auto;
   height: 68px;
+}
+
+/* =====================================================================================
+   Team Modal: "1.1 - Team Modal / Available Teams" (396:19940, light) and
+   "1.2 - Team Modal / Used Teams" (396:20047, dark, .team-modal--used).
+   A bottom sheet (396:19955 / 396:20062) laid out as in Figma: its parts sit at Figma's
+   positions inside the 375px sheet (measured from inside its 3px top border). Both states
+   share Налични's positions and sizes (the user's request, 2026-11-13: Figma's Използвани sits
+   a few pixels off in places, which made the content jump when switching the filter); only
+   colours, the card texture and Форма ↔ W/L/D change.
+   ===================================================================================== */
+.team-card,
+.team-card-02 { cursor: pointer; }
+
+.team-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+
+.team-modal[hidden] { display: none; }
+
+html.team-modal-open,
+html.team-modal-open body { overflow: hidden; }
+
+/* blur-bgr (396:19954) */
+.team-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: #000000b3;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+.team-modal__sheet {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 375px;
+  max-width: 100%;
+  height: 587px;
+  border-top: 3px solid #5c5c5c;
+  border-radius: 12px 12px 0 0;
+  background: #171717 url("data:image/svg+xml;utf8,<svg viewBox='0 0 375 587' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-63.75 -188.9 120.68 -254.11 646.25 1889)'><stop stop-color='rgba(0,0,0,1)' offset='0'/><stop stop-color='rgba(6,6,6,1)' offset='0.2'/><stop stop-color='rgba(12,12,12,1)' offset='0.4'/><stop stop-color='rgba(23,23,23,1)' offset='0.8'/></radialGradient></defs></svg>") 0 0 / 100% 100%;
+  box-shadow: 0 4px 12px #00000040;
+  overflow: hidden;
+  transform: translate(-50%, 100%);
+  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.team-modal.is-open .team-modal__backdrop { opacity: 1; }
+.team-modal.is-open .team-modal__sheet { transform: translate(-50%, 0); }
+.team-modal.is-closing .team-modal__sheet { transition-duration: 0.25s; transition-timing-function: cubic-bezier(0.4, 0, 1, 1); }
+
+.team-modal__sheet > * { position: absolute; }
+
+/* Rectangle 17 (light: white → #cacaca under its texture) / Rectangle 16 (dark) */
+.team-modal__card {
+  top: 75px;
+  left: 5px;
+  width: 365px;
+  height: 370px;
+  border: 1px solid #909090;
+  border-radius: 12px;
+  background: linear-gradient(to top, #cacaca, #ffffff);
+  box-shadow: 0 4px 12px #00000080;
+  overflow: hidden;
+}
+
+.team-modal__card-bgr {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  object-position: bottom;
+}
+
+.team-modal--used .team-modal__card {
+  border-color: #242424;
+  background: linear-gradient(to bottom, #1c1c1c, #212121);
+}
+
+.team-modal--used .team-modal__card-bgr { object-fit: cover; opacity: 0.5; }
+
+/* Group 58: title + filter, the gold count on the right */
+.team-modal__head { top: 10px; left: 10px; width: 345px; }
+
+/* crests: 80 blurred · 140 with its glow · 80 blurred, 5px apart */
+.team-modal__crests {
+  top: 85px;
+  left: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 365px;
+}
+
+.team-modal__side {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  opacity: 0.8;
+  filter: blur(4px);
+  cursor: pointer;
+}
+
+.team-modal__main {
+  position: relative;
+  flex-shrink: 0;
+  width: 140px;
+  height: 140px;
+}
+
+/* Ellipse 25: 110px at (14.5, 15), its SVG carries the blur room (inset −27.27%) */
+.team-modal__glow {
+  position: absolute;
+  top: -15px;
+  left: -15.5px;
+  width: 170px;
+  height: 170px;
+  max-width: none;
+}
+
+.team-modal__crest {
+  position: relative;
+  width: 140px;
+  height: 140px;
   object-fit: contain;
 }
+
+/* the 28px round arrow buttons, 10px in from the row's ends (Figma mirrors their content) */
+.team-modal__chevron {
+  position: absolute;
+  top: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid #ffffff;
+  border-radius: 50px;
+  background: #ffffff7d;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  box-shadow: inset 0 0 16px #ffffff;
+  overflow: hidden;
+  transform: scaleX(-1);
+  cursor: pointer;
+}
+
+.team-modal__chevron--prev { left: 10px; }
+.team-modal__chevron--next { right: 10px; }
+
+/* chavron-default, 14px: the icon at inset 0 20.83% 0 22.92% */
+.team-modal__chevron img { width: 7.875px; height: 14px; margin-left: 0.29px; }
+
+.team-modal--used .team-modal__chevron {
+  border-color: #3e3e3e;
+  background: #0000007d;
+  box-shadow: inset 0 0 16px #3f3f3f;
+}
+
+/* "3-то място" */
+.team-modal__rank {
+  top: 213px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  height: 20px;
+  padding: 3px 8px;
+  border: 1px solid #fcfcfc;
+  border-radius: 20px;
+  background: linear-gradient(to right, #e4e4e4, #dbdbdb);
+  filter: drop-shadow(0 0 2px #00000040);
+  transform: translateX(-50%);
+  font-family: "Montserrat", sans-serif;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 14px;
+  white-space: pre;
+}
+
+.team-modal__rank strong { font-size: 12px; font-weight: 800; color: #434343; }
+.team-modal__rank i { font-size: 12px; }
+.team-modal__rank span { font-size: 10px; color: #5e5e5e; }
+
+.team-modal--used .team-modal__rank {
+  border-color: #636363;
+  background: linear-gradient(to right, #454545, #3c3c3c);
+}
+
+.team-modal--used .team-modal__rank strong { color: #ffffff; }
+.team-modal--used .team-modal__rank span { color: #aeaeae; }
+
+/* name, centred on y 249 */
+.team-modal__name {
+  top: 249px;
+  left: calc(50% + 0.5px);
+  transform: translate(-50%, -50%);
+  font-family: "Montserrat", sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: normal;
+  color: #2f2f2f;
+  white-space: nowrap;
+}
+
+.team-modal--used .team-modal__name { color: #ffffff; }
+
+/* Точки: 30 | Мачове: 13 */
+.team-modal__totals {
+  top: 262px;
+  left: calc(50% + 0.5px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transform: translateX(-50%);
+}
+
+.team-modal__totals p,
+.team-modal__row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: "Montserrat", sans-serif;
+  font-style: italic;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.team-modal__totals p { font-size: 12px; }
+.team-modal__totals span { font-weight: 500; color: #818181; }
+.team-modal__totals strong { font-weight: 700; color: #2f2f2f; }
+.team-modal__totals i { width: 1px; height: 12px; border-radius: 10px; background: #a6a6a6; }
+
+.team-modal--used .team-modal__totals span { color: #aeaeae; }
+.team-modal--used .team-modal__totals strong { color: #ffffff; }
+.team-modal--used .team-modal__totals i { background: #aeaeae; }
+
+/* Rectangle 13: the white details box */
+.team-modal__info {
+  top: 287px;
+  left: 10px;
+  width: 355px;
+  height: 153px;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 0 3px #00000026;
+}
+
+.team-modal--used .team-modal__info { background: #292929; box-shadow: 0 0 3px #00000066; }
+
+/* the two shirts and the Away / Home switch, clipped to 167 × 99 */
+.team-modal__shirts {
+  top: 286px;
+  left: 198.45px;
+  width: 166.988px;
+  height: 99px;
+  overflow: hidden;
+}
+
+.team-modal__shirt-home {
+  position: absolute;
+  top: 3.58px;
+  left: 36.97px;
+  width: 155.06px;
+  height: 155.06px;
+}
+
+.team-modal__shirt-home img { position: absolute; top: 0; left: 0; width: 155.06px; height: 155.06px; max-width: none; }
+
+.team-modal__shirt-home .team-modal__shirt-away { top: 17.89px; left: -44.13px; width: 119.277px; height: 119.277px; }
+
+.team-modal__kit {
+  position: absolute;
+  top: 60.07px;
+  left: 30.17px;
+  display: flex;
+  align-items: center;
+  gap: 1.193px;
+  width: 114.506px;
+  border-radius: 11.928px;
+  overflow: hidden;
+  font-family: "Montserrat", sans-serif;
+  font-size: 11.928px;
+  font-style: italic;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.team-modal__kit > * {
+  display: flex;
+  flex: 1 0 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 1px;
+  padding: 2.386px 5.964px;
+  border: 1.193px solid #ffffff80;
+  background: #ffffff4d;
+  -webkit-backdrop-filter: blur(4.771px);
+  backdrop-filter: blur(4.771px);
+}
+
+.team-modal__kit span { height: 21.47px; border-radius: 11.928px 0 0 11.928px; font-weight: 500; line-height: 11.928px; }
+.team-modal__kit strong { border-radius: 0 11.928px 11.928px 0; font-weight: 700; line-height: 13.12px; }
+
+/* Rectangle 15 */
+.team-modal__divider {
+  top: 385px;
+  left: 20px;
+  width: 335px;
+  height: 1px;
+  background: linear-gradient(to right, #e8e8e800, #e5e5e5, #e8e8e800);
+}
+
+.team-modal--used .team-modal__divider { background: linear-gradient(to right, #31313100, #3c3c3c, #31313100); }
+
+/* Треньор / Топ Играч / Титли / Форма: 20px apart (dark: 18px, and the W/L/D badges) */
+.team-modal__rows {
+  top: 297px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.team-modal__row { height: 15px; } /* Figma's 15px rows */
+.team-modal__row span { font-size: 11px; font-weight: 500; color: #838383; }
+.team-modal__row strong { font-size: 12px; font-weight: 700; color: #2f2f2f; }
+.team-modal__badges { display: none; }
+
+.team-modal--used .team-modal__row span { color: #aeaeae; }
+.team-modal--used .team-modal__row strong { color: #ffffff; }
+.team-modal--used .team-modal__form { display: none; }
+
+/* badge-history: 16px rounds, W / L / D */
+.team-modal--used .team-modal__badges { display: flex; gap: 5px; } /* in Форма's place, y 357 */
+
+.team-modal__badges b {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: normal;
+  color: #efefef;
+}
+
+.team-modal__badges .is-win { background: #19b14e; }
+.team-modal__badges .is-lose { background: #b33939; }
+.team-modal__badges .is-draw { background: #2a75ff; }
+
+/* Голове / Победи / Загуби / ГР */
+.team-modal__stats {
+  top: 396px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 335px;
+}
+
+.team-modal__stat {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 1px;
+}
+
+.team-modal__stat--80 { flex: 0 0 80px; }
+.team-modal__stat--56 { flex: 0 0 56px; gap: 3px; }
+
+.team-modal__stat-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  font-family: "Montserrat", sans-serif;
+  font-size: 11px;
+  font-style: italic;
+  font-weight: 500;
+  line-height: normal;
+  color: #838383;
+  white-space: nowrap;
+}
+
+.team-modal__stat-value {
+  width: 100%;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: normal;
+  color: #333333;
+  text-align: center;
+}
+
+.team-modal--used .team-modal__stat-head { color: #aeaeae; }
+.team-modal--used .team-modal__stat-value { color: #ffffff; }
+
+/* 14px icons, each with Figma's inset */
+.team-modal__icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+}
+
+.team-modal__icon img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.team-modal__icon--trophy img { top: 1.4px; height: 11.2px; }
+.team-modal__icon--statistics img { inset: 10.42%; width: auto; height: auto; }
+
+/* Предстоящ Мач • Кръг 9 and its card */
+.team-modal__next {
+  top: 455px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  width: 355px;
+}
+
+.team-modal__next-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-style: italic;
+  line-height: normal;
+  color: #ffffffbf;
+  white-space: nowrap;
+}
+
+/* the next match is the shared match-card (404:12582 Available, 404:12606 Used) */
+.team-modal__next .match-card { width: 100%; }
+.team-modal__next .match-card[hidden] { display: none; }
+
+.team-modal__name,
+.team-modal__rank,
+.team-modal__totals,
+.team-modal__rows,
+.team-modal__stats { font-feature-settings: "locl" 0; }

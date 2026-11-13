@@ -1,0 +1,7 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="live-indicator">
+<circle id="Ellipse 15" opacity="0.4" cx="5" cy="5" r="3.75" fill="#19B14E"/>
+<circle id="Ellipse 17" opacity="0.2" cx="5" cy="5" r="5" fill="#00FF59"/>
+<circle id="Ellipse 16" cx="5" cy="5" r="2.5" fill="#30FF78"/>
+</g>
+</svg>

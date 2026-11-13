@@ -84,7 +84,8 @@
       var dis = locked ? ' disabled' : '';
 
       function crest(src, name) {
-        return '<img class="event__crest" src="' + esc(src) + '" alt="' + esc(name) + '">';
+        // the slot is the span; the image inside keeps its own proportions (see the CSS)
+        return '<span class="event__crest"><img src="' + esc(src) + '" alt="' + esc(name) + '"></span>';
       }
 
       function teamBtn(side, name) {
@@ -172,83 +173,73 @@
     }
 
     // A level score in Correct Score (Figma 316:13024) isn't a valid pick: after the score has
-    // stayed level for 2 seconds (not just passed through on the way to another score), the
-    // date strip gives way to the gold warning "Невалиден залог. Използвайте коз за
-    // “Равенство”.", easing in. Once the score isn't level the warning eases out straight
-    // away (no wait) and the date comes back.
+    // stayed level for 1.35 seconds (not just passed through on the way to another score), the
+    // gold warning "Невалиден залог. Използвайте коз за “Равенство”." unrolls over the date
+    // strip. The date stays where it is underneath the whole time (the user's request); the
+    // warning is laid on top of it. Once the score isn't level the warning rolls away straight
+    // away (no wait), showing the date again.
     _drawWarning() {
       var self = this;
       clearTimeout(this._warnTimer);
       var level = this._get('variant', 'match-outcome') === 'correct-score' &&
         this._get('state', 'default') !== 'locked' &&
         this._score('home-score', 3) === this._score('away-score', 0);
-      var time = this.querySelector('.event__time');
+      var time = this.querySelector('.event__time:not(.event__time--warning)');
       if (!time) return;
       var motion = !!time.animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var current = this.querySelector('.event__time--warning');
 
-      function dateStrip() {
-        var d = document.createElement('div');
-        d.className = 'event__time';
-        d.innerHTML = '<img class="event__time-bgr" src="' + ASSETS + 'time-stamp-bgr.svg" alt="">' +
-          '<span class="event__time-text">' + esc(self._get('date', 'Четвъртък, 22/11 13:00ч.')) + '</span>';
-        return d;
-      }
-      function warningStrip() {
+      // the warning, laid over the date strip: same top, centred, above it
+      function addWarning() {
         var w = document.createElement('div');
         w.className = 'event__time event__time--warning';
         w.setAttribute('role', 'status');
         w.innerHTML = '<span class="event__time-text">Невалиден залог. Използвайте коз за <b>“Равенство”.</b></span>';
+        w.style.position = 'absolute';
+        w.style.top = time.offsetTop + 'px';
+        w.style.left = '50%';
+        w.style.transform = 'translateX(-50%)';
+        w.style.zIndex = '1';
+        time.after(w);
         return w;
       }
 
       if (!level) {
         if (!this._warningShown) return;
         this._warningShown = false;
-        // the card may just have been redrawn with the date: put the warning back for its exit
-        var leaving = time;
-        if (!leaving.classList.contains('event__time--warning')) {
-          leaving = warningStrip();
-          time.replaceWith(leaving);
-        }
-        if (!motion) return leaving.replaceWith(dateStrip());
-        // A crossfade: the date goes back in its place underneath straight away and fades in,
-        // while the warning, lifted over it, fades out and rises a touch; then it's removed
-        var d = dateStrip();
-        var top = leaving.offsetTop; // where it is now, so it doesn't move when lifted out
-        leaving.before(d);
-        leaving.style.position = 'absolute';
-        leaving.style.top = top + 'px';
-        leaving.style.left = '50%';
-        leaving.style.zIndex = '1';
-        var ease = 'cubic-bezier(0.25, 0.1, 0.25, 1)';
-        d.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 320, easing: ease });
-        var remove = function () { if (leaving.isConnected) leaving.remove(); };
-        leaving.animate([
-          { opacity: 1, transform: 'translateX(-50%)' },
-          { opacity: 0, transform: 'translateX(-50%) translateY(-3px)' }
-        ], { duration: 320, easing: ease, fill: 'forwards' }).onfinish = remove;
+        if (!current) return;
+        if (!motion) return current.remove();
+        // rolls back up into the card's top edge while fading (clipped, it never moves, so
+        // nothing shows outside the card); then it's removed
+        var remove = function () { if (current.isConnected) current.remove(); };
+        current.getAnimations().forEach(function (a) { a.cancel(); });
+        current.animate([
+          { opacity: 1, clipPath: 'inset(0 0 0 0)' },
+          { opacity: 0, clipPath: 'inset(0 0 100% 0)' }
+        ], { duration: 320, easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)', fill: 'forwards' }).onfinish = remove;
         setTimeout(remove, 500); // gone even if the animation is paused (a hidden tab)
         return;
       }
 
       if (this._warningShown) {
         // still level after a redraw (e.g. 1 : 1 → 2 : 2): keep the warning, no new wait
-        if (!time.classList.contains('event__time--warning')) time.replaceWith(warningStrip());
+        if (!current) addWarning();
         return;
       }
       this._warnTimer = setTimeout(function () {
-        var t = self.querySelector('.event__time');
-        if (!t) return;
-        var warning = warningStrip();
-        t.replaceWith(warning);
+        if (!time.isConnected) return;
+        var warning = addWarning();
         self._warningShown = true;
         if (motion) {
+          // unrolls down from the card's top edge over the date (clipped, so it stays inside
+          // the card), soft and unhurried: the fade runs a little behind the unroll
           warning.animate([
-            { opacity: 0, transform: 'translateY(-4px)' },
-            { opacity: 1, transform: 'none' }
-          ], { duration: 260, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)' });
+            { opacity: 0, clipPath: 'inset(0 0 100% 0)' },
+            { opacity: 0.6, clipPath: 'inset(0 0 25% 0)', offset: 0.55 },
+            { opacity: 1, clipPath: 'inset(0 0 0 0)' }
+          ], { duration: 480, easing: 'cubic-bezier(0.33, 0, 0.2, 1)' });
         }
-      }, 2000);
+      }, 1350);
     }
 
     // Switching Match Outcome ↔ Correct Score: the middle ("vs" / score), the buttons row
@@ -346,4 +337,27 @@
   }
 
   customElements.define('event-container', EventContainer);
+
+  // The big "vs" has an inner shadow in Figma (273:9128: black 65%, x −1, y 1, blur 2), which CSS
+  // can't put on text; this SVG filter draws it, once per page, used by .event__vs in the CSS
+  function addVsShadow() {
+    if (document.getElementById('event-vs-inner-shadow')) return;
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', '0');
+    svg.setAttribute('height', '0');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.style.position = 'absolute';
+    svg.innerHTML =
+      '<filter id="event-vs-inner-shadow" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">' +
+        '<feOffset in="SourceAlpha" dx="-1" dy="1" result="shifted"/>' +
+        '<feGaussianBlur in="shifted" stdDeviation="1" result="blurred"/>' +
+        '<feComposite in="SourceAlpha" in2="blurred" operator="out" result="inner"/>' +
+        '<feFlood flood-color="#000000" flood-opacity="0.65"/>' +
+        '<feComposite in2="inner" operator="in" result="shadow"/>' +
+        '<feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="shadow"/></feMerge>' +
+      '</filter>';
+    document.body.appendChild(svg);
+  }
+  if (document.body) addVsShadow();
+  else document.addEventListener('DOMContentLoaded', addVsShadow);
 })();
