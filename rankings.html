@@ -12,8 +12,9 @@
   <script src="components/page-boot.js"></script>
 </head>
 <body>
-  <!-- Figma: "3.1 - Ranking / Seasonal" (308:9739). The page opened by "Класиране" in the
-       tab bar; the rest of it is still to be designed. -->
+  <!-- Класиране: the page opened by "Класиране" in the tab bar. The header and the shared top
+       block came from Figma's "3.1 - Ranking / Seasonal" (308:9739, since removed from the
+       file); under it the rankings (2026-11-14, designed here). -->
   <div class="lobby-main">
 
     <!-- Figma: gradient-bgr (308:9742), the same red glow as the lobby -->
@@ -51,13 +52,287 @@
     <!-- Figma: Frame 15 (308:9745) with the title (308:9781), subtitle (308:9773) and ball (308:9778) -->
     <section class="page-hero">
       <h1 class="page-hero__title">Твоето<br>Класиране</h1>
-      <p class="page-hero__subtitle page-hero__subtitle--rank"><strong>#<span class="count-up" data-count="53">53</span></strong> от 10 083 играчи за сезона.</p>
+      <p class="page-hero__subtitle page-hero__subtitle--rank"><strong>#<span class="count-up" data-count="53">53</span></strong><span data-rank-subtitle> от 10 083 играчи за сезона.</span></p>
 
       <!-- Figma's ball screenshot, as the ball video (as on the lobby) -->
       <div class="sport-header__image" aria-hidden="true">
         <img class="sport-header__shadow" src="assets/lobby-main/ball-shadow.svg" alt="">
         <div class="sport-header__ball">
           <video class="sport-header__video" autoplay muted loop playsinline data-src-mov="assets/visual-primary.mov" data-src-webm="assets/visual-primary.webm"></video>
+        </div>
+      </div>
+    </section>
+
+    <!-- Класиране's content (2026-11-14, designed here: Figma's "3.1 - Ranking / Seasonal"
+         frame is gone from the file). Two rankings on Прогнози's tab_list_primary, Сезон and
+         Полусезон (RULES.md), each with the same four cards: my position, the leaders, the
+         prizes, my tie-break numbers. Every name and number is a sample; mine follow the lobby. -->
+    <section class="content-bottom content-bottom--ranking">
+      <div class="tab-primary-row">
+        <div class="tab-primary" role="tablist">
+          <button class="tab-primary__item is-active" type="button" role="tab" aria-selected="true" data-rank-tab="season">Сезон</button>
+          <button class="tab-primary__item" type="button" role="tab" aria-selected="false" data-rank-tab="half">Полусезон</button>
+        </div>
+      </div>
+
+      <!-- ===== Сезон (the lobby's numbers: 29т., #53 от 10 083) ===== -->
+      <div class="rank-panel" data-rank-panel="season">
+
+        <!-- my position: place and points, then how far the next prize is -->
+        <div class="card rank-card">
+          <div class="rank-card__head">
+            <h2 class="card__title">Твоята позиция</h2>
+            <p class="rank-card__meta">След Кръг 6 от 26</p>
+          </div>
+          <div class="history-section">
+            <div class="history-stat">
+              <span class="history-stat__label">Място<span class="rank-move rank-move--up rank-move--note">4</span></span>
+              <span class="history-stat__points"><span class="history-stat__number">#53</span></span>
+            </div>
+            <div class="history-stat">
+              <span class="history-stat__label">Точки</span>
+              <span class="history-stat__points"><span class="history-stat__number">29</span><span class="history-stat__unit">т.</span></span>
+            </div>
+          </div>
+          <div class="rank-next">
+            <div class="rank-next__row">
+              <p class="rank-next__label">Сега печелиш</p>
+              <p class="rank-next__prize">€50 фрийбет</p>
+            </div>
+            <div class="rank-next__bar"><i style="width: 94%"></i></div>
+            <div class="rank-next__row">
+              <p class="rank-next__note">Още <strong>2т.</strong> до топ 50</p>
+              <p class="rank-next__note">Следваща: <strong>€100 фрийбет</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- the leaders: top 3 on the lobby's podium (the prize pictures were tried on it and
+             taken off again at the user's request), then 4-13 and the five players around me: 15 rows (the user's choice) -->
+        <div class="card rank-card">
+          <div class="rank-card__head">
+            <h2 class="card__title">Топ играчи</h2>
+            <p class="rank-card__meta">10 083 играчи</p>
+          </div>
+          <div class="rank-podium">
+            <div class="rank-podium__players">
+              <div class="rank-podium__player rank-podium__player--2"><span class="rank-podium__avatar">NI</span><p class="rank-podium__name">ni***87</p><p class="rank-podium__pts">40<span>т.</span></p></div>
+              <div class="rank-podium__player rank-podium__player--1"><span class="rank-podium__avatar">GE</span><p class="rank-podium__name">ge***ev</p><p class="rank-podium__pts">41<span>т.</span></p></div>
+              <div class="rank-podium__player rank-podium__player--3"><span class="rank-podium__avatar">ST</span><p class="rank-podium__name">st***an</p><p class="rank-podium__pts">39<span>т.</span></p></div>
+            </div>
+            <img class="podium" src="assets/lobby-main/podium.png" alt="">
+          </div>
+          <div class="rank-table">
+            <!-- "Точни рез.": each player's exact scores, the first tie-break (RULES.md) -->
+            <div class="rank-table__head"><span>Място</span><span>Играч</span><span>Точни рез.</span><span>Точки</span></div>
+            <ol class="rank-list">
+            <li class="rank-row"><span class="rank-row__pos">4</span><span class="rank-move rank-move--up">2</span><span class="rank-row__name">pe***ov</span><span class="rank-row__exact">5</span><span class="rank-row__pts">38<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">5</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">di***ya</span><span class="rank-row__exact">4</span><span class="rank-row__pts">38<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">6</span><span class="rank-move rank-move--up">3</span><span class="rank-row__name">ma***n9</span><span class="rank-row__exact">4</span><span class="rank-row__pts">37<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">7</span><span class="rank-move rank-move--down">2</span><span class="rank-row__name">kr***ov</span><span class="rank-row__exact">5</span><span class="rank-row__pts">36<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">8</span><span class="rank-move rank-move--up">1</span><span class="rank-row__name">al***ka</span><span class="rank-row__exact">3</span><span class="rank-row__pts">36<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">9</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">bo***04</span><span class="rank-row__exact">4</span><span class="rank-row__pts">35<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">10</span><span class="rank-move rank-move--down">1</span><span class="rank-row__name">va***ev</span><span class="rank-row__exact">4</span><span class="rank-row__pts">35<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">11</span><span class="rank-move rank-move--up">4</span><span class="rank-row__name">ts***ko</span><span class="rank-row__exact">3</span><span class="rank-row__pts">35<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">12</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">ya***na</span><span class="rank-row__exact">4</span><span class="rank-row__pts">34<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">13</span><span class="rank-move rank-move--down">3</span><span class="rank-row__name">mi***21</span><span class="rank-row__exact">3</span><span class="rank-row__pts">34<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">14</span><span class="rank-move rank-move--up">1</span><span class="rank-row__name">ro***ov</span><span class="rank-row__exact">3</span><span class="rank-row__pts">34<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">15</span><span class="rank-move rank-move--up">2</span><span class="rank-row__name">el***ca</span><span class="rank-row__exact">4</span><span class="rank-row__pts">33<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">16</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">da***ev</span><span class="rank-row__exact">4</span><span class="rank-row__pts">33<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">17</span><span class="rank-move rank-move--down">1</span><span class="rank-row__name">vi***or</span><span class="rank-row__exact">3</span><span class="rank-row__pts">33<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">18</span><span class="rank-move rank-move--up">5</span><span class="rank-row__name">si***na</span><span class="rank-row__exact">2</span><span class="rank-row__pts">33<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">19</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">pl***en</span><span class="rank-row__exact">4</span><span class="rank-row__pts">32<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">20</span><span class="rank-move rank-move--down">2</span><span class="rank-row__name">an***77</span><span class="rank-row__exact">4</span><span class="rank-row__pts">32<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">21</span><span class="rank-move rank-move--up">1</span><span class="rank-row__name">lu***bo</span><span class="rank-row__exact">3</span><span class="rank-row__pts">32<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">22</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">ka***in</span><span class="rank-row__exact">3</span><span class="rank-row__pts">32<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">23</span><span class="rank-move rank-move--up">3</span><span class="rank-row__name">ze***ro</span><span class="rank-row__exact">3</span><span class="rank-row__pts">32<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="2"><span class="rank-row__pos">24</span><span class="rank-move rank-move--down">1</span><span class="rank-row__name">ne***li</span><span class="rank-row__exact">2</span><span class="rank-row__pts">32<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="2"><span class="rank-row__pos">25</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">do***ov</span><span class="rank-row__exact">4</span><span class="rank-row__pts">31<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="2"><span class="rank-row__pos">26</span><span class="rank-move rank-move--up">2</span><span class="rank-row__name">il***an</span><span class="rank-row__exact">3</span><span class="rank-row__pts">31<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="2"><span class="rank-row__pos">27</span><span class="rank-move rank-move--down">4</span><span class="rank-row__name">ra***ya</span><span class="rank-row__exact">3</span><span class="rank-row__pts">31<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="2"><span class="rank-row__pos">28</span><span class="rank-move rank-move--up">1</span><span class="rank-row__name">ch***ko</span><span class="rank-row__exact">3</span><span class="rank-row__pts">31<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="2"><span class="rank-row__pos">29</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">em***il</span><span class="rank-row__exact">2</span><span class="rank-row__pts">31<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="2"><span class="rank-row__pos">30</span><span class="rank-move rank-move--down">1</span><span class="rank-row__name">ga***ev</span><span class="rank-row__exact">2</span><span class="rank-row__pts">31<span>т.</span></span></li>
+            </ol>
+            <!-- the gap between the leaders and my neighbours: shows ten more of the top each time -->
+            <button class="rank-gap" type="button" data-rank-show>Покажи още <img src="assets/lobby-main/chevron-down.svg" alt="" width="10" height="6"></button>
+            <ol class="rank-list">
+            <li class="rank-row"><span class="rank-row__pos">51</span><span class="rank-move rank-move--up">1</span><span class="rank-row__name">ra***ov</span><span class="rank-row__exact">3</span><span class="rank-row__pts">30<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">52</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">to***91</span><span class="rank-row__exact">3</span><span class="rank-row__pts">29<span>т.</span></span></li>
+            <li class="rank-row is-me"><span class="rank-row__pos">53</span><span class="rank-move rank-move--up">4</span><span class="rank-row__name">lastfan<span class="rank-row__you">Ти</span></span><span class="rank-row__exact">2</span><span class="rank-row__pts">29<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">54</span><span class="rank-move rank-move--down">2</span><span class="rank-row__name">iv***na</span><span class="rank-row__exact">1</span><span class="rank-row__pts">29<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">55</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">hr***ev</span><span class="rank-row__exact">3</span><span class="rank-row__pts">28<span>т.</span></span></li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- prizes: the lobby's awards and prize-table (273:8598), with my tier marked -->
+        <div class="card rank-card">
+          <div class="rank-card__head">
+            <h2 class="card__title">Награди за сезона</h2>
+          </div>
+          <div class="rank-awards">
+            <div class="rank-award"><img src="assets/lobby-main/awards-season-1st.png" alt="" loading="lazy"><p>1-во място</p></div>
+            <div class="rank-award"><img src="assets/lobby-main/awards-season-2nd.png" alt="" loading="lazy"><p>2-ро място</p></div>
+            <div class="rank-award"><img src="assets/lobby-main/awards-season-3rd.png" alt="" loading="lazy"><p>3-то място</p></div>
+          </div>
+          <div class="prize-table">
+            <div class="prize-table__head"><span>Позиция:</span><span>Награда:</span></div>
+            <div class="prize-table__rows">
+              <div class="prize-table__row"><span>3-10</span><span>€1000 фрийбет</span></div>
+              <div class="prize-table__row"><span>10-20</span><span>€200 фрийбет</span></div>
+              <div class="prize-table__row"><span>20-50</span><span>€100 фрийбет</span></div>
+              <div class="prize-table__row is-mine"><span>50-100<span class="rank-row__you">Ти</span></span><span>€50 фрийбет</span></div>
+            </div>
+          </div>
+          <div class="info-label">
+            <img src="assets/lobby-main/icon-info-light.svg" alt="" width="16" height="16">
+            <p>Наградите под подиума се начисляват директно на играчите на съответните позиции.</p>
+          </div>
+        </div>
+
+        <!-- my tie-break numbers, in the order the rules use them (RULES.md: Ranking and prizes) -->
+        <div class="card rank-card">
+          <div class="rank-card__head">
+            <h2 class="card__title">При равни точки</h2>
+          </div>
+          <p class="rules-lead">Тези три твои числа решават кой е по-напред, в този ред:</p>
+          <div class="rank-ties">
+            <div class="rank-tie"><span class="rank-tie__order">1</span><p class="rank-tie__value">2</p><p class="rank-tie__label">Точни резултати</p><p class="rank-tie__hint">повече печели</p></div>
+            <div class="rank-tie"><span class="rank-tie__order">2</span><p class="rank-tie__value">4</p><p class="rank-tie__label">Познати изходи</p><p class="rank-tie__hint">повече печели</p></div>
+            <div class="rank-tie"><span class="rank-tie__order">3</span><p class="rank-tie__value">2<span>т.</span></p><p class="rank-tie__label">Бонус от козове</p><p class="rank-tie__hint">по-малко печели</p></div>
+          </div>
+          <a class="rules-more" href="rules.html" data-open-rules="5">Виж пълното правило <span class="season__chevron"><img src="assets/lobby-main/chevron-right.svg" alt=""></span></a>
+        </div>
+      </div>
+
+      <!-- ===== Полусезон (the lobby's numbers: 14т., #132 от 13 083) ===== -->
+      <div class="rank-panel" data-rank-panel="half" hidden>
+
+        <!-- my position: place and points, then how far the next prize is -->
+        <div class="card rank-card">
+          <div class="rank-card__head">
+            <h2 class="card__title">Твоята позиция</h2>
+            <p class="rank-card__meta">След Кръг 6 от 13</p>
+          </div>
+          <div class="history-section">
+            <div class="history-stat">
+              <span class="history-stat__label">Място<span class="rank-move rank-move--up rank-move--note">7</span></span>
+              <span class="history-stat__points"><span class="history-stat__number">#132</span></span>
+            </div>
+            <div class="history-stat">
+              <span class="history-stat__label">Точки</span>
+              <span class="history-stat__points"><span class="history-stat__number">14</span><span class="history-stat__unit">т.</span></span>
+            </div>
+          </div>
+          <div class="rank-next">
+            <div class="rank-next__row">
+              <p class="rank-next__label">Сега печелиш</p>
+              <p class="rank-next__prize is-none">Извън наградите</p>
+            </div>
+            <div class="rank-next__bar"><i style="width: 82%"></i></div>
+            <div class="rank-next__row">
+              <p class="rank-next__note">Още <strong>3т.</strong> до топ 50</p>
+              <p class="rank-next__note">Следваща: <strong>€10 фрийбет</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- the leaders: top 3 on the lobby's podium (the prize pictures were tried on it and
+             taken off again at the user's request), then 4-13 and the five players around me: 15 rows (the user's choice) -->
+        <div class="card rank-card">
+          <div class="rank-card__head">
+            <h2 class="card__title">Топ играчи</h2>
+            <p class="rank-card__meta">13 083 играчи</p>
+          </div>
+          <div class="rank-podium">
+            <div class="rank-podium__players">
+              <div class="rank-podium__player rank-podium__player--2"><span class="rank-podium__avatar">BO</span><p class="rank-podium__name">bo***04</p><p class="rank-podium__pts">25<span>т.</span></p></div>
+              <div class="rank-podium__player rank-podium__player--1"><span class="rank-podium__avatar">AL</span><p class="rank-podium__name">al***ka</p><p class="rank-podium__pts">26<span>т.</span></p></div>
+              <div class="rank-podium__player rank-podium__player--3"><span class="rank-podium__avatar">VA</span><p class="rank-podium__name">va***ev</p><p class="rank-podium__pts">25<span>т.</span></p></div>
+            </div>
+            <img class="podium" src="assets/lobby-main/podium.png" alt="">
+          </div>
+          <div class="rank-table">
+            <!-- "Точни рез.": each player's exact scores, the first tie-break (RULES.md) -->
+            <div class="rank-table__head"><span>Място</span><span>Играч</span><span>Точни рез.</span><span>Точки</span></div>
+            <ol class="rank-list">
+            <li class="rank-row"><span class="rank-row__pos">4</span><span class="rank-move rank-move--up">1</span><span class="rank-row__name">ts***ko</span><span class="rank-row__exact">4</span><span class="rank-row__pts">24<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">5</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">ya***na</span><span class="rank-row__exact">3</span><span class="rank-row__pts">24<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">6</span><span class="rank-move rank-move--down">1</span><span class="rank-row__name">mi***21</span><span class="rank-row__exact">3</span><span class="rank-row__pts">24<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">7</span><span class="rank-move rank-move--up">4</span><span class="rank-row__name">ro***ov</span><span class="rank-row__exact">3</span><span class="rank-row__pts">23<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">8</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">el***ca</span><span class="rank-row__exact">3</span><span class="rank-row__pts">23<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">9</span><span class="rank-move rank-move--down">3</span><span class="rank-row__name">da***ev</span><span class="rank-row__exact">2</span><span class="rank-row__pts">23<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">10</span><span class="rank-move rank-move--up">1</span><span class="rank-row__name">vi***or</span><span class="rank-row__exact">4</span><span class="rank-row__pts">22<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">11</span><span class="rank-move rank-move--up">2</span><span class="rank-row__name">si***na</span><span class="rank-row__exact">3</span><span class="rank-row__pts">22<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">12</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">pl***en</span><span class="rank-row__exact">3</span><span class="rank-row__pts">22<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">13</span><span class="rank-move rank-move--down">1</span><span class="rank-row__name">an***77</span><span class="rank-row__exact">2</span><span class="rank-row__pts">22<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">14</span><span class="rank-move rank-move--up">5</span><span class="rank-row__name">lu***bo</span><span class="rank-row__exact">2</span><span class="rank-row__pts">22<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">15</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">ka***in</span><span class="rank-row__exact">4</span><span class="rank-row__pts">21<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">16</span><span class="rank-move rank-move--down">2</span><span class="rank-row__name">ze***ro</span><span class="rank-row__exact">3</span><span class="rank-row__pts">21<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">17</span><span class="rank-move rank-move--up">1</span><span class="rank-row__name">ne***li</span><span class="rank-row__exact">3</span><span class="rank-row__pts">21<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">18</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">do***ov</span><span class="rank-row__exact">3</span><span class="rank-row__pts">21<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">19</span><span class="rank-move rank-move--up">3</span><span class="rank-row__name">il***an</span><span class="rank-row__exact">3</span><span class="rank-row__pts">21<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">20</span><span class="rank-move rank-move--down">1</span><span class="rank-row__name">ra***ya</span><span class="rank-row__exact">2</span><span class="rank-row__pts">21<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">21</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">ch***ko</span><span class="rank-row__exact">2</span><span class="rank-row__pts">21<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">22</span><span class="rank-move rank-move--up">2</span><span class="rank-row__name">em***il</span><span class="rank-row__exact">2</span><span class="rank-row__pts">21<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="1"><span class="rank-row__pos">23</span><span class="rank-move rank-move--down">4</span><span class="rank-row__name">ga***ev</span><span class="rank-row__exact">1</span><span class="rank-row__pts">21<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="2"><span class="rank-row__pos">24</span><span class="rank-move rank-move--up">1</span><span class="rank-row__name">ge***ev</span><span class="rank-row__exact">3</span><span class="rank-row__pts">20<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="2"><span class="rank-row__pos">25</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">ni***87</span><span class="rank-row__exact">3</span><span class="rank-row__pts">20<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="2"><span class="rank-row__pos">26</span><span class="rank-move rank-move--down">1</span><span class="rank-row__name">st***an</span><span class="rank-row__exact">3</span><span class="rank-row__pts">20<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="2"><span class="rank-row__pos">27</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">pe***ov</span><span class="rank-row__exact">2</span><span class="rank-row__pts">20<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="2"><span class="rank-row__pos">28</span><span class="rank-move rank-move--up">1</span><span class="rank-row__name">di***ya</span><span class="rank-row__exact">2</span><span class="rank-row__pts">20<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="2"><span class="rank-row__pos">29</span><span class="rank-move rank-move--down">1</span><span class="rank-row__name">ma***n9</span><span class="rank-row__exact">2</span><span class="rank-row__pts">20<span>т.</span></span></li>
+            <li class="rank-row" hidden data-rank-more="2"><span class="rank-row__pos">30</span><span class="rank-move rank-move--up">2</span><span class="rank-row__name">kr***ov</span><span class="rank-row__exact">1</span><span class="rank-row__pts">20<span>т.</span></span></li>
+            </ol>
+            <!-- the gap between the leaders and my neighbours: shows ten more of the top each time -->
+            <button class="rank-gap" type="button" data-rank-show>Покажи още <img src="assets/lobby-main/chevron-down.svg" alt="" width="10" height="6"></button>
+            <ol class="rank-list">
+            <li class="rank-row"><span class="rank-row__pos">130</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">sv***ov</span><span class="rank-row__exact">2</span><span class="rank-row__pts">15<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">131</span><span class="rank-move rank-move--down">1</span><span class="rank-row__name">ke***12</span><span class="rank-row__exact">2</span><span class="rank-row__pts">14<span>т.</span></span></li>
+            <li class="rank-row is-me"><span class="rank-row__pos">132</span><span class="rank-move rank-move--up">7</span><span class="rank-row__name">lastfan<span class="rank-row__you">Ти</span></span><span class="rank-row__exact">1</span><span class="rank-row__pts">14<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">133</span><span class="rank-move rank-move--up">2</span><span class="rank-row__name">ol***ga</span><span class="rank-row__exact">0</span><span class="rank-row__pts">14<span>т.</span></span></li>
+            <li class="rank-row"><span class="rank-row__pos">134</span><span class="rank-move rank-move--same"></span><span class="rank-row__name">bi***er</span><span class="rank-row__exact">1</span><span class="rank-row__pts">13<span>т.</span></span></li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- prizes: the lobby's awards and prize-table (273:8598), with my tier marked -->
+        <div class="card rank-card">
+          <div class="rank-card__head">
+            <h2 class="card__title">Награди за полусезона</h2>
+          </div>
+          <div class="rank-awards">
+            <div class="rank-award"><img src="assets/lobby-main/awards-halfseason-1st.png" alt="" loading="lazy"><p>1-во място</p></div>
+            <div class="rank-award"><img src="assets/lobby-main/awards-halfseason-2nd.png" alt="" loading="lazy"><p>2-ро място</p></div>
+            <div class="rank-award"><img src="assets/lobby-main/awards-halfseason-3rd.png" alt="" loading="lazy"><p>3-то място</p></div>
+          </div>
+          <div class="prize-table">
+            <div class="prize-table__head"><span>Позиция:</span><span>Награда:</span></div>
+            <div class="prize-table__rows">
+              <div class="prize-table__row"><span>3-10</span><span>€100 фрийбет</span></div>
+              <div class="prize-table__row"><span>10-20</span><span>€20 фрийбет</span></div>
+              <div class="prize-table__row"><span>20-50</span><span>€10 фрийбет</span></div>
+            </div>
+          </div>
+          <div class="info-label">
+            <img src="assets/lobby-main/icon-info-light.svg" alt="" width="16" height="16">
+            <p>Наградите под подиума се начисляват директно на играчите на съответните позиции.</p>
+          </div>
+        </div>
+
+        <!-- my tie-break numbers, in the order the rules use them (RULES.md: Ranking and prizes) -->
+        <div class="card rank-card">
+          <div class="rank-card__head">
+            <h2 class="card__title">При равни точки</h2>
+          </div>
+          <p class="rules-lead">Тези три твои числа решават кой е по-напред, в този ред:</p>
+          <div class="rank-ties">
+            <div class="rank-tie"><span class="rank-tie__order">1</span><p class="rank-tie__value">1</p><p class="rank-tie__label">Точни резултати</p><p class="rank-tie__hint">повече печели</p></div>
+            <div class="rank-tie"><span class="rank-tie__order">2</span><p class="rank-tie__value">3</p><p class="rank-tie__label">Познати изходи</p><p class="rank-tie__hint">повече печели</p></div>
+            <div class="rank-tie"><span class="rank-tie__order">3</span><p class="rank-tie__value">0<span>т.</span></p><p class="rank-tie__label">Бонус от козове</p><p class="rank-tie__hint">по-малко печели</p></div>
+          </div>
+          <a class="rules-more" href="rules.html" data-open-rules="5">Виж пълното правило <span class="season__chevron"><img src="assets/lobby-main/chevron-right.svg" alt=""></span></a>
         </div>
       </div>
     </section>
@@ -77,12 +352,12 @@
         <svg class="tab-nav__icon" aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path d="M18.125 5H16.25V3.75C16.25 3.58424 16.1842 3.42527 16.0669 3.30806C15.9497 3.19085 15.7908 3.125 15.625 3.125H4.375C4.20924 3.125 4.05027 3.19085 3.93306 3.30806C3.81585 3.42527 3.75 3.58424 3.75 3.75V5H1.875C1.54348 5 1.22554 5.1317 0.991116 5.36612C0.756696 5.60054 0.625 5.91848 0.625 6.25V7.5C0.625 8.3288 0.95424 9.12366 1.54029 9.70971C1.83047 9.99989 2.17497 10.2301 2.55411 10.3871C2.93326 10.5442 3.33962 10.625 3.75 10.625H4.03516C4.40332 11.7917 5.10529 12.825 6.0543 13.5971C7.00331 14.3693 8.15778 14.8464 9.375 14.9695V16.875H4.90891C4.74315 16.875 4.58418 16.9408 4.46697 17.0581C4.34976 17.1753 4.28391 17.3342 4.28391 17.5C4.28391 17.6658 4.34976 17.8247 4.46697 17.9419C4.58418 18.0592 4.74315 18.125 4.90891 18.125H15.0911C15.2569 18.125 15.4158 18.0592 15.533 17.9419C15.6502 17.8247 15.7161 17.6658 15.7161 17.5C15.7161 17.3342 15.6502 17.1753 15.533 17.0581C15.4158 16.9408 15.2569 16.875 15.0911 16.875H10.625V14.9672C13.1203 14.7148 15.1906 12.9641 15.9438 10.625H16.25C17.0788 10.625 17.8737 10.2958 18.4597 9.70971C19.0458 9.12366 19.375 8.3288 19.375 7.5V6.25C19.375 5.91848 19.2433 5.60054 19.0089 5.36612C18.7745 5.1317 18.4565 5 18.125 5ZM3.75 9.375C3.25272 9.375 2.77581 9.17746 2.42417 8.82583C2.07254 8.4742 1.875 7.99728 1.875 7.5V6.25H3.75V8.75C3.75 8.95833 3.76016 9.16667 3.78047 9.375H3.75ZM18.125 7.5C18.125 7.99728 17.9275 8.4742 17.5758 8.82583C17.2242 9.17746 16.7473 9.375 16.25 9.375H16.2109C16.2366 9.14411 16.2496 8.912 16.25 8.67969V6.25H18.125V7.5Z" fill="white" fill-opacity="0.75"/></g></svg>
         <span class="tab-nav__label">Класиране</span>
       </a>
-      <a class="tab-nav__item tab-nav__item--4" href="#achievements">
+      <a class="tab-nav__item tab-nav__item--4" href="achievements.html">
         <svg class="tab-nav__icon" aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><g><path d="M17.9276 7.49997C17.9283 6.34138 17.6362 5.2014 17.0784 4.18593C16.5206 3.17045 15.7152 2.31241 14.737 1.69151C13.7589 1.0706 12.6396 0.706975 11.4833 0.634393C10.327 0.561812 9.1711 0.782634 8.12297 1.27635C7.07484 1.77006 6.16848 2.52065 5.48807 3.45841C4.80766 4.39616 4.37528 5.49066 4.23109 6.64025C4.08689 7.78983 4.23556 8.95721 4.66328 10.034C5.091 11.1107 5.78391 12.0619 6.67763 12.7992V18.75C6.67756 18.8566 6.70474 18.9614 6.7566 19.0545C6.80847 19.1476 6.88328 19.226 6.97394 19.282C7.0646 19.3381 7.16809 19.37 7.27458 19.3748C7.38106 19.3796 7.487 19.357 7.58232 19.3093L11.0526 17.5781L14.5237 19.3133C14.6107 19.3549 14.7062 19.376 14.8026 19.375C14.9684 19.375 15.1274 19.3091 15.2446 19.1919C15.3618 19.0747 15.4276 18.9157 15.4276 18.75V12.7992C16.2096 12.1552 16.8393 11.346 17.2716 10.4298C17.7038 9.51356 17.9278 8.51302 17.9276 7.49997ZM5.42763 7.49997C5.42763 6.38745 5.75753 5.29992 6.37562 4.37489C6.9937 3.44986 7.8722 2.72889 8.90004 2.30315C9.92787 1.87741 11.0589 1.76601 12.15 1.98305C13.2412 2.2001 14.2434 2.73582 15.0301 3.5225C15.8168 4.30917 16.3525 5.31144 16.5696 6.40259C16.7866 7.49373 16.6752 8.62473 16.2495 9.65257C15.8237 10.6804 15.1027 11.5589 14.1777 12.177C13.2527 12.7951 12.1652 13.125 11.0526 13.125C9.5613 13.1233 8.13152 12.5302 7.07698 11.4756C6.02245 10.4211 5.42929 8.99131 5.42763 7.49997ZM6.67763 7.49997C6.67763 6.63468 6.93422 5.78882 7.41495 5.06935C7.89568 4.34989 8.57897 3.78913 9.37839 3.458C10.1778 3.12686 11.0575 3.04022 11.9062 3.20904C12.7548 3.37785 13.5344 3.79452 14.1462 4.40638C14.7581 5.01823 15.1748 5.79778 15.3436 6.64645C15.5124 7.49512 15.4257 8.37478 15.0946 9.17421C14.7635 9.97364 14.2027 10.6569 13.4833 11.1377C12.7638 11.6184 11.9179 11.875 11.0526 11.875C9.89269 11.8737 8.78061 11.4124 7.96041 10.5922C7.14021 9.77199 6.67887 8.65991 6.67763 7.49997Z" fill="white" fill-opacity="0.75"/></g></svg>
         <span class="tab-nav__label">Подвизи</span>
         <span class="tab-nav__dot" aria-hidden="true"></span>
       </a>
-      <a class="tab-nav__item tab-nav__item--5" href="#rules">
+      <a class="tab-nav__item tab-nav__item--5" href="rules.html">
         <svg class="tab-nav__icon" aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><g><g><path d="M12.807 5.59591C12.6675 5.59591 12.5337 5.54071 12.4351 5.44245C12.3365 5.3442 12.281 5.21094 12.281 5.07199V1.05263H4.7368C4.31821 1.05316 3.91692 1.21903 3.62093 1.51386C3.32494 1.80869 3.15842 2.20842 3.15789 2.62538V17.3746C3.15842 17.7916 3.32494 18.1913 3.62093 18.4861C3.91692 18.781 4.31821 18.9468 4.7368 18.9474H15.2632C15.6818 18.9468 16.0831 18.781 16.3791 18.4861C16.6751 18.1913 16.8416 17.7916 16.8421 17.3746V5.59591H12.807ZM13.8599 14.753H6.14006C6.00043 14.753 5.86652 14.6978 5.76779 14.5994C5.66906 14.5011 5.61359 14.3677 5.61359 14.2286C5.61359 14.0895 5.66906 13.9562 5.76779 13.8578C5.86652 13.7595 6.00043 13.7042 6.14006 13.7042H13.8589C13.9986 13.7042 14.1325 13.7595 14.2312 13.8578C14.33 13.9562 14.3854 14.0895 14.3854 14.2286C14.3854 14.3677 14.33 14.5011 14.2312 14.5994C14.1325 14.6978 13.9996 14.753 13.8599 14.753ZM13.8589 11.6075H6.14006C6.00043 11.6075 5.86652 11.5523 5.76779 11.4539C5.66906 11.3556 5.61359 11.2222 5.61359 11.0831C5.61359 10.944 5.66906 10.8107 5.76779 10.7123C5.86652 10.614 6.00043 10.5587 6.14006 10.5587H13.8589C13.9986 10.5587 14.1325 10.614 14.2312 10.7123C14.33 10.8107 14.3854 10.944 14.3854 11.0831C14.3854 11.2222 14.33 11.3556 14.2312 11.4539C14.1325 11.5523 13.9986 11.6075 13.8589 11.6075ZM13.8589 8.46205H6.14006C6.00043 8.46205 5.86652 8.4068 5.76779 8.30845C5.66906 8.2101 5.61359 8.07672 5.61359 7.93763C5.61359 7.79855 5.66906 7.66516 5.76779 7.56681C5.86652 7.46847 6.00043 7.41322 6.14006 7.41322H13.8589C13.9986 7.41322 14.1325 7.46847 14.2312 7.56681C14.33 7.66516 14.3854 7.79855 14.3854 7.93763C14.3854 8.07672 14.33 8.2101 14.2312 8.30845C14.1325 8.4068 13.9986 8.46205 13.8589 8.46205Z" fill="white" fill-opacity="0.75"/><path d="M13.3333 1.35942V4.54767H16.534L13.3333 1.35942Z" fill="white" fill-opacity="0.75"/></g></g></svg>
         <span class="tab-nav__label">Правила</span>
       </a>
@@ -95,5 +370,81 @@
   <script src="components/page-motion.js"></script>
   <script src="components/tab-nav.js"></script>
   <script src="components/hero-intro.js"></script>
+  <script>
+    // Класиране: Сезон / Полусезон, "Покажи още" in the list, and the link to the rule.
+    (function () {
+      var list = function (selector, root) { return Array.prototype.slice.call((root || document).querySelectorAll(selector)); };
+      var canAnimate = !!Element.prototype.animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // the same quick entry as Прогнози's tabs: each block rises 10px and fades in
+      function riseIn(els) {
+        if (!canAnimate) return;
+        els.forEach(function (el, n) {
+          el.getAnimations().forEach(function (a) { a.cancel(); });
+          el.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }],
+            { duration: 340, delay: Math.min(n, 7) * 45, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'backwards' });
+        });
+      }
+
+      // the hero's line follows the ranking shown (the lobby's numbers)
+      var SUBTITLE = {
+        season: { rank: '53', rest: ' от 10 083 играчи за сезона.' },
+        half: { rank: '132', rest: ' от 13 083 играчи за полусезона.' }
+      };
+      var rankNumber = document.querySelector('.page-hero .count-up');
+      var rankRest = document.querySelector('[data-rank-subtitle]');
+
+      var tabs = list('[data-rank-tab]');
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          if (tab.classList.contains('is-active')) return;
+          var name = tab.getAttribute('data-rank-tab');
+          tabs.forEach(function (other) {
+            other.classList.toggle('is-active', other === tab);
+            other.setAttribute('aria-selected', String(other === tab));
+          });
+          list('[data-rank-panel]').forEach(function (el) { el.hidden = el.getAttribute('data-rank-panel') !== name; });
+          riseIn(list('[data-rank-panel="' + name + '"] > *'));
+          if (rankNumber && rankRest) {
+            rankNumber.style.minWidth = ''; // hero-intro.js held the first number's width
+            rankNumber.setAttribute('data-count', SUBTITLE[name].rank);
+            rankNumber.textContent = SUBTITLE[name].rank;
+            rankRest.textContent = SUBTITLE[name].rest;
+          }
+        });
+      });
+
+      // "Покажи още": the next places of the top each time (14-23, then 24-30, the end of the sample)
+      list('[data-rank-show]').forEach(function (btn) {
+        var shown = 0;
+        btn.addEventListener('click', function () {
+          var table = btn.closest('.rank-table');
+          var next = list('[data-rank-more="' + (shown + 1) + '"]', table);
+          if (!next.length) return;
+          shown += 1;
+          next.forEach(function (row) { row.hidden = false; });
+          riseIn(next);
+          if (!table.querySelector('[data-rank-more="' + (shown + 1) + '"]')) {
+            btn.classList.add('is-done');
+            btn.setAttribute('aria-hidden', 'true');
+            btn.tabIndex = -1;
+          }
+        });
+      });
+
+      // "Виж пълното правило": Правила opens on that section of Пълни правила. It goes through
+      // the tab bar's Правила tab, so the page leaves like a tab change (rules.html reads the
+      // section from sessionStorage)
+      list('[data-open-rules]').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          try { sessionStorage.setItem('fens-rules-section', link.getAttribute('data-open-rules')); } catch (err) { /* opens on Накратко */ }
+          var tab = document.querySelector('.tab-nav__item[href="rules.html"]');
+          if (tab) tab.click();
+          else window.location.href = link.getAttribute('href');
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

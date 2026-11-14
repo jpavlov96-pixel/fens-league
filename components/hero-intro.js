@@ -28,8 +28,16 @@
     el.style.display = 'inline-block';
     el.style.minWidth = el.getBoundingClientRect().width + 'px';
     el.style.textAlign = 'right';
-    el.textContent = '0';
+    el.textContent = padCount(0, el);
   });
+
+  // while counting, the number keeps the final value's digit count: #53 runs 00, 01 … 53
+  function padCount(n, el) {
+    var digits = String(parseInt(el.getAttribute('data-count'), 10) || 0).length;
+    var text = String(n);
+    while (text.length < digits) text = '0' + text;
+    return text;
+  }
 
   // once whatever brings the subtitle in has finished
   function countAfterSubtitle() {
@@ -51,7 +59,7 @@
         var start = performance.now();
         (function step(now) {
           var p = Math.min((now - start) / duration, 1);
-          el.textContent = String(Math.round(to * (1 - Math.pow(1 - p, 3))));
+          el.textContent = padCount(Math.round(to * (1 - Math.pow(1 - p, 3))), el);
           if (p < 1) requestAnimationFrame(step);
         })(start);
       }, delay);

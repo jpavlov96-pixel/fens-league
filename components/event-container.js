@@ -48,8 +48,40 @@
       this._render();
     }
 
-    attributeChangedCallback() {
-      if (this.isConnected && !this._quiet) this._render();
+    attributeChangedCallback(name) {
+      if (!this.isConnected || this._quiet) return;
+      // the trump cards are added / taken away in place, so the rest of the card isn't redrawn
+      var card = this.querySelector('.event');
+      if (name === 'trump-card' && card && this._get('variant', '') !== 'no-match') {
+        var old = card.querySelector('.event__trump');
+        if (old) old.remove();
+        if (this.hasAttribute('trump-card')) {
+          var box = document.createElement('div');
+          box.innerHTML = this._trumpHtml();
+          var trump = box.firstChild;
+          card.appendChild(trump);
+          // they drop into the corner (after "Премахни" took the label away)
+          if (trump.animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            trump.animate([
+              { opacity: 0, transform: 'translate(-6px, 10px) scale(0.6) rotate(-12deg)' },
+              { opacity: 1, transform: 'translate(0, 0) scale(1.08) rotate(2deg)', offset: 0.7 },
+              { opacity: 1, transform: 'none' }
+            ], { duration: 420, easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)' });
+          }
+        }
+        return;
+      }
+      this._render();
+    }
+
+    _trumpHtml() {
+      var CARDS = 'assets/trump-cards/'; // the official backs (a, b)
+      return '<div class="event__trump" aria-hidden="true">' +
+          '<img class="event__trump-blur" src="' + ASSETS + 'trump-blur.svg" alt="">' +
+          '<span class="event__trump-card event__trump-card--1"><img src="' + CARDS + 'a-small.webp" alt=""></span>' +
+          '<span class="event__trump-card event__trump-card--2"><img src="' + CARDS + 'a-small.webp" alt=""></span>' +
+          '<span class="event__trump-card event__trump-card--3"><img src="' + CARDS + 'b-small.webp" alt=""></span>' +
+        '</div>';
     }
 
     _get(name, fallback) {
@@ -127,14 +159,7 @@
             '<img src="' + ASSETS + 'icon-view-more.svg" alt="" width="14" height="14">' +
             '<span class="event__market-text">' + (correctScore ? 'Изход от мача' : 'Точен Резултат') + '</span></button>';
 
-      var trump = this.hasAttribute('trump-card')
-        ? '<div class="event__trump" aria-hidden="true">' +
-            '<img class="event__trump-blur" src="' + ASSETS + 'trump-blur.svg" alt="">' +
-            '<span class="event__trump-card event__trump-card--1"><img src="' + ASSETS + 'trump-card-a.png" alt=""></span>' +
-            '<span class="event__trump-card event__trump-card--2"><img src="' + ASSETS + 'trump-card-a.png" alt=""></span>' +
-            '<span class="event__trump-card event__trump-card--3"><img src="' + ASSETS + 'trump-card-b.png" alt=""></span>' +
-          '</div>'
-        : '';
+      var trump = this.hasAttribute('trump-card') ? this._trumpHtml() : '';
 
       var html =
         '<div class="event' + (locked ? ' event--locked' : '') + '">' +
