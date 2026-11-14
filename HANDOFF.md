@@ -1,47 +1,40 @@
-# Handoff — 2026-11-13 — end of day
+# Handoff — 2026-11-14 — end of day
 
-## Done today (all on `main` and live, last feature commit 7529942)
-- **Official resources as WebP.** The web copies of the crests, power cards and achievements are WebP (quality 90) instead of 256-colour PNG, which had broken their gradients into bands. `tools/optimize-resources.py` makes them; every page points at `.webp`.
-- **Team Modal** (`components/team-modal.js`, Figma 396:19940 / 396:20047): bottom sheet from the team cards on the lobby's Отбори card and on Прогнози's Отбори tab. Light for Налични, dark for Използвани, both on one shared layout so switching moves nothing. Налични opens ЦСКА | Лудогорец | Славия as in Figma. The count runs like the lobby's counters. The Away/Home switch has Figma's gradient outlines. It closes on a tap outside, Escape, or a drag down (past 120px or a flick).
-- **Прогнози:**
-  - Текущ кръг list (finished / live / upcoming match cards).
-  - Content rises in when График / История open and on arrival; Отбори's cards come in like the lobby's.
-  - Следващ ↔ Текущ is a mild cross-fade with a slight scale (150ms out, 320ms in).
-- **Match card** (shared): Figma's new sizes (13px tab text, 32px name boxes, 86px cards, used teams too). Прогнозирай / Предстои sit alone and centred (no "vs", Figma 361:11018), Прогнозирай is green.
-- **Lobby prediction panel** (event-container):
-  - Crests keep their shape.
-  - The big "vs" has Figma's inner shadow.
-  - The draw warning lies over the date after 1.35s, kept inside the card.
-  - Премахни / Инфо are black at 60%.
-- **Lobby:**
-  - Следващ shows the empty state (No Match Selected); its Прогнозирай opens Прогнози on Текущ.
-  - Ход на сезона has the legend (opens with an animation); "Виж Историята" opens Прогнози on История.
-  - The Подвизи note has the Info icon.
-- **Page changes:** the content under the top section fades out on leaving and rises in on arrival, with the ball and title.
-- **Power card images** keep their 2:3 shape (not cropped) in the feature panel, the History break card and the info message.
+## Done today (all on `main` and live, feature commit f8f9b5b)
+- **Правила** (`rules.html`), designed in code, no Figma frame:
+  - Two top tabs. **Накратко**: four sub-tabs, Основи · Козове · Подвизи · Класиране, short rules only. **Пълни правила**: the whole text in 7 numbered sections.
+  - Each card in Накратко ends with "Виж пълното правило", which opens Пълни правила at that section.
+  - The row of chips (sub-tabs / sections) sticks to the top of the screen; in Пълни правила the chips follow the section being read. A round "up" button shows after a screen of scrolling.
+  - Another page can open it on a section: sessionStorage `fens-rules-section` (Класиране uses it).
+- **Класиране** (`rankings.html`), designed in code (Figma's frame 308:9739 is gone from the file):
+  - Сезон / Полусезон, each with four cards: Твоята позиция, Топ играчи, Награди, При равни точки.
+  - Топ играчи: top 3 on the podium as circles with initials, then a table (place, movement, player, "Точни рез.", points) that opens with 15 rows: places 4–13 and the five around me. "Покажи още" reveals 14–23, then 24–30.
+  - The hero's subtitle follows the tab.
+- **Подвизи** (`achievements.html`): header and hero only.
+- **`RULES.md`**: the rules of the game from the user, the source for any copy that states a rule (not served).
+- Earlier in the day: the lobby's empty state opens Прогнози on Следващ (never Текущ), and smaller changes in the lobby, Прогнози, the match card and the components page.
 
 ## Unfinished / waiting on the user
-- Класиране: only the header and hero; the rest isn't designed yet.
-- Сезон (third round tab on Прогнози) and the bottom sheet "2.21 - Prediction / Schedule / Season": still waiting for its Figma node.
-- Team Modal: every team shows Figma's sample details (rank, points, coach, form, next match); only the crest and name follow the team. Real data per team isn't designed.
-- The lobby's Отбори count for Използвани is 4 (the lobby card's list); Figma's modal shows 6. The modal follows the page it opens from.
-- Empty state: its note says "Кръг 7" (Следващ) but the button opens Текущ (Кръг 6), as the user asked.
-- Not tried on a real phone today:
-  - the drag-to-close
-  - the crest fix (stretching for a moment on page change)
-  - the empty state's border during animations
-  - the WebP images in Safari
-- If the tab bar still flickers on page change: a `_headers` file with longer caching for `assets/` would help (ask first).
+- **Подвизи page**: only the header and hero; the rest isn't designed.
+- **Класиране is all sample data**: names, points, movements, exact scores, "2т. до топ 50". Mine follow the lobby (29т. #53 от 10 083; 14т. #132 от 13 083). My username is the placeholder "lastfan".
+- **The lobby's "Към Класации" button** still points at `#rankings`, not at `rankings.html`. Offered, not answered.
+- **Правила, gaps in the rules**: no prize amounts, no definition of the monthly periods ("Перфектен месец"), no list of derbies, no general terms. Nothing was invented.
+- **Правила, two things inferred**: 13 rounds per half-season, and that "Чиста мрежа" applies to the team you picked. Not confirmed by the user.
+- **Card name**: the pages say "Повторен избор" (the lobby's card); `RULES.md` says "Повторение".
+- The prize tiers are the lobby's, with their overlapping ranges (3-10, 10-20, 20-50).
+- The new components of Правила and Класиране aren't on `components.html`.
+- Other pages don't link into Правила's tabs (the user's choice for now), apart from Класиране's tie-break card.
+- Not tried on a real phone: both new pages, the sticky chips (Safari older than 16 won't stick them), the smooth scrolling to a section.
+- Still open from before: Сезон's bottom sheet on Прогнози (needs its Figma node); the Team Modal's per-team details are Figma's samples.
 
 ## Decisions and gotchas
-- **Figma's code export leaves things out.** It flattens gradient strokes to one colour and drops text effects (the vs inner shadow). When a border or shadow looks wrong, read the node's `strokes` / `effects` with `use_figma` (read-only).
-- **Figma components change between sessions** (match card sizes, the button position, the draw warning): re-read the node before a fix.
-- **Crests are never stretched or cropped:** the image box is sized to the crest's own shape (max-width / max-height), not `object-fit`, since phones briefly drew it stretched on page changes.
-- **Borders that must stay visible over images** are drawn as a layer on top (`::after`, a masked ring for gradients). Phones can draw a clipped image over the element's own border while it animates.
-- **Prefer a stable layout to Figma's per-state offsets** where they'd make content jump (Team Modal states, Следващ / Текущ heights).
-- **Never go back to a colour palette for the resources:** it bands the gradients. Full-colour PNG is ~8x heavier; WebP is the choice.
-- **Test in a background tab** (the user clicks in the pane). Background tabs run animations slowly: finish them (`getAnimations().forEach(a => a.finish())`) before measuring or screenshotting.
-- View transitions between pages were tried and reverted on 2026-11-11 (flicker). Don't retry them.
+- **The user tried the lobby's prize pictures on Класиране's podium and reverted it** to the circles with initials. The prize pictures live in the Награди card as three tiles.
+- **Sticky needs `overflow-x: clip` on the body** (class `rules-page`): with "hidden" on both html and body, the body becomes the box things stick to and never scrolls.
+- **Measure positions from the layout** (`offsetTop`), not `getBoundingClientRect`, while the arrival animation is running: the rise-in shifts everything by 12px.
+- **Achievement pictures** are wide banners with the art in the left third on flat #06101a. A thumbnail is that left end, on a row of the same colour.
+- **Montserrat needs `"locl" 0`** on any Bulgarian text, or "т." turns into "m.".
+- **Testing in the Browser pane**: use a separate background tab (the user clicks in the first one). There, lazy images don't load (set them to eager), `img.decode()` hangs, and smooth scrolling doesn't move.
+- `rules.html` and `rankings.html` were generated by throwaway scripts; edit the HTML directly from now on.
 
 ## First task next time
-Ask what to build next: Класиране, the Сезон bottom sheet (needs its Figma node), or more polish. Re-read that Figma frame first. If the user has tried today's work on their phone, start with what they found.
+Ask what to build next: the Подвизи page (the last one without content), or changes to Правила and Класиране after the user has tried them on a phone. Start with what they found.
