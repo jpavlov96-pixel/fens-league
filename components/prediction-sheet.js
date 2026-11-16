@@ -271,7 +271,12 @@
         '</div>';
     }).join('');
     old.replaceWith(track);
-    track.addEventListener('trumpcentre', function (e) { pickerAt = e.detail.index; drawRule(); });
+    track.addEventListener('trumpcentre', function (e) {
+      pickerAt = e.detail.index;
+      drawRule();
+      // the A2c "Дъги" current goes onto the card in the middle (components/card-fx.js)
+      if (window.CardFx) window.CardFx.attach(track.querySelectorAll('.trump')[pickerAt]);
+    });
     // the rule moves with the cards (the user's request): as the middle card leaves, its text
     // fades out and drifts the same way; the next one's comes in as that card arrives, and is
     // fully there once it has settled
@@ -325,6 +330,7 @@
     } else {
       picker.hidden = true;
       root.classList.remove('is-picking');
+      if (window.CardFx) window.CardFx.stop();
     }
   }
 
@@ -506,7 +512,17 @@
     if (e.target.closest('[data-picker-close]')) { setPicker(false); return; }
     var apply = e.target.closest('[data-picker-apply]');
     if (apply) {
-      if (!apply.disabled && pickerCards[pickerAt]) applyTrump(pickerCards[pickerAt].id);
+      if (apply.disabled || !pickerCards[pickerAt] || root.classList.contains('is-slamming')) return;
+      var id = pickerCards[pickerAt].id;
+      var card = q('.predict-sheet__picker-cards').querySelectorAll('.trump')[pickerAt];
+      // the slam (components/card-fx.js): the card is hit on the table, then it goes on
+      if (window.CardFx && card) {
+        root.classList.add('is-slamming');
+        window.CardFx.slam(card, q('.predict-sheet__picker'), function () {
+          root.classList.remove('is-slamming');
+          applyTrump(id);
+        });
+      } else applyTrump(id);
       return;
     }
     // the offers' "Използвай" (Равенство, Повторен избор)

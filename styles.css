@@ -5372,3 +5372,58 @@ html.predict-sheet-open body { overflow: hidden; }
 
 /* the sheet with Почивка on: the Почивка panel in place of the match card */
 .predict-sheet__event.is-rest event-container:not([data-sheet-rest]) { display: none; }
+
+/* ---------- Card effects in "Избери Коз" (components/card-fx.js; the user's pick from
+   demos/card-fx.html: A2c "Дъги" and the slam) ---------- */
+.card-fx {
+  position: absolute;
+  top: -14px;
+  left: -14px;
+  z-index: 2;
+  width: calc(100% + 28px);
+  height: calc(100% + 28px);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.card-fx__arc { fill: none; stroke: #fffaf0; stroke-width: 1.3; stroke-linejoin: bevel; filter: url(#cfx-soft); }
+.card-fx__arc-glow { fill: none; stroke: #f5d584; stroke-width: 4; stroke-linejoin: round; opacity: 0.55; filter: url(#cfx-blur); }
+.card-fx__hot { fill: #fff2c4; filter: url(#cfx-blur); }
+
+/* the slam's pieces, inside the picker */
+.card-fx-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: #fff3cf;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.card-fx-ring {
+  position: absolute;
+  z-index: 4;
+  width: 60px;
+  height: 60px;
+  margin: -30px 0 0 -30px;
+  border: 3px solid #f5d584;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.card-fx-spark {
+  position: absolute;
+  z-index: 4;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 50%;
+  background: #ffe6a3;
+  box-shadow: 0 0 6px #f5d584;
+  pointer-events: none;
+}
+
+/* while the card is slammed, the picker's buttons wait */
+.predict-sheet.is-slamming .predict-sheet__picker-back,
+.predict-sheet.is-slamming .predict-sheet__picker-apply { pointer-events: none; }
