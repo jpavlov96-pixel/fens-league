@@ -1,6 +1,6 @@
 /* Prediction sheet: Figma "2.21 - Prediction / Open" (330:17117, no power card; 440:19105,
    a power card picked and the head-to-head row open), Section 2 (440:19350). It opens on a
-   tap on "Прогнозирай" in Прогнози's match list, with that match's teams, crests, date and
+   tap on "Прогнозирай" in Прогнози's match list or the Team Modal's next match, with that match's teams, crests, date and
    used teams (the match-card's "К3" marks).
 
    It always opens on "Изход от мача" with no team picked and 0т. in the top right corner (the
@@ -31,8 +31,8 @@
 
    Close: a tap on the dimmed page, dragging the sheet down, or Escape. */
 (function () {
-  var lists = document.querySelectorAll('[data-predict-list]');
-  if (!lists.length) return;
+  // Every match-card "Прогнозирай" inside a [data-predict-list="Кръг N"] opens it: Прогнози's
+  // Следващ list and the Team Modal's next match (lobby and Прогнози)
   var A = 'assets/lobby-main/';
   var CARDS = 'assets/trump-cards/';
 
@@ -312,12 +312,11 @@
     };
   }
 
-  lists.forEach(function (list) {
-    list.addEventListener('click', function (e) {
-      var btn = e.target.closest('.match-card__middle--action .secondary-btn');
-      if (!btn) return;
-      open(matchOf(btn.closest('.match-card'), list));
-    });
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.match-card__middle--action .secondary-btn');
+    var list = btn && btn.closest('[data-predict-list]');
+    if (!list) return;
+    open(matchOf(btn.closest('.match-card'), list));
   });
 
   root.addEventListener('click', function (e) {

@@ -87,8 +87,10 @@
         stat('', 'football', 'Голове:', '0') + stat('', 'trophy', 'Победи:', '0') +
         stat('team-modal__stat--80', 'close-circle', 'Загуби:', '0') + stat('team-modal__stat--56', 'statistics', 'ГР:', '32:9') +
       '</div>' +
-      '<div class="team-modal__next">' +
-        '<p class="team-modal__next-title">Предстоящ Мач <img src="' + A + 'team-modal-dot.svg" alt="" width="4" height="4"> Кръг 9</p>' +
+      // its "Прогнозирай" opens the prediction sheet (components/prediction-sheet.js). The match
+      // is Кръг 7's ЦСКА – Лудогорец (Прогнози's list), so the title says Кръг 7 (Figma: Кръг 9)
+      '<div class="team-modal__next" data-predict-list="Кръг 7">' +
+        '<p class="team-modal__next-title">Предстоящ Мач <img src="' + A + 'team-modal-dot.svg" alt="" width="4" height="4"> Кръг 7</p>' +
         // match-card 404:12582 (Налични) and 404:12606 (Използвани: both teams used)
         '<div class="match-card" data-for="0">' +
           '<div class="time-stamp time-stamp--dark"><span>Четвъртък, 22/11 13:00ч.</span></div>' +
