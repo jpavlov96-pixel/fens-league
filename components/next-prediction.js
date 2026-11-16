@@ -76,7 +76,11 @@
       case 'rest': return '';
       // Изход от мача: it makes the prediction a draw ("Равен"); Точен резултат: a level score
       case 'even': return !r.exact || r.winner === 'draw' ? '' : 'Само за равен резултат.';
-      case 'repeat': return r.used ? '' : 'Само за вече използван отбор.';
+      // Повторен избор: for a match with a used team; it's added first (the used team's button
+      // is disabled without it), and comes off if the other team is picked to win
+      case 'repeat':
+        if (!p.homeUsed && !p.awayUsed) return 'Само за мач с вече използван отбор.';
+        return hasWinner && !r.used ? 'Само за вече използван отбор.' : '';
       case 'all-or-nothing':
         if (!r.exact) return 'Само за точен резултат.';
         if (!hasWinner) return 'Само за прогноза с победител.';

@@ -495,3 +495,12 @@ event-container[hidden] { display: none; }
 
 .event__crest-used--home { left: 0; }
 .event__crest-used--away { right: 0; }
+
+/* a used team's button while "Повторен избор" isn't on: it can't be picked. Figma's disabled
+   arrow-btn (449:21312): white at 25%, border #a7a7a7 at 80%, the content at 60% */
+.event:not(.event--locked) .event__team-btn:disabled {
+  border-color: #a7a7a7cc;
+  background: #ffffff40;
+  color: #2b2b2b99;
+  cursor: default;
+}

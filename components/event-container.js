@@ -27,7 +27,8 @@
 //   home-used, away-used     the round the team was used in ("К3"): its crest is greyed out
 //                with the round in the corner, as on Прогнози's match-card
 //   allow-used   present = a used team may be picked to win (the "Повторен избор" card);
-//                without it, picking a used team shows the gold warning
+//                without it, its button is disabled and a Correct Score it wins shows the gold
+//                warning "Невалиден залог." 
 //   allow-draw   present = a level Correct Score is valid (the "Равенство" card)
 //
 // When not locked, the "Точен Резултат" / "Изход от мача" button switches between the two
@@ -133,10 +134,14 @@
           (used ? '<span class="event__crest-used event__crest-used--' + side + '">' + esc(used) + '</span>' : '') + '</span>';
       }
 
+      // a used team can't be picked to win unless "Повторен избор" is on (allow-used): its
+      // button is disabled, in the look of Figma's disabled arrow-btn (449:21312)
+      var self1 = this;
       function teamBtn(side, name) {
         var picked = pick === side || pick === 'draw';
+        var usedOff = !locked && self1._get(side + '-used', '') && !self1.hasAttribute('allow-used');
         return '<button class="event__team-btn' + (picked ? ' is-selected' : '') + '" type="button" data-pick="' + side + '"' +
-          ' aria-pressed="' + picked + '"' + dis + '>' + esc(name) + '</button>';
+          ' aria-pressed="' + picked + '"' + (usedOff ? ' disabled' : dis) + '>' + esc(name) + '</button>';
       }
 
       // at 0 the down arrow is greyed out, as Figma shows it for the away team's 0
@@ -234,7 +239,7 @@
       var winner = exact ? (hs > as ? 'home' : as > hs ? 'away' : '') : this._get('pick', 'home');
       var usedWinner = open && !level && winner && this._get(winner + '-used', '') && !this.hasAttribute('allow-used');
       var message = level ? 'Невалиден залог. Използвайте коз за <b>“Равенство”.</b>'
-        : usedWinner ? 'Използвайте коз <b>“Повторен Избор”.</b>' : '';
+        : usedWinner ? 'Невалиден залог.' : '';
       var kind = level ? 'draw' : usedWinner ? 'used' : '';
       if (this._warningShown && message && message !== this._warningText) {
         // a different reason: swap the text in place
