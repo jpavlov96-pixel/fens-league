@@ -1118,6 +1118,12 @@
     // its tab row. It goes through the tab bar's Прогнози tab, so the page leaves the same way
     // as a tab change (pill slide, ball and title off); predictions.html reads the flag from
     // sessionStorage
+    // "Промени" (under the prediction panel) goes to the same place: the match list on Прогнози
+    var editBtn = document.querySelector('.edit-btn');
+    if (editBtn) editBtn.addEventListener('click', function () {
+      document.dispatchEvent(new CustomEvent('predict'));
+    });
+
     document.addEventListener('predict', function () {
       try { sessionStorage.setItem('fens-predictions-scroll', '1'); } catch (e) { /* no scroll */ }
       var tab = document.querySelector('.tab-nav__item[href="predictions.html"]');
