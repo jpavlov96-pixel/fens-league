@@ -83,20 +83,10 @@
           </button>
         </div>
 
-        <!-- Inner Page: active-trump-label with "Премахни" over a Correct Score card -->
-        <div class="round-stack" data-round="0">
-          <div class="trump-label">
-            <span class="trump-label__cards" aria-hidden="true">
-              <span class="trump-label__card trump-label__card--1"><img src="assets/trump-cards/a-small.webp" alt=""></span>
-              <span class="trump-label__card trump-label__card--2"><img src="assets/trump-cards/a-small.webp" alt=""></span>
-              <span class="trump-label__card trump-label__card--3"><img src="assets/trump-cards/a-small.webp" alt=""></span>
-            </span>
-            <p class="trump-label__text"><span>Активен коз:</span> <strong>“Чиста Мрежа”</strong></p>
-            <button class="trump-label__remove" type="button">Премахни <span class="trump-label__close"><img src="assets/lobby-main/icon-close.svg" alt=""></span></button>
-          </div>
-          <event-container variant="correct-score" state="default" home-score="3" away-score="0"
-            home-crest="assets/crests/cska.webp" away-crest="assets/crests/ludogorets.webp"></event-container>
-        </div>
+        <!-- Следващ: the next round's saved prediction (components/next-prediction.js), the same
+             as the lobby's panel: the empty state (No Match Selected) until one is saved, then the
+             match card, with the active-trump-label ("Премахни") over it when a power card is on -->
+        <div class="round-stack" data-round="0" data-next-slot></div>
 
         <!-- Locked: "Инфо" on the label, Match Outcome locked -->
         <div class="round-stack" data-round="1" hidden>
@@ -480,6 +470,7 @@
   <script src="components/event-container.js"></script>
   <!-- Team Modal (396:19940 / 396:20047): opens on a tap on the Отбори tab's team cards -->
   <script src="components/team-modal.js"></script>
+  <script src="components/next-prediction.js"></script>
   <script src="components/prediction-sheet.js"></script>
   <script>
     // Прогнози's own switches: the three tabs (График / Отбори / История), the round tabs
@@ -605,15 +596,14 @@
         box.classList.toggle('prediction--locked', i === 1);
       });
 
-      // "Премахни" takes the active trump card off this round: the label goes and the trump
-      // cards show again in the match card's top right corner
-      list('.trump-label__remove:not(.trump-label__info)').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          var label = btn.closest('.trump-label');
-          var card = label.parentNode.querySelector('event-container');
-          label.remove();
-          if (card) card.setAttribute('trump-card', '');
-        });
+      // The empty state's "Прогнозирай" (no prediction saved yet): to the match list, on График
+      document.addEventListener('predict', function () {
+        var schedule = document.querySelector('.tab-primary__item[data-tab="schedule"]');
+        if (schedule && !schedule.classList.contains('is-active')) schedule.click();
+        var row = document.querySelector('.tab-primary-row');
+        var top = row.getBoundingClientRect().top + window.pageYOffset - 10;
+        var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: top, behavior: still ? 'auto' : 'smooth' });
       });
 
       // Opened from the lobby's empty state ("Прогнозирай"): the page scrolls to the tab row

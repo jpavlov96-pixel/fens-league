@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="components/event-container.css">
   <script src="components/event-container.js"></script>
+  <script src="components/next-prediction.js"></script>
   <!-- Hides the header section until the ball's bounce intro starts (see the end of the page) -->
   <script src="components/page-boot.js"></script>
 </head>
@@ -99,11 +100,12 @@
         <!-- Figma: event-container (276:9188): the reusable component, see components/event-container.js.
              One card per round tab: "Следващ • Кръг 7" is open for picks; "Текущ • Кръг 6" is
              variant 4 of the set (Correct Score, Locked, 276:9578) with its Figma teams -->
-        <!-- Следващ shows the empty state, No Match Selected (Figma 356:10163 / 352:10051; the user's
-             request 2026-11-13): "Прогнозирай" opens Прогнози on Текущ кръг (see the script below).
-             The picked-match card it replaces, for when a pick exists:
-             <event-container data-round="0" variant="match-outcome" state="default" trump-card></event-container> -->
-        <event-container data-round="0" variant="no-match" data-predict-to="predictions.html"></event-container>
+        <!-- Следващ: the next round's saved prediction (components/next-prediction.js), always the
+             same as Прогнози's: the empty state, No Match Selected (Figma 356:10163 / 352:10051),
+             until one is saved ("Прогнозирай" opens Прогнози, see the script below); then the
+             match card, with the active-trump-label over it when a power card is on, or the trump
+             cards in its corner when not -->
+        <div class="round-stack" data-round="0" data-next-slot></div>
         <!-- Кръг 6: the active-trump-label over the card, 5px apart (Figma 273:8185) -->
         <div class="round-stack" data-round="1" hidden>
           <!-- active-trump-label (273:8186) -->

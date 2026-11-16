@@ -20,7 +20,9 @@
      only be added where it is needed). A card that stops applying is taken off.
    - head-to-head (440:19086 closed / 440:19255 open): a tap opens and closes it. The record
      is Figma's sample ("5 победи" each) for every match.
-   - "Запази Прогноза" is dimmed while the prediction can't be saved, and closes the sheet.
+   - "Запази Прогноза" is dimmed while the prediction can't be saved; it saves the prediction as
+     the next round's (components/next-prediction.js: the lobby's and Прогнози's slots show it)
+     and closes the sheet.
 
    The info icon by the points opens the points table (Group 61, 448:19962): Figma's four rows,
    and a row for the picked card when it adds points (Figma shows "Чиста Мрежа" 2т; the others
@@ -34,27 +36,10 @@
   var A = 'assets/lobby-main/';
   var CARDS = 'assets/trump-cards/';
 
-  // The six power cards (official names; panel texts follow the rules)
-  var TRUMPS = [
-    { id: 'even', name: 'Равенство', file: 'even',
-      short: 'Единственият начин да прогнозираш равенство.',
-      panel: 'Прогнозата за равен резултат е <b>валидна</b>.' },
-    { id: 'repeat', name: 'Повторен избор', file: 'repeat',
-      short: 'Избери за победител вече използван отбор.',
-      panel: 'Избери отново <b>вече използван</b> отбор.' },
-    { id: 'scorer', name: 'Голмайстор', file: 'scorer',
-      short: 'Ако избраният играч отбележи: двойни точки.',
-      panel: 'Ако избраният играч отбележи, точките се <b>удвояват</b>.' },
-    { id: 'all-or-nothing', name: 'Всичко или нищо', file: 'all-or-nothing',
-      short: 'Само за точен резултат: 6 точки или 0.',
-      panel: 'Познат точен резултат носи <b>6 точки</b>, иначе 0.' },
-    { id: 'rest', name: 'Почивка', file: 'rest',
-      short: 'Пропусни кръга и вземи 1 точка.',
-      panel: 'Пропускаш кръга и получаваш <b>1 точка</b>.' },
-    { id: 'clean-sheet', name: 'Чиста мрежа', file: 'clean-sheet',
-      short: 'При победа без допуснат гол: +2 точки.',
-      panel: 'При победа без допуснат гол получаваш <b>+2 точки.</b>' }
-  ];
+  // The power cards and the rules for them are shared with the saved prediction's slots
+  // (components/next-prediction.js)
+  var P = window.fensPrediction;
+  var TRUMPS = P.TRUMPS;
 
   function esc(t) {
     return String(t).replace(/[&<>"]/g, function (c) {
@@ -115,40 +100,27 @@
   var trump = ''; // the picked power card's id
   var match = null;
 
-  // What the event-container says the prediction is
-  function read() {
-    var exact = event.getAttribute('variant') === 'correct-score';
-    var hs = parseInt(event.getAttribute('home-score'), 10) || 0;
-    var as = parseInt(event.getAttribute('away-score'), 10) || 0;
-    var pick = event.getAttribute('pick') || '';
-    var winner = exact ? (hs > as ? 'home' : as > hs ? 'away' : 'draw') : pick;
-    var used = winner === 'home' || winner === 'away' ? !!match[winner + 'Used'] : false;
-    return { exact: exact, winner: winner, used: used };
+  // The prediction as it is in the sheet (the shape window.fensPrediction saves)
+  function current() {
+    return {
+      date: match.date, home: match.home, away: match.away,
+      homeCrest: match.homeCrest, awayCrest: match.awayCrest,
+      homeUsed: match.homeUsed, awayUsed: match.awayUsed,
+      variant: event.getAttribute('variant'),
+      pick: event.getAttribute('pick') || '',
+      homeScore: parseInt(event.getAttribute('home-score'), 10) || 0,
+      awayScore: parseInt(event.getAttribute('away-score'), 10) || 0,
+      trump: trump
+    };
   }
+
+  // exact or not, the winner, whether it's a used team
+  function read() { return P.read(current()); }
 
   // Why a card can't be added right now ('' = it can), per the rules and clarifications
-  function blocked(id, p) {
-    var hasWinner = p.winner === 'home' || p.winner === 'away';
-    switch (id) {
-      case 'rest': return '';
-      case 'even': return p.exact && p.winner === 'draw' ? '' : 'Само за равен точен резултат.';
-      case 'repeat': return p.used ? '' : 'Само за вече използван отбор.';
-      case 'all-or-nothing':
-        if (!p.exact) return 'Само за точен резултат.';
-        if (!hasWinner) return 'Само за прогноза с победител.';
-        return p.used ? 'Отборът е използван.' : '';
-      default: // scorer, clean-sheet
-        if (!hasWinner) return 'Само за прогноза с победител.';
-        return p.used ? 'Отборът е използван.' : '';
-    }
-  }
+  function blocked(id) { return P.blocked(id, current()); }
 
-  function valid(p) {
-    if (trump === 'rest') return true;
-    if (!p.winner) return false;
-    if (p.winner === 'draw') return trump === 'even';
-    return !p.used || trump === 'repeat';
-  }
+  function valid() { return P.valid(current()); }
 
   function points(p) {
     if (trump === 'rest') return 1;
@@ -383,7 +355,11 @@
       return;
     }
     var save = e.target.closest('[data-save]');
-    if (save && !save.disabled) close();
+    if (save && !save.disabled) {
+      // it becomes the next round's prediction, in every slot that shows it
+      P.save(current(), null);
+      close();
+    }
   });
 
   // Drag down to close, as the Team Modal: the sheet follows the finger down, the dimmed page
