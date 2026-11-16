@@ -5289,7 +5289,8 @@ html.predict-sheet-open body { overflow: hidden; }
   font-size: 4px;
   font-style: italic;
   font-weight: 800;
-  line-height: 18px;
+  line-height: 4.5px; /* one line as in Figma; two for a longer name */
+  text-align: center;
   color: #ffffff;
   white-space: nowrap;
   transform: rotate(-3.24deg);

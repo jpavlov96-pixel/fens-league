@@ -184,17 +184,24 @@
   function drawTrump() {
     var box = q('.predict-sheet__trump');
     var t = TRUMPS.filter(function (x) { return x.id === trump; })[0];
-    if (!t && suggest === 'draw' && P.USED.indexOf('even') < 0) {
+    // the card the warning asks for: a level score → Равенство (Figma 449:21195); a used team
+    // → Повторен избор (the user's request, 2026-11-16, in the same look)
+    var OFFER = {
+      draw: { id: 'even', mark: 'Равенство', title: 'Равенство', text: 'Отключи прогноза за равенство.' },
+      used: { id: 'repeat', mark: 'Повторен<br>избор', title: 'Повторен избор', text: 'Избери отново вече използван отбор.' }
+    };
+    var o = OFFER[suggest];
+    if (!t && o && P.USED.indexOf(o.id) < 0) {
       box.className = 'predict-sheet__trump predict-sheet__trump--suggest';
       box.innerHTML =
         '<span class="predict-sheet__trump-cards" aria-hidden="true">' +
           '<span class="predict-sheet__trump-back"><img src="' + CARDS + 'b-small.webp" alt=""></span>' +
-          '<span class="predict-sheet__trump-front"><img src="' + CARDS + 'even-small.webp" alt=""></span>' +
-          '<span class="predict-sheet__trump-mark">Равенство</span>' +
+          '<span class="predict-sheet__trump-front"><img src="' + CARDS + P.trumpOf(o.id).file + '-small.webp" alt=""></span>' +
+          '<span class="predict-sheet__trump-mark">' + o.mark + '</span>' +
         '</span>' +
-        '<p class="predict-sheet__trump-title">Равенство</p>' +
-        '<p class="predict-sheet__trump-text">Отключи прогноза за равенство.</p>' +
-        '<button class="predict-sheet__trump-btn" type="button" data-trump="even">Използвай</button>';
+        '<p class="predict-sheet__trump-title">' + o.title + '</p>' +
+        '<p class="predict-sheet__trump-text">' + o.text + '</p>' +
+        '<button class="predict-sheet__trump-btn" type="button" data-trump="' + o.id + '">Използвай</button>';
       return;
     }
     if (!t) {

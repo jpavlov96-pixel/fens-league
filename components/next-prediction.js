@@ -46,7 +46,8 @@
 
   // Already used this half-season (sample, the same as the lobby's Козове: 4 available / 2 used,
   // the user's request 2026-11-16)
-  var USED = ['scorer', 'repeat'];
+  // (Повторен избор kept available since the sheet offers it for a used team)
+  var USED = ['scorer', 'all-or-nothing'];
 
   function trumpOf(id) { return TRUMPS.filter(function (t) { return t.id === id; })[0]; }
 

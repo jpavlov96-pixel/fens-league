@@ -234,7 +234,7 @@
       var winner = exact ? (hs > as ? 'home' : as > hs ? 'away' : '') : this._get('pick', 'home');
       var usedWinner = open && !level && winner && this._get(winner + '-used', '') && !this.hasAttribute('allow-used');
       var message = level ? 'Невалиден залог. Използвайте коз за <b>“Равенство”.</b>'
-        : usedWinner ? 'Отборът е използван. Използвайте коз <b>“Повторен избор”.</b>' : '';
+        : usedWinner ? 'Използвайте коз <b>“Повторен Избор”.</b>' : '';
       var kind = level ? 'draw' : usedWinner ? 'used' : '';
       if (this._warningShown && message && message !== this._warningText) {
         // a different reason: swap the text in place

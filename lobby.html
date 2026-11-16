@@ -351,8 +351,8 @@
         <div class="card-body">
           <!-- cards-slider: the full collection (Figma 231:11202, artworks 317:11985), a swipeable
                carousel (components/trump-carousel.js). The middle card is 193 × 290, the others
-               175 × 263. Since 2026-11-16 only the four available cards (Голмайстор and Повторен
-               избор are used, see Използвани below); it opens on Почивка, the 3rd of 4 dots -->
+               175 × 263. Since 2026-11-16 only the four available cards (Голмайстор and Всичко или
+               нищо are used, see Използвани below); it opens on Почивка, the 3rd of 4 dots -->
           <div class="trumps" tabindex="0" aria-label="Козове" data-start="2" data-trump-list="0">
             <div class="trump">
               <img class="trump__bgr" src="assets/trump-cards/even.webp" alt="" loading="lazy" draggable="false">
@@ -366,14 +366,14 @@
               </div>
             </div>
             <div class="trump">
-              <img class="trump__bgr" src="assets/trump-cards/all-or-nothing.webp" alt="" loading="lazy" draggable="false">
-              <div class="trump__info trump__info--small">6/0</div>
+              <img class="trump__bgr" src="assets/trump-cards/repeat.webp" alt="" loading="lazy" draggable="false">
+              <div class="trump__info"><img src="assets/lobby-main/icon-card-swap.svg" alt="" width="14" height="14"></div>
               <div class="trump__content">
                 <div class="trump__text">
-                  <p class="trump__name">ВСИЧКО<br>ИЛИ НИЩО</p>
-                  <p class="trump__desc">Точен резултат: печелиш<br>шест точки или нула.</p>
+                  <p class="trump__name">ПОВТОРЕН<br>ИЗБОР</p>
+                  <p class="trump__desc">Избери вече използван<br>отбор отново.</p>
                 </div>
-                <a class="trump__link" href="#trump-all-or-nothing" draggable="false">Детайли <img src="assets/lobby-main/icon-arrow-gold.svg" alt="" width="10" height="10"></a>
+                <a class="trump__link" href="#trump-repeat" draggable="false">Детайли <img src="assets/lobby-main/icon-arrow-gold.svg" alt="" width="10" height="10"></a>
               </div>
             </div>
             <div class="trump">
@@ -404,7 +404,7 @@
           </div>
           <!-- Използвани (Figma 444:15907): the used cards, greyed out (the official art in
                greyscale, as Figma's), grey texts and links. The six are split 4 available / 2 used
-               (the user's request, 2026-11-16): Голмайстор and Повторен избор are used, the same
+               (the user's request, 2026-11-16): Голмайстор and Всичко или нищо are used, the same
                as components/next-prediction.js (USED).
                Figma's side cards carry placeholder texts ("+1", Голмайстор's line): the cards'
                own texts are used -->
@@ -421,14 +421,14 @@
               </div>
             </div>
             <div class="trump">
-              <img class="trump__bgr" src="assets/trump-cards/repeat.webp" alt="" loading="lazy" draggable="false">
-              <div class="trump__info"><img src="assets/lobby-main/icon-card-swap-grey.svg" alt="" width="14" height="14"></div>
+              <img class="trump__bgr" src="assets/trump-cards/all-or-nothing.webp" alt="" loading="lazy" draggable="false">
+              <div class="trump__info trump__info--small">6/0</div>
               <div class="trump__content">
                 <div class="trump__text">
-                  <p class="trump__name">ПОВТОРЕН<br>ИЗБОР</p>
-                  <p class="trump__desc">Избери вече използван<br>отбор отново.</p>
+                  <p class="trump__name">ВСИЧКО<br>ИЛИ НИЩО</p>
+                  <p class="trump__desc">Точен резултат: печелиш<br>шест точки или нула.</p>
                 </div>
-                <a class="trump__link" href="#trump-repeat" draggable="false">Детайли <img src="assets/lobby-main/icon-arrow-grey.svg" alt="" width="10" height="10"></a>
+                <a class="trump__link" href="#trump-all-or-nothing" draggable="false">Детайли <img src="assets/lobby-main/icon-arrow-grey.svg" alt="" width="10" height="10"></a>
               </div>
             </div>
           </div>
