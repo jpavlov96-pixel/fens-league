@@ -180,14 +180,22 @@
     }
   }
 
+  // the points count to the new number the way the lobby's counters do (600ms, easing out;
+  // lobby.html countTo), instead of changing at once
   function setPoints(n) {
     var num = q('.predict-sheet__points-num');
-    if (num.textContent === String(n)) return;
-    num.textContent = n;
-    if (num.animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      num.animate([{ transform: 'scale(1.18)' }, { transform: 'none' }],
-        { duration: 260, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)' });
+    var from = parseInt(num.textContent, 10) || 0;
+    cancelAnimationFrame(num._countFrame);
+    if (from === n || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      num.textContent = n;
+      return;
     }
+    var start = performance.now();
+    (function step(now) {
+      var p = Math.min((now - start) / 600, 1);
+      num.textContent = Math.round(from + (n - from) * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) num._countFrame = requestAnimationFrame(step);
+    })(start);
   }
 
   // Figma's power card panels. While the card's "Невалиден залог" warning is up for a level
@@ -468,6 +476,7 @@
     setPicker(false);
     setTip(false);
     drawTrump();
+    cancelAnimationFrame(q('.predict-sheet__points-num')._countFrame); // a count still running from before
     q('.predict-sheet__points-num').textContent = '0';
     update();
 
