@@ -455,3 +455,43 @@ event-container[hidden] { display: none; }
   color: #ffffff;
   white-space: nowrap;
 }
+
+/* ---------- form: the 150px card of the prediction sheet ("2.21 - Prediction / Open",
+   330:17210). The buttons row moves down to y 111 (Figma), with the teams' form dots
+   (Frame 2147208140 / 2147208142) between it and the crests ---------- */
+.event--form {
+  gap: 23px;
+  padding-bottom: 5px;
+}
+
+.event__form {
+  position: absolute;
+  width: 56px;
+  height: 8px;
+}
+
+.event__form--home { top: 95px; left: 37px; }
+.event__form--away { top: 96px; left: 263px; }
+
+/* a used team: the crest greyed out as on Прогнози's match-card (.team-logo--disabled), with
+   the round it was used in ("К3") in the top corner (.team-logo__used) */
+.event__crest { position: relative; }
+
+.event__crest--used img {
+  mix-blend-mode: luminosity;
+  opacity: 0.5;
+}
+
+.event__crest-used {
+  position: absolute;
+  top: 5.5px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 11px;
+  color: #929295;
+  white-space: nowrap;
+  transform: translateY(-50%);
+}
+
+.event__crest-used--home { left: 0; }
+.event__crest-used--away { right: 0; }

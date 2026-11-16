@@ -20,6 +20,13 @@
 //   home-score, away-score   Correct Score numbers            (default 3 and 0)
 //   pick         "home" | "away" | "" (no pick)               (default "home")
 //   trump-card   present = the trump cards show in the top right corner
+//   form         present = the 150px card of the prediction sheet ("2.21 - Prediction / Open",
+//                330:17210): each team's last five results as dots under its crest
+//   home-used, away-used     the round the team was used in ("К3"): its crest is greyed out
+//                with the round in the corner, as on Прогнози's match-card
+//   allow-used   present = a used team may be picked to win (the "Повторен избор" card);
+//                without it, picking a used team shows the gold warning
+//   allow-draw   present = a level Correct Score is valid (the "Равенство" card)
 //
 // When not locked, the "Точен Резултат" / "Изход от мача" button switches between the two
 // variants; switching to Correct Score starts the score at 1 : 0 for the picked team. Every change the user makes updates the attributes and fires a "change" event.
@@ -37,7 +44,8 @@
   class EventContainer extends HTMLElement {
     static get observedAttributes() {
       return ['variant', 'state', 'date', 'home', 'away', 'home-crest', 'away-crest',
-        'home-score', 'away-score', 'pick', 'trump-card', 'note'];
+        'home-score', 'away-score', 'pick', 'trump-card', 'note', 'form', 'home-used', 'away-used',
+        'allow-used', 'allow-draw'];
     }
 
     connectedCallback() {
@@ -115,9 +123,12 @@
       var pick = this._get('pick', 'home');
       var dis = locked ? ' disabled' : '';
 
-      function crest(src, name) {
+      var self0 = this;
+      function crest(src, name, side) {
         // the slot is the span; the image inside keeps its own proportions (see the CSS)
-        return '<span class="event__crest"><img src="' + esc(src) + '" alt="' + esc(name) + '"></span>';
+        var used = self0._get(side + '-used', '');
+        return '<span class="event__crest' + (used ? ' event__crest--used' : '') + '"><img src="' + esc(src) + '" alt="' + esc(name) + '">' +
+          (used ? '<span class="event__crest-used event__crest-used--' + side + '">' + esc(used) + '</span>' : '') + '</span>';
       }
 
       function teamBtn(side, name) {
@@ -161,20 +172,27 @@
 
       var trump = this.hasAttribute('trump-card') ? this._trumpHtml() : '';
 
+      var form = this.hasAttribute('form');
+      // Frame 2147208140 / 2147208142: Figma's sample form (the same five dots for both teams)
+      var dots = form
+        ? '<img class="event__form event__form--home" src="' + ASSETS + 'form-dots.svg" alt="" width="56" height="8">' +
+          '<img class="event__form event__form--away" src="' + ASSETS + 'form-dots.svg" alt="" width="56" height="8">'
+        : '';
       var html =
-        '<div class="event' + (locked ? ' event--locked' : '') + '">' +
-          '<img class="event__bgr" src="' + ASSETS + 'event-bgr-frame.svg" alt="">' +
+        '<div class="event' + (locked ? ' event--locked' : '') + (form ? ' event--form' : '') + '">' +
+          '<img class="event__bgr" src="' + ASSETS + (form ? 'event-bgr-frame-form.svg' : 'event-bgr-frame.svg') + '" alt="">' +
           '<div class="event__top">' +
             '<div class="event__time">' +
               '<img class="event__time-bgr" src="' + ASSETS + 'time-stamp-bgr.svg" alt="">' +
               '<span class="event__time-text">' + esc(this._get('date', 'Четвъртък, 22/11 13:00ч.')) + '</span>' +
             '</div>' +
             '<div class="event__teams">' +
-              crest(this._get('home-crest', 'assets/crests/cska.webp'), home) +
+              crest(this._get('home-crest', 'assets/crests/cska.webp'), home, 'home') +
               middle +
-              crest(this._get('away-crest', 'assets/crests/ludogorets.webp'), away) +
+              crest(this._get('away-crest', 'assets/crests/ludogorets.webp'), away, 'away') +
             '</div>' +
           '</div>' +
+          dots +
           '<div class="event__btns">' + buttons + '</div>' +
           market +
           trump +
@@ -206,9 +224,21 @@
     _drawWarning() {
       var self = this;
       clearTimeout(this._warnTimer);
-      var level = this._get('variant', 'match-outcome') === 'correct-score' &&
-        this._get('state', 'default') !== 'locked' &&
-        this._score('home-score', 3) === this._score('away-score', 0);
+      var exact = this._get('variant', 'match-outcome') === 'correct-score';
+      var open = this._get('state', 'default') !== 'locked';
+      var hs = this._score('home-score', 3), as = this._score('away-score', 0);
+      var level = exact && open && hs === as && !this.hasAttribute('allow-draw');
+      // the team picked to win (the green button, or the side ahead in Correct Score) is used
+      var winner = exact ? (hs > as ? 'home' : as > hs ? 'away' : '') : this._get('pick', 'home');
+      var usedWinner = open && !level && winner && this._get(winner + '-used', '') && !this.hasAttribute('allow-used');
+      var message = level ? 'Невалиден залог. Използвайте коз за <b>“Равенство”.</b>'
+        : usedWinner ? 'Отборът е използван. Използвайте коз <b>“Повторен избор”.</b>' : '';
+      if (this._warningShown && message && message !== this._warningText) {
+        // a different reason: swap the text in place
+        var shown = this.querySelector('.event__time--warning .event__time-text');
+        if (shown) shown.innerHTML = message;
+      }
+      this._warningText = message;
       var time = this.querySelector('.event__time:not(.event__time--warning)');
       if (!time) return;
       var motion = !!time.animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -219,7 +249,7 @@
         var w = document.createElement('div');
         w.className = 'event__time event__time--warning';
         w.setAttribute('role', 'status');
-        w.innerHTML = '<span class="event__time-text">Невалиден залог. Използвайте коз за <b>“Равенство”.</b></span>';
+        w.innerHTML = '<span class="event__time-text">' + self._warningText + '</span>';
         w.style.position = 'absolute';
         w.style.top = time.offsetTop + 'px';
         w.style.left = '50%';
@@ -229,7 +259,7 @@
         return w;
       }
 
-      if (!level) {
+      if (!message) {
         if (!this._warningShown) return;
         this._warningShown = false;
         if (!current) return;
@@ -264,7 +294,7 @@
             { opacity: 1, clipPath: 'inset(0 0 0 0)' }
           ], { duration: 480, easing: 'cubic-bezier(0.33, 0, 0.2, 1)' });
         }
-      }, 1350);
+      }, level ? 1350 : 0); // a used team shows at once; a level score waits (it may be passing through)
     }
 
     // Switching Match Outcome ↔ Correct Score: the middle ("vs" / score), the buttons row

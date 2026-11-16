@@ -15,6 +15,7 @@
 - Earlier in the day: the lobby's empty state opens Прогнози on Следващ (never Текущ), and smaller changes in the lobby, Прогнози, the match card and the components page.
 
 ## Unfinished / waiting on the user
+- **Prediction sheet (2026-11-16)**: built from Figma 440:19350 on Прогнози. Open questions: a draw in Изход от мача mode (the rules allow X with Равенство for 3т., Figma has no X button, so Равенство only works with a level exact score for now); Голмайстор has no player picker; saving doesn't change the match card yet; the card list, used-team mark and dimmed save are not from Figma.
 - **Подвизи page**: only the header and hero; the rest isn't designed.
 - **Класиране is all sample data**: names, points, movements, exact scores, "2т. до топ 50". Mine follow the lobby (29т. #53 от 10 083; 14т. #132 от 13 083). My username is the placeholder "lastfan".
 - **The lobby's "Към Класации" button** still points at `#rankings`, not at `rankings.html`. Offered, not answered.
