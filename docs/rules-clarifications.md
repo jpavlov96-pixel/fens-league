@@ -10,6 +10,6 @@ Answers from the user to questions about `fan-league-rules-bg.md` / `fan-league-
 4. **Applicable card (§2, §5).** A card can only be added when it is needed: you can't, for example, add Reuse / Повторен избор to a team that is still available.
 5. **Variety / Разнообразие (§7).** A correct winner with All or Nothing / Всичко или нищо but the wrong score counts as a correctly predicted win for Variety.
 6. **Name.** The official name is **Fens League** (the English file's "Fan League" means Fens League).
+7. **All or Nothing / Всичко или нищо with an awarded result (§3.2, §5).** If the match is awarded without being played, the card is returned to the player and the prediction is settled as if no card had been applied (an exact-score prediction: 4 / 2 / 0 pts by the awarded score). If the half-season is already over when the match is awarded, the card can't come back (the reset has given a new set of 6), and the prediction is still settled as if no card had been applied.
 
-## Still open (asked, not answered yet)
-- All or Nothing / Всичко или нищо with a result awarded without a match being played: settled normally, or the card returned?
+All questions from the 2026-11-16 review are answered.
