@@ -188,7 +188,7 @@
           '<span class="predict-sheet__trump-back"><img src="' + CARDS + 'b-small.webp" alt=""></span>' +
           '<span class="predict-sheet__trump-front"><img src="' + CARDS + 'b-small.webp" alt=""></span>' +
         '</span>' +
-        '<p class="predict-sheet__trump-title"><span>' + TRUMPS.length + '</span> НАЛИЧНИ КОЗА</p>' +
+        '<p class="predict-sheet__trump-title"><span>' + (TRUMPS.length - P.USED.length) + '</span> НАЛИЧНИ КОЗА</p>' +
         '<p class="predict-sheet__trump-text">Промени играта с един ход. Избери коз за този кръг.</p>' +
         '<button class="predict-sheet__trump-btn" type="button" data-picker-open>Избери Коз</button>';
       return;

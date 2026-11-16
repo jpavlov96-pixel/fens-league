@@ -44,6 +44,10 @@
       panel: 'При победа без допуснат гол получаваш <b>+2 точки.</b>' }
   ];
 
+  // Already used this half-season (sample, the same as the lobby's Козове: 4 available / 2 used,
+  // the user's request 2026-11-16)
+  var USED = ['scorer', 'repeat'];
+
   function trumpOf(id) { return TRUMPS.filter(function (t) { return t.id === id; })[0]; }
 
   // "Чиста мрежа" → "Чиста Мрежа", as Figma writes the names in labels
@@ -64,6 +68,7 @@
   // Why a card can't be added to this prediction ('' = it can): the rules and clarifications
   // (a card only where it is needed)
   function blocked(id, p) {
+    if (USED.indexOf(id) >= 0) return 'Вече е използван този полусезон.';
     var r = read(p);
     var hasWinner = r.winner === 'home' || r.winner === 'away';
     switch (id) {
@@ -117,7 +122,7 @@
   var memory = get();
 
   window.fensPrediction = {
-    TRUMPS: TRUMPS, trumpOf: trumpOf, titleCase: titleCase,
+    TRUMPS: TRUMPS, USED: USED, trumpOf: trumpOf, titleCase: titleCase,
     get: function () { return memory; }, save: save, clear: clear,
     blocked: blocked, valid: valid, read: read,
     onChange: function (fn) { listeners.push(fn); }
