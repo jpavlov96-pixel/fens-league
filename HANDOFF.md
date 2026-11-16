@@ -1,38 +1,25 @@
-# Handoff — 2026-11-14 — end of day
+# Handoff — 2026-11-16 — end of day
 
-## Done today (all on `main` and live, feature commit f8f9b5b)
-- **Правила** (`rules.html`), designed in code, no Figma frame:
-  - Two top tabs. **Накратко**: four sub-tabs, Основи · Козове · Подвизи · Класиране, short rules only. **Пълни правила**: the whole text in 7 numbered sections.
-  - Each card in Накратко ends with "Виж пълното правило", which opens Пълни правила at that section.
-  - The row of chips (sub-tabs / sections) sticks to the top of the screen; in Пълни правила the chips follow the section being read. A round "up" button shows after a screen of scrolling.
-  - Another page can open it on a section: sessionStorage `fens-rules-section` (Класиране uses it).
-- **Класиране** (`rankings.html`), designed in code (Figma's frame 308:9739 is gone from the file):
-  - Сезон / Полусезон, each with four cards: Твоята позиция, Топ играчи, Награди, При равни точки.
-  - Топ играчи: top 3 on the podium as circles with initials, then a table (place, movement, player, "Точни рез.", points) that opens with 15 rows: places 4–13 and the five around me. "Покажи още" reveals 14–23, then 24–30.
-  - The hero's subtitle follows the tab.
-- **Подвизи** (`achievements.html`): header and hero only.
-- **`RULES.md`**: the rules of the game from the user, the source for any copy that states a rule (not served).
-- Earlier in the day: the lobby's empty state opens Прогнози on Следващ (never Текущ), and smaller changes in the lobby, Прогнози, the match card and the components page.
+## Done today (all pushed to `main`, live)
+- Official rules in `docs/` (BG, EN) + `docs/rules-clarifications.md` (the user's answers, #1–8); Правила, Класиране and the lobby's prize tables follow them.
+- Prediction sheet (`components/prediction-sheet.js`) from "Прогнозирай" (Прогнози list, Team Modal): Изход от мача / Точен резултат, used teams (disabled until Повторен избор), draws via Равенство ("Равен"), points counter + ⓘ points table, Равенство / Повторен избор offers, Почивка panel, Figma's disabled save button.
+- One saved next-round prediction (`components/next-prediction.js`, localStorage `fens-next-prediction`) shown in both slots (lobby, Прогнози); card icons on a saved prediction open "Избери Коз" and apply + save at once.
+- "Избери Коз" picker (Figma 449:20222): carousel of the 4 available cards, rule text moving with the cards, A2c "Дъги" electricity + tremble on the middle card, slam on "Приложи Коз" (vibration, no sound), smooth hand-off (`components/card-fx.js`; demo in `demos/card-fx.html`, off the site).
+- Power cards: split 4 available / 2 used (`USED`: Голмайстор, Всичко или нищо); any available card can be applied any time, a misfit says "Коз “…” няма да бъде приложен.".
+- Lobby: Козове Използвани state, 2-card / 1-card layouts, card details sheet from "Детайли" (`components/trump-details.js`), "Към Класации" → Класиране, "Промени" → Прогнози.
+- Landing page "Fens League Demo" + "Рестартирай демото"; header image preload; Прогнози tab row without the power-card button.
 
 ## Unfinished / waiting on the user
-- **Prediction sheet (2026-11-16)**: built from Figma 440:19350 on Прогнози. Open questions: Голмайстор has no player picker; saving doesn't change the match card yet; the card list, used-team mark and dimmed save are not from Figma.
-- **Подвизи page**: only the header and hero; the rest isn't designed.
-- **Класиране is all sample data**: names, points, movements, exact scores, "2т. до топ 50". Mine follow the lobby (29т. #53 от 10 083; 14т. #132 от 13 083). My username is the placeholder "lastfan".
-- **Rules (2026-11-16)**: the official rules are in `docs/` (BG, EN, plus the user's clarifications); Правила, Класиране and the lobby's prize tables now follow them. Still not in the rules: prize amounts, the derby list, the reset date (per edition).
-- **Monthly ranking**: the rules have one; Класиране only has Сезон / Полусезон.
-- The new components of Правила and Класиране aren't on `components.html`.
-- Other pages don't link into Правила's tabs (the user's choice for now), apart from Класиране's tie-break card.
-- Not tried on a real phone: both new pages, the sticky chips (Safari older than 16 won't stick them), the smooth scrolling to a section.
-- Still open from before: Сезон's bottom sheet on Прогнози (needs its Figma node); the Team Modal's per-team details are Figma's samples.
+- **Flash on load** (yellow border / black button on the prediction panel): not reproducible in the built-in browser; asked which browser/device + a screen recording. The header flash was fixed (preload).
+- Голмайстор has no player picker; saving doesn't change the match list's card; the sheet's head-to-head and form dots are samples.
+- Класиране has no monthly tab; prize amounts are Figma samples; Подвизи page still only a hero.
+- Not tried on a real phone: the electricity, slam timing, smooth scroll from "Промени".
 
 ## Decisions and gotchas
-- **The user tried the lobby's prize pictures on Класиране's podium and reverted it** to the circles with initials. The prize pictures live in the Награди card as three tiles.
-- **Sticky needs `overflow-x: clip` on the body** (class `rules-page`): with "hidden" on both html and body, the body becomes the box things stick to and never scrolls.
-- **Measure positions from the layout** (`offsetTop`), not `getBoundingClientRect`, while the arrival animation is running: the rise-in shifts everything by 12px.
-- **Achievement pictures** are wide banners with the art in the left third on flat #06101a. A thumbnail is that left end, on a row of the same colour.
-- **Montserrat needs `"locl" 0`** on any Bulgarian text, or "т." turns into "m.".
-- **Testing in the Browser pane**: use a separate background tab (the user clicks in the first one). There, lazy images don't load (set them to eager), `img.decode()` hangs, and smooth scrolling doesn't move.
-- `rules.html` and `rankings.html` were generated by throwaway scripts; edit the HTML directly from now on.
+- Чиста мрежа with an exact score where the winner concedes is "not applied" — stricter than the official §5 (recorded as clarification #8).
+- Test in a separate Browser-pane tab and keep it in front: a hidden pane pauses animations/rAF (the slam, carousel moves, counters) — the slam has a timer fallback for that.
+- SVG filter effects: update turbulence ~14×/s, never every frame (it dropped to 2fps).
+- Local `main` folder: an untracked `.agents/` copy once blocked the fast-forward; the files are in git now.
 
 ## First task next time
-Ask what to build next: the Подвизи page (the last one without content), or changes to Правила and Класиране after the user has tried them on a phone. Start with what they found.
+Ask about the load flash (browser/device, recording) and what the user found on the phone; then continue with what they pick (Голмайстор player picker, Подвизи page, monthly ranking).
