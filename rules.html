@@ -66,7 +66,8 @@
 
     <!-- Правила's content (2026-11-14, no Figma frame): two top tabs on Прогнози's
          tab_list_primary. "Накратко" = the short rules in four sub-tabs; "Пълни правила" =
-         the whole text. All copy follows RULES.md. -->
+         the whole text. All copy follows the official rules, docs/fan-league-rules-bg.md
+         (with docs/rules-clarifications.md). -->
     <section class="content-bottom content-bottom--rules">
       <div class="tab-primary-row">
         <div class="tab-primary" role="tablist">
@@ -98,8 +99,8 @@
             <ol class="rules-steps">
               <li class="rules-step"><span class="rules-step__num">1</span><div class="rules-step__text"><p class="rules-step__title">Избери един мач</p><p class="rules-step__note">Всеки кръг избираш един мач и правиш една прогноза.</p></div></li>
               <li class="rules-step"><span class="rules-step__num">2</span><div class="rules-step__text"><p class="rules-step__title">Прогнозирай</p><p class="rules-step__note">„Изход от мача“ или по-смелото „Точен резултат“.</p></div></li>
-              <li class="rules-step"><span class="rules-step__num">3</span><div class="rules-step__text"><p class="rules-step__title">Бъди навреме</p><p class="rules-step__note">Прогнозите се заключват при старта на кръга.</p></div></li>
-              <li class="rules-step"><span class="rules-step__num">4</span><div class="rules-step__text"><p class="rules-step__title">Събирай точки</p><p class="rules-step__note">Те те изкачват в класирането за полусезона и за сезона.</p></div></li>
+              <li class="rules-step"><span class="rules-step__num">3</span><div class="rules-step__text"><p class="rules-step__title">Бъди навреме</p><p class="rules-step__note">Можеш да я променяш до началото на първия мач от кръга. Тогава се заключва сама.</p></div></li>
+              <li class="rules-step"><span class="rules-step__num">4</span><div class="rules-step__text"><p class="rules-step__title">Събирай точки</p><p class="rules-step__note">Те те изкачват в класирането за месеца, полусезона и сезона.</p></div></li>
             </ol>
             <button class="rules-more" type="button" data-rules-goto="1">Виж пълното правило <span class="season__chevron"><img src="assets/lobby-main/chevron-right.svg" alt=""></span></button>
           </div>
@@ -122,13 +123,13 @@
           <div class="card rules-card">
             <h2 class="card__title">Отбори</h2>
             <ul class="rules-list">
-              <li>Използва се отборът, който <strong>избереш</strong>, не съперникът му.</li>
+              <li>Използва се отборът, който <strong>прогнозираш за победител</strong>, дори прогнозата да е грешна.</li>
               <li>Всеки отбор може да бъде използван <strong>веднъж на полусезон</strong>.</li>
-              <li>Отборите няма как да свършат: те са повече от кръговете.</li>
+              <li>Отборите няма как да свършат: в полусезона кръговете са с един по-малко от отборите.</li>
             </ul>
             <div class="info-label">
               <img src="assets/lobby-main/icon-refresh-gold.svg" alt="" width="16" height="16">
-              <p>Всички отбори се подновяват в началото на всеки полусезон.</p>
+              <p>След паузата между полусезоните всички отбори отново са налични.</p>
             </div>
             <button class="rules-more" type="button" data-rules-goto="3">Виж пълното правило <span class="season__chevron"><img src="assets/lobby-main/chevron-right.svg" alt=""></span></button>
           </div>
@@ -144,16 +145,16 @@
           <div class="card rules-card">
             <h2 class="card__title">Шестте коза</h2>
             <ul class="rules-trumps">
-              <li class="rules-trump"><img class="rules-trump__card" src="assets/trump-cards/even-small.webp" alt="" width="44" height="66" loading="lazy"><div class="rules-trump__text"><p class="rules-trump__name">Равенство</p><p class="rules-trump__desc">Отключва прогноза за <strong>равен</strong> краен резултат.</p></div></li>
+              <li class="rules-trump"><img class="rules-trump__card" src="assets/trump-cards/even-small.webp" alt="" width="44" height="66" loading="lazy"><div class="rules-trump__text"><p class="rules-trump__name">Равенство</p><p class="rules-trump__desc">Единственият начин да прогнозираш <strong>равенство</strong>. Не използва отбор.</p></div></li>
               <li class="rules-trump"><img class="rules-trump__card" src="assets/trump-cards/repeat-small.webp" alt="" width="44" height="66" loading="lazy"><div class="rules-trump__text"><p class="rules-trump__name">Повторен избор</p><p class="rules-trump__desc">Избери отново <strong>вече използван</strong> отбор.</p></div></li>
               <li class="rules-trump"><img class="rules-trump__card" src="assets/trump-cards/scorer-small.webp" alt="" width="44" height="66" loading="lazy"><div class="rules-trump__text"><p class="rules-trump__name">Голмайстор</p><p class="rules-trump__desc">Ако избраният играч отбележи: <strong>двойни точки</strong>.</p></div></li>
-              <li class="rules-trump"><img class="rules-trump__card" src="assets/trump-cards/all-or-nothing-small.webp" alt="" width="44" height="66" loading="lazy"><div class="rules-trump__text"><p class="rules-trump__name">Всичко или нищо</p><p class="rules-trump__desc">Точен резултат носи <strong>6 точки</strong>, всичко друго: <strong>0</strong>.</p></div></li>
+              <li class="rules-trump"><img class="rules-trump__card" src="assets/trump-cards/all-or-nothing-small.webp" alt="" width="44" height="66" loading="lazy"><div class="rules-trump__text"><p class="rules-trump__name">Всичко или нищо</p><p class="rules-trump__desc">Само за точен резултат: познат носи <strong>6 точки</strong>, всичко друго: <strong>0</strong>.</p></div></li>
               <li class="rules-trump"><img class="rules-trump__card" src="assets/trump-cards/rest-small.webp" alt="" width="44" height="66" loading="lazy"><div class="rules-trump__text"><p class="rules-trump__name">Почивка</p><p class="rules-trump__desc">Пропусни кръг, запази серията и получи <strong>1 точка</strong>.</p></div></li>
               <li class="rules-trump"><img class="rules-trump__card" src="assets/trump-cards/clean-sheet-small.webp" alt="" width="44" height="66" loading="lazy"><div class="rules-trump__text"><p class="rules-trump__name">Чиста мрежа</p><p class="rules-trump__desc">Победа без допуснат гол: <strong>2 допълнителни точки</strong>.</p></div></li>
             </ul>
             <div class="info-label">
               <img src="assets/lobby-main/icon-refresh-gold.svg" alt="" width="16" height="16">
-              <p>Всички козове се подновяват в началото на всеки полусезон.</p>
+              <p>След паузата между полусезоните получаваш нови 6 коза. Неизползваните изтичат.</p>
             </div>
             <button class="rules-more" type="button" data-rules-goto="4">Виж пълното правило <span class="season__chevron"><img src="assets/lobby-main/chevron-right.svg" alt=""></span></button>
           </div>
@@ -208,11 +209,11 @@
           </div>
 
           <div class="card rules-card">
-            <h2 class="card__title">Две класирания</h2>
+            <h2 class="card__title">Три класирания</h2>
             <ul class="rules-list">
-              <li>Състезаваш се едновременно в класирането за <strong>сезона</strong> и за <strong>полусезона</strong>.</li>
-              <li>Наградите под подиума се начисляват директно на играчите на съответните позиции.</li>
-              <li>Отложените мачове се броят като всички останали; точките им идват по-късно в полусезона.</li>
+              <li>Точките от всеки кръг влизат едновременно в класирането за <strong>месеца</strong>, <strong>полусезона</strong> и <strong>сезона</strong>.</li>
+              <li>Награди получават първите три места и цели диапазони: до 30-о място за месеца, до 50-о за полусезона и до 100-но за сезона.</li>
+              <li>Отложен мач се отчита към своя кръг, щом има официален резултат. Дотогава класирането е предварително.</li>
             </ul>
           </div>
 
@@ -223,7 +224,7 @@
               <li class="rules-step"><span class="rules-step__num">1</span><div class="rules-step__text"><p class="rules-step__title">Повече точни резултати</p><p class="rules-step__note">Броят се познатите точни резултати.</p></div></li>
               <li class="rules-step"><span class="rules-step__num">2</span><div class="rules-step__text"><p class="rules-step__title">Повече познати изходи</p><p class="rules-step__note">Ако точните резултати също са равни.</p></div></li>
               <li class="rules-step"><span class="rules-step__num">3</span><div class="rules-step__text"><p class="rules-step__title">По-малко бонус точки от козове</p><p class="rules-step__note">Печели този, който е разчитал по-малко на козове.</p></div></li>
-              <li class="rules-step"><span class="rules-step__num">4</span><div class="rules-step__text"><p class="rules-step__title">Все още наравно?</p><p class="rules-step__note">Мястото се поделя: наградите за заетите места се събират и се делят поравно.</p></div></li>
+              <li class="rules-step"><span class="rules-step__num">4</span><div class="rules-step__text"><p class="rules-step__title">Все още наравно?</p><p class="rules-step__note">Жребий определя реда. Всеки получава наградата за мястото си.</p></div></li>
             </ol>
             <button class="rules-more" type="button" data-rules-goto="5">Виж пълното правило <span class="season__chevron"><img src="assets/lobby-main/chevron-right.svg" alt=""></span></button>
           </div>
@@ -249,66 +250,75 @@
           <section class="card rules-card rules-section" id="pravila-1" data-rules-section="1">
             <h2 class="card__title"><span class="rules-section__num">1</span>Сезон и кръгове</h2>
             <ol class="rules-clauses">
-              <li><span class="rules-clause__num">1.1</span><p>Сезонът има <strong>26 кръга</strong>, разделени на два полусезона по 13 кръга.</p></li>
-              <li><span class="rules-clause__num">1.2</span><p>Във всеки кръг избираш <strong>един мач</strong> и правиш <strong>една прогноза</strong>.</p></li>
-              <li><span class="rules-clause__num">1.3</span><p>Прогнозите се заключват при старта на кръга.</p></li>
-              <li><span class="rules-clause__num">1.4</span><p>Кръг без прогноза е пропуск и се брои като прогноза с <strong>0 точки</strong>.</p></li>
-              <li><span class="rules-clause__num">1.5</span><p>Ако вместо това използваш коза „Почивка“, получаваш <strong>1 точка</strong> (виж&nbsp;т.&nbsp;4).</p></li>
+              <li><span class="rules-clause__num">1.1</span><p>Фенска лига е <strong>безплатна</strong>: няма такса, депозит или залог за участие.</p></li>
+              <li><span class="rules-clause__num">1.2</span><p>Сезонът има <strong>26 кръга</strong>, разделени на два полусезона: кръгове 1–13 и 14–26. Плейофите и баражите не са част от играта.</p></li>
+              <li><span class="rules-clause__num">1.3</span><p>Във всеки кръг правиш <strong>една прогноза за един мач</strong> от текущия или следващия кръг. Прогноза за друг мач от същия кръг заменя предишната.</p></li>
+              <li><span class="rules-clause__num">1.4</span><p>Можеш да промениш мача, вида на прогнозата, резултата и коза до <strong>началото на първия мач от кръга</strong>, независимо кога е твоят мач. Тогава прогнозата се заключва сама, без потвърждение.</p></li>
+              <li><span class="rules-clause__num">1.5</span><p>Кръг без прогноза е пропуск: носи <strong>0 точки</strong>, не използва отбор или коз и прекъсва сериите.</p></li>
+              <li><span class="rules-clause__num">1.6</span><p>Ако вместо прогноза използваш коза „Почивка“, получаваш <strong>1 точка</strong> (виж&nbsp;т.&nbsp;4).</p></li>
+              <li><span class="rules-clause__num">1.7</span><p>Можеш да се включиш и след началото на сезона. Получаваш всички отбори и козове, но не и точки за отминалите кръгове.</p></li>
             </ol>
           </section>
           <section class="card rules-card rules-section" id="pravila-2" data-rules-section="2">
             <h2 class="card__title"><span class="rules-section__num">2</span>Прогнози и точки</h2>
             <ol class="rules-clauses">
-              <li><span class="rules-clause__num">2.1</span><p>Има два вида прогноза: <strong>„Изход от мача“</strong> и <strong>„Точен резултат“</strong>.</p></li>
+              <li><span class="rules-clause__num">2.1</span><p>Има два вида прогноза: <strong>„Изход от мача“</strong> и <strong>„Точен резултат“</strong>. Изходът е победа на домакина, равенство или победа на госта. Точният резултат заменя прогнозата за изход, а не се добавя към нея.</p></li>
               <li><span class="rules-clause__num">2.2</span><p>Точките зависят от вида на прогнозата и от това какво си познал:</p></li>
             </ol>
             <table class="rules-table">
               <thead><tr><th>Прогноза</th><th>Какво позна</th><th>Точки</th></tr></thead>
               <tbody>
-                <tr><td>Изход от мача</td><td>Изхода</td><td>3</td></tr>
+                <tr><td>Изход от мача</td><td>Изхода (равенство: с „Равенство“)</td><td>3</td></tr>
                 <tr><td>Точен резултат</td><td>Точния резултат</td><td>4</td></tr>
                 <tr><td>Точен резултат</td><td>Само изхода</td><td>2</td></tr>
                 <tr><td>Всяка</td><td>Нищо (грешен изход)</td><td>0</td></tr>
               </tbody>
             </table>
             <ol class="rules-clauses" start="3">
-              <li><span class="rules-clause__num">2.3</span><p>Козовете могат да променят точките за кръга (виж&nbsp;т.&nbsp;4).</p></li>
-              <li><span class="rules-clause__num">2.4</span><p><strong>Отложени мачове.</strong> Те се броят в класирането като всички останали; точките от тях се начисляват по-късно в рамките на полусезона.</p></li>
+              <li><span class="rules-clause__num">2.3</span><p>Точките от двата вида не се събират. Козовете могат да ги променят (виж&nbsp;т.&nbsp;4).</p></li>
+              <li><span class="rules-clause__num">2.4</span><p>Зачита се резултатът след <strong>редовното и добавеното време</strong>. Продълженията и дузпите след мача не се броят. Служебен резултат се зачита като официален.</p></li>
+              <li><span class="rules-clause__num">2.5</span><p><strong>Отложен мач.</strong> Прогнозата чака официален резултат. Точките се отчитат към първоначалния кръг и неговите класирания.</p></li>
+              <li><span class="rules-clause__num">2.6</span><p><strong>Отменен мач</strong> без официален резултат. Прогнозата се анулира и не носи точки, а отборът и козът се връщат. Сериите не се прекъсват.</p></li>
+              <li><span class="rules-clause__num">2.7</span><p>Класирането е предварително, докато всички прогнози за периода бъдат отчетени.</p></li>
             </ol>
           </section>
           <section class="card rules-card rules-section" id="pravila-3" data-rules-section="3">
             <h2 class="card__title"><span class="rules-section__num">3</span>Отбори</h2>
             <ol class="rules-clauses">
-              <li><span class="rules-clause__num">3.1</span><p>Използван е отборът, който си <strong>избрал</strong>, а не неговият съперник.</p></li>
-              <li><span class="rules-clause__num">3.2</span><p>Всеки отбор може да бъде използван <strong>веднъж на полусезон</strong>.</p></li>
-              <li><span class="rules-clause__num">3.3</span><p>В началото на всеки полусезон всички отбори отново са налични.</p></li>
-              <li><span class="rules-clause__num">3.4</span><p>Отборите не могат да свършат: в лигата те са повече от кръговете в един полусезон.</p></li>
-              <li><span class="rules-clause__num">3.5</span><p>Козът „Повторен избор“ позволява да избереш отново вече използван отбор (виж&nbsp;т.&nbsp;4).</p></li>
+              <li><span class="rules-clause__num">3.1</span><p>Използван е отборът, който прогнозираш за <strong>победител</strong>, и при точен резултат, дори прогнозата да е грешна. Съперникът му остава наличен. Равенството не използва отбор.</p></li>
+              <li><span class="rules-clause__num">3.2</span><p>Всеки отбор може да бъде използван <strong>веднъж на полусезон</strong>. Ако и двата отбора в мача са използвани, избери друг мач или подходящ коз.</p></li>
+              <li><span class="rules-clause__num">3.3</span><p>Запазената прогноза задържа отбора и коза до заключването. Промяна или отмяна ги освобождава.</p></li>
+              <li><span class="rules-clause__num">3.4</span><p>След <strong>паузата между полусезоните</strong> всички отбори отново са налични. Датата се определя за всяко издание. Прогноза, която се заключва след тази дата, използва новия комплект.</p></li>
+              <li><span class="rules-clause__num">3.5</span><p>Отборите не могат да свършат: полусезонът свършва, когато всеки отбор е играл с всеки, така че кръговете са с един по-малко от отборите.</p></li>
+              <li><span class="rules-clause__num">3.6</span><p>Козът „Повторен избор“ позволява да избереш отново вече използван отбор (виж&nbsp;т.&nbsp;4).</p></li>
             </ol>
           </section>
           <section class="card rules-card rules-section" id="pravila-4" data-rules-section="4">
             <h2 class="card__title"><span class="rules-section__num">4</span>Козове</h2>
             <ol class="rules-clauses">
-              <li><span class="rules-clause__num">4.1</span><p>Разполагаш с <strong>6 коза</strong>. Те се възстановяват в началото на всеки полусезон.</p></li>
-              <li><span class="rules-clause__num">4.2</span><p>В един кръг можеш да използваш <strong>най-много един</strong> коз.</p></li>
+              <li><span class="rules-clause__num">4.1</span><p>Разполагаш с <strong>6 коза</strong>, по един от всеки. След паузата между полусезоните получаваш нови 6, а неизползваните изтичат. Козовете не се купуват.</p></li>
+              <li><span class="rules-clause__num">4.2</span><p>В един кръг можеш да използваш <strong>най-много един</strong> коз и само там, където е нужен: например „Повторен избор“ само за вече използван отбор. Козът се заключва заедно с прогнозата.</p></li>
               <li><span class="rules-clause__num">4.3</span><p>Какво прави всеки коз:</p></li>
             </ol>
             <ul class="rules-entries">
-              <li class="rules-entry"><div class="rules-entry__head"><img class="rules-entry__card" src="assets/trump-cards/even-small.webp" alt="" width="30" height="45" loading="lazy"><p class="rules-entry__name">Равенство</p></div><p class="rules-entry__body">Отключва прогноза за равен краен резултат.</p></li>
-              <li class="rules-entry"><div class="rules-entry__head"><img class="rules-entry__card" src="assets/trump-cards/repeat-small.webp" alt="" width="30" height="45" loading="lazy"><p class="rules-entry__name">Повторен избор</p></div><p class="rules-entry__body">Позволява да избереш отново отбор, който вече си използвал през полусезона.</p></li>
-              <li class="rules-entry"><div class="rules-entry__head"><img class="rules-entry__card" src="assets/trump-cards/scorer-small.webp" alt="" width="30" height="45" loading="lazy"><p class="rules-entry__name">Голмайстор</p></div><p class="rules-entry__body">Избираш играч. Ако той отбележи, точките ти за кръга се удвояват.</p></li>
-              <li class="rules-entry"><div class="rules-entry__head"><img class="rules-entry__card" src="assets/trump-cards/all-or-nothing-small.webp" alt="" width="30" height="45" loading="lazy"><p class="rules-entry__name">Всичко или нищо</p></div><p class="rules-entry__body">Познат точен резултат носи 6 точки. Във всеки друг случай получаваш 0 точки.</p></li>
-              <li class="rules-entry"><div class="rules-entry__head"><img class="rules-entry__card" src="assets/trump-cards/rest-small.webp" alt="" width="30" height="45" loading="lazy"><p class="rules-entry__name">Почивка</p></div><p class="rules-entry__body">Пропускаш кръга и получаваш 1 точка. Серията ти се запазва, без да се увеличава. „Почивка“ се брои за участие в кръга, но не замества позната прогноза: прекъсва поредицата от точни резултати и не важи за „Перфектен месец“ и „Силен финал“.</p></li>
-              <li class="rules-entry"><div class="rules-entry__head"><img class="rules-entry__card" src="assets/trump-cards/clean-sheet-small.webp" alt="" width="30" height="45" loading="lazy"><p class="rules-entry__name">Чиста мрежа</p></div><p class="rules-entry__body">Ако избраният от теб отбор победи, без да допусне гол, получаваш 2 допълнителни точки.</p></li>
+              <li class="rules-entry"><div class="rules-entry__head"><img class="rules-entry__card" src="assets/trump-cards/even-small.webp" alt="" width="30" height="45" loading="lazy"><p class="rules-entry__name">Равенство</p></div><p class="rules-entry__body">Единственият начин да прогнозираш равенство или точен равен резултат. Не използва отбор. Ако мачът завърши с победа за някой от отборите, получаваш 0 точки.</p></li>
+              <li class="rules-entry"><div class="rules-entry__head"><img class="rules-entry__card" src="assets/trump-cards/repeat-small.webp" alt="" width="30" height="45" loading="lazy"><p class="rules-entry__name">Повторен избор</p></div><p class="rules-entry__body">Позволява да избереш за победител отбор, който вече си използвал през полусезона, и при точен резултат. Отборът остава използван. Точките са обичайните.</p></li>
+              <li class="rules-entry"><div class="rules-entry__head"><img class="rules-entry__card" src="assets/trump-cards/scorer-small.webp" alt="" width="30" height="45" loading="lazy"><p class="rules-entry__name">Голмайстор</p></div><p class="rules-entry__body">Избираш играч от който и да е от двата отбора в мача. Ако отбележи в редовното или добавеното време, точките ти се удвояват (3→6, 4→8, 2→4). Дузпа в игра се брои, автогол — не. Играч на резервната скамейка също участва. Ако играчът изобщо не е в състава за мача, козът се връща.</p></li>
+              <li class="rules-entry"><div class="rules-entry__head"><img class="rules-entry__card" src="assets/trump-cards/all-or-nothing-small.webp" alt="" width="30" height="45" loading="lazy"><p class="rules-entry__name">Всичко или нищо</p></div><p class="rules-entry__body">Само за точен резултат. Познат точен резултат носи 6 точки. Във всеки друг случай получаваш 0 точки, дори при познат победител, но изходът все пак се брои за подвизите и класирането.</p></li>
+              <li class="rules-entry"><div class="rules-entry__head"><img class="rules-entry__card" src="assets/trump-cards/rest-small.webp" alt="" width="30" height="45" loading="lazy"><p class="rules-entry__name">Почивка</p></div><p class="rules-entry__body">Пропускаш кръга и получаваш 1 точка, без да използваш отбор. Серията ти се запазва, без да се увеличава. „Почивка“ се брои за участие в кръга, но не замества позната прогноза: прекъсва поредицата от точни резултати и не важи за „Перфектен месец“ и „Силен финал“.</p></li>
+              <li class="rules-entry"><div class="rules-entry__head"><img class="rules-entry__card" src="assets/trump-cards/clean-sheet-small.webp" alt="" width="30" height="45" loading="lazy"><p class="rules-entry__name">Чиста мрежа</p></div><p class="rules-entry__body">Ако прогнозираният от теб победител спечели, без да допусне гол, получаваш 2 допълнителни точки, независимо какъв резултат си прогнозирал.</p></li>
             </ul>
+            <ol class="rules-clauses" start="4">
+              <li><span class="rules-clause__num">4.4</span><p>При <strong>служебен резултат без изигран мач</strong> „Чиста мрежа“ и „Всичко или нищо“ се връщат, а прогнозата се отчита все едно е без коз. Ако полусезонът вече е свършил, козът не се връща (вече имаш нови 6).</p></li>
+            </ol>
           </section>
           <section class="card rules-card rules-section" id="pravila-5" data-rules-section="5">
             <h2 class="card__title"><span class="rules-section__num">5</span>Класиране и награди</h2>
             <ol class="rules-clauses">
-              <li><span class="rules-clause__num">5.1</span><p>Има две класирания: за <strong>сезона</strong> и за <strong>полусезона</strong>.</p></li>
-              <li><span class="rules-clause__num">5.2</span><p>При равен брой точки по-напред се класира играчът с:<span class="rules-sublist"><span><b>а)</b> повече познати точни резултати;</span><span><b>б)</b> повече познати изходи;</span><span><b>в)</b> по-малко бонус точки от козове.</span></span></p></li>
-              <li><span class="rules-clause__num">5.3</span><p>Ако играчите все още са наравно, те <strong>поделят мястото</strong>. Наградите за местата, които заемат, се събират и се разделят поравно между тях.</p></li>
-              <li><span class="rules-clause__num">5.4</span><p>Наградите под подиума се начисляват директно на играчите на съответните позиции.</p></li>
+              <li><span class="rules-clause__num">5.1</span><p>Има три класирания: за <strong>месеца</strong>, за <strong>полусезона</strong> и за <strong>сезона</strong>. Точките от всеки кръг влизат едновременно във всяко от тях. Всеки месец обхваща цели кръгове, определени предварително.</p></li>
+              <li><span class="rules-clause__num">5.2</span><p>При равен брой точки по-напред се класира играчът с:<span class="rules-sublist"><span><b>а)</b> повече познати точни резултати;</span><span><b>б)</b> повече познати изходи;</span><span><b>в)</b> по-малко бонус точки от козове: точките, които козът добавя, включително точката от „Почивка“.</span></span></p></li>
+              <li><span class="rules-clause__num">5.3</span><p>Ако играчите все още са наравно, <strong>жребий</strong> определя реда им. Всеки получава наградата за мястото си.</p></li>
+              <li><span class="rules-clause__num">5.4</span><p>Награди получават 1-во, 2-ро и 3-то място и диапазоните <strong>4–10</strong> и <strong>11–30</strong>. За полусезона и <strong>31–50</strong>, а за сезона и <strong>51–100</strong>. Конкретните награди се обявяват за всяко издание.</p></li>
             </ol>
           </section>
           <section class="card rules-card rules-section" id="pravila-6" data-rules-section="6">
@@ -316,16 +326,16 @@
             <ol class="rules-clauses">
               <li><span class="rules-clause__num">6.1</span><p>Серията е броят на поредните ти познати изходи.</p></li>
               <li><span class="rules-clause__num">6.2</span><p>Тя съществува само заради подвизите и сама по себе си <strong>не носи точки</strong>.</p></li>
-              <li><span class="rules-clause__num">6.3</span><p>Грешна прогноза или пропуснат кръг прекъсва серията.</p></li>
+              <li><span class="rules-clause__num">6.3</span><p>Грешна прогноза или пропуснат кръг прекъсва серията. Анулирана прогноза (отменен мач) не я прекъсва.</p></li>
               <li><span class="rules-clause__num">6.4</span><p>Козът „Почивка“ запазва серията, без да я увеличава.</p></li>
             </ol>
           </section>
           <section class="card rules-card rules-section" id="pravila-7" data-rules-section="7">
             <h2 class="card__title"><span class="rules-section__num">7</span>Подвизи</h2>
             <ol class="rules-clauses">
-              <li><span class="rules-clause__num">7.1</span><p>Подвизите са <strong>16</strong>. Всяка степен и всеки самостоятелен подвиг се награждават <strong>веднъж за сезона</strong>.</p></li>
+              <li><span class="rules-clause__num">7.1</span><p>Подвизите са <strong>16</strong> в 10 карти. Всяка степен и всеки самостоятелен подвиг се награждават <strong>веднъж за сезона</strong>.</p></li>
               <li><span class="rules-clause__num">7.2</span><p>Прогресът се запазва между полусезоните, а една прогноза може да отключи няколко подвига.</p></li>
-              <li><span class="rules-clause__num">7.3</span><p>Наградите от подвизи обикновено са фрийбет или парична награда и <strong>не добавят точки</strong> към класирането.</p></li>
+              <li><span class="rules-clause__num">7.3</span><p>Наградите от подвизи са отделни от наградите за класирането и <strong>не добавят точки</strong> към него. Козовете не умножават прогреса по подвизите.</p></li>
               <li><span class="rules-clause__num">7.4</span><p>Условия за всеки подвиг:</p></li>
             </ol>
             <ul class="rules-entries">

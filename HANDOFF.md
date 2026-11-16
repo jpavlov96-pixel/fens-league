@@ -18,10 +18,8 @@
 - **Подвизи page**: only the header and hero; the rest isn't designed.
 - **Класиране is all sample data**: names, points, movements, exact scores, "2т. до топ 50". Mine follow the lobby (29т. #53 от 10 083; 14т. #132 от 13 083). My username is the placeholder "lastfan".
 - **The lobby's "Към Класации" button** still points at `#rankings`, not at `rankings.html`. Offered, not answered.
-- **Правила, gaps in the rules**: no prize amounts, no definition of the monthly periods ("Перфектен месец"), no list of derbies, no general terms. Nothing was invented.
-- **Правила, two things inferred**: 13 rounds per half-season, and that "Чиста мрежа" applies to the team you picked. Not confirmed by the user.
-- **Card name**: the pages say "Повторен избор" (the lobby's card); `RULES.md` says "Повторение".
-- The prize tiers are the lobby's, with their overlapping ranges (3-10, 10-20, 20-50).
+- **Rules (2026-11-16)**: the official rules are in `docs/` (BG, EN, plus the user's clarifications); Правила, Класиране and the lobby's prize tables now follow them. Still not in the rules: prize amounts, the derby list, the reset date (per edition).
+- **Monthly ranking**: the rules have one; Класиране only has Сезон / Полусезон.
 - The new components of Правила and Класиране aren't on `components.html`.
 - Other pages don't link into Правила's tabs (the user's choice for now), apart from Класиране's tie-break card.
 - Not tried on a real phone: both new pages, the sticky chips (Safari older than 16 won't stick them), the smooth scrolling to a section.
