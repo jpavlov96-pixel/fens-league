@@ -303,7 +303,7 @@
     q('[data-picker-apply]').disabled = !!why;
   }
 
-  function setPicker(on) {
+  function setPicker(on, smooth) {
     var picker = q('.predict-sheet__picker');
     if (on) {
       picker.hidden = false;
@@ -328,9 +328,26 @@
       Promise.all(imgs).then(show);
       setTimeout(show, 400);
     } else {
-      picker.hidden = true;
       root.classList.remove('is-picking');
       if (window.CardFx) window.CardFx.stop();
+      var motion = !picker.hidden && picker.animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!motion || !smooth) { picker.hidden = true; return; }
+      // after "Приложи Коз": the picker fades and drops a little while the sheet eases back to
+      // its height (the panel's own 0.3s transition), so the prediction comes up from under it
+      picker.style.pointerEvents = 'none';
+      var out = picker.animate([
+        { opacity: 1, transform: 'none' },
+        { opacity: 0, transform: 'translateY(10px)' }
+      ], { duration: 280, easing: 'cubic-bezier(0.4, 0, 0.2, 1)' });
+      var gone = false;
+      var hide = function () {
+        if (gone) return;
+        gone = true;
+        picker.hidden = true;
+        picker.style.pointerEvents = '';
+      };
+      out.onfinish = hide;
+      setTimeout(hide, 400);
     }
   }
 
@@ -338,9 +355,22 @@
     trump = id;
     // Равенство in Изход от мача: the prediction becomes the draw ("Равен", both teams)
     if (trump === 'even' && event.getAttribute('variant') !== 'correct-score') event.setAttribute('pick', 'draw');
-    setPicker(false);
+    setPicker(false, true);
     drawTrump();
     update();
+    // the picked card's panel settles in as the picker fades
+    var panelBox = q('.predict-sheet__trump');
+    if (panelBox.animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      panelBox.animate([
+        { opacity: 0, transform: 'translateY(8px) scale(0.97)' },
+        { opacity: 1, transform: 'none' }
+      ], { duration: 360, delay: 120, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'backwards' });
+      var front = panelBox.querySelector('.predict-sheet__trump-front');
+      if (front) front.animate([
+        { transform: 'translateY(-14px) rotate(-8deg) scale(1.25)', opacity: 0 },
+        { transform: 'none', opacity: 1 }
+      ], { duration: 420, delay: 160, easing: 'cubic-bezier(0.2, 0.9, 0.3, 1.15)', fill: 'backwards' });
+    }
     // opened from a saved prediction's card icons: the card goes straight onto that
     // prediction, saved, and the sheet closes (no "Запази Прогноза" step; the user's request)
     if (direct) {
