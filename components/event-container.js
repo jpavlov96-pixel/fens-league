@@ -32,6 +32,7 @@
 //                without it, its button is disabled and a Correct Score it wins shows the gold
 //                warning "Невалиден залог." 
 //   allow-draw   present = a level Correct Score is valid (the "Равенство" card)
+//   no-draw-card present = "Равенство" is already used: a level score only says "Невалиден залог."
 //   trump-warning  text for the gold strip when the power card on it won't be applied
 //                ("Коз “Чиста мрежа” няма да бъде приложен."); shown at once, after the level
 //                score and used team warnings
@@ -53,7 +54,7 @@
     static get observedAttributes() {
       return ['variant', 'state', 'date', 'home', 'away', 'home-crest', 'away-crest',
         'home-score', 'away-score', 'pick', 'trump-card', 'note', 'form', 'home-used', 'away-used',
-        'allow-used', 'allow-draw', 'trump-warning'];
+        'allow-used', 'allow-draw', 'trump-warning', 'no-draw-card'];
     }
 
     connectedCallback() {
@@ -67,7 +68,7 @@
     attributeChangedCallback(name) {
       if (!this.isConnected || this._quiet) return;
       // the power card's warning only changes the gold strip
-      if (name === 'trump-warning') { this._drawWarning(); return; }
+      if (name === 'trump-warning' || name === 'no-draw-card') { this._drawWarning(); return; }
       // the trump cards are added / taken away in place, so the rest of the card isn't redrawn
       var card = this.querySelector('.event');
       if (name === 'trump-card' && card && this._get('variant', '') !== 'no-match') {
@@ -249,7 +250,7 @@
 
     // A level score in Correct Score (Figma 316:13024) isn't a valid pick: after the score has
     // stayed level for 1.35 seconds (not just passed through on the way to another score), the
-    // gold warning "Невалиден залог. Използвайте коз за “Равенство”." unrolls over the date
+    // gold warning "Използвайте коз “Равенство”." (or "Невалиден залог." when it is used) unrolls over the date
     // strip. The date stays where it is underneath the whole time (the user's request); the
     // warning is laid on top of it. Once the score isn't level the warning rolls away straight
     // away (no wait), showing the date again.
@@ -263,7 +264,9 @@
       // the team picked to win (the green button, or the side ahead in Correct Score) is used
       var winner = exact ? (hs > as ? 'home' : as > hs ? 'away' : '') : this._get('pick', 'home');
       var usedWinner = open && !level && winner && this._get(winner + '-used', '') && !this.hasAttribute('allow-used');
-      var message = level ? 'Невалиден залог. Използвайте коз за <b>“Равенство”.</b>'
+      // a level score: point to "Равенство", or only "Невалиден залог." when that card is
+      // already used (no-draw-card; the user's request, 2026-11-16)
+      var message = level ? (this.hasAttribute('no-draw-card') ? 'Невалиден залог.' : 'Използвайте коз <b>“Равенство”.</b>')
         : usedWinner ? 'Невалиден залог.' : '';
       // last: the page's word that the power card on it won't be applied (trump-warning)
       var cardText = open ? this._get('trump-warning', '') : '';

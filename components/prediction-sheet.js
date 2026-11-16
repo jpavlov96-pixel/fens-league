@@ -411,6 +411,7 @@
     event.setAttribute('away-crest', m.awayCrest);
     if (m.homeUsed) event.setAttribute('home-used', m.homeUsed);
     if (m.awayUsed) event.setAttribute('away-used', m.awayUsed);
+    if (P.USED.indexOf('even') >= 0) event.setAttribute('no-draw-card', '');
     if (saved) {
       event.setAttribute('variant', saved.variant);
       event.setAttribute('pick', saved.pick || '');

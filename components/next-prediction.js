@@ -203,7 +203,8 @@
       'allow-used': p.trump === 'repeat' ? '' : null,
       'allow-draw': p.trump === 'even' ? '' : null,
       'trump-card': p.trump ? null : '',
-      'trump-warning': mismatchText(p) || null
+      'trump-warning': mismatchText(p) || null,
+      'no-draw-card': USED.indexOf('even') >= 0 ? '' : null
     };
     Object.keys(set).forEach(function (k) {
       var v = set[k];
