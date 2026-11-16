@@ -203,7 +203,16 @@
       { transform: tf('translateY(4px) scale(0.97, 0.95) rotateX(0deg)'), filter: 'brightness(1.35)', offset: k(LAND), easing: 'cubic-bezier(0.2, 0.7, 0.3, 1)' },
       { transform: tf('translateY(-2px) scale(1.012, 1.01)'), filter: 'brightness(1.1)', offset: k(560), easing: 'cubic-bezier(0.4, 0, 0.3, 1)' },
       { transform: tf('translateY(0) scale(1) rotateX(0deg)'), filter: 'brightness(1)' }
-    ], { duration: TOTAL }).onfinish = function () { card.classList.remove('is-slammed'); done(); };
+    ], { duration: TOTAL }).onfinish = finish;
+    // the card goes on even if the animation is held up (a hidden page pauses it)
+    var finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      card.classList.remove('is-slammed');
+      done();
+    }
+    setTimeout(finish, TOTAL + 150);
 
     setTimeout(function () {
       // a decaying shake: three swings, each smaller

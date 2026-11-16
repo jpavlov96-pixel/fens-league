@@ -341,6 +341,12 @@
     setPicker(false);
     drawTrump();
     update();
+    // opened from a saved prediction's card icons: the card goes straight onto that
+    // prediction, saved, and the sheet closes (no "Запази Прогноза" step; the user's request)
+    if (direct) {
+      P.save(current(), null);
+      close();
+    }
   }
 
   // Everything that follows the prediction: the card's allow-* flags, the card that stopped
@@ -385,7 +391,9 @@
 
   // m: the match; saved (optional): a saved prediction to start from; picker: open on
   // "Избери Коз" (the card icons in a saved prediction's corner)
+  var direct = false; // opened on "Избери Коз" for a saved prediction (the slots' card icons)
   function open(m, saved, picker) {
+    direct = !!(saved && picker);
     match = m;
     trump = '';
     suggest = '';
@@ -509,7 +517,11 @@
       return;
     }
     if (e.target.closest('[data-picker-open]')) { setPicker(true); return; }
-    if (e.target.closest('[data-picker-close]')) { setPicker(false); return; }
+    if (e.target.closest('[data-picker-close]')) {
+      // came only for a card: "Назад" closes the sheet
+      if (direct) close(); else setPicker(false);
+      return;
+    }
     var apply = e.target.closest('[data-picker-apply]');
     if (apply) {
       if (apply.disabled || !pickerCards[pickerAt] || root.classList.contains('is-slamming')) return;
