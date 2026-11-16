@@ -42,6 +42,8 @@
     .strength { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 12px; color: #b3b3b3; }
     .strength input { flex: 1 0 0; accent-color: #f5d584; }
     .arc { fill: none; stroke: #fffaf0; stroke-width: 1.3; stroke-linejoin: bevel; filter: url(#soft); }
+    .arc-glow { fill: none; stroke: #f5d584; stroke-width: 4; stroke-linejoin: round; opacity: 0.55; filter: url(#volt-glow); }
+    .hot { fill: #fff2c4; filter: url(#volt-glow); }
     .note { min-height: 48px; margin-top: 10px; font-size: 12px; line-height: 16px; color: #b3b3b3; }
 
     /* the stage: the sheet's dark gradient */
@@ -150,14 +152,16 @@
     <p class="lead">Предложение за „Избери Коз“: ефект по ръба на средната карта и удар при „Приложи Коз“.</p>
 
     <div class="tabs" role="tablist">
-      <button type="button" class="is-on" data-fx="volt">A1 · Ток</button>
-      <button type="button" data-fx="storm">A2 · Буря</button>
-      <button type="button" data-fx="surge">A3 · Вълна</button>
-      <button type="button" data-fx="charge">A4 · Заряд</button>
+      <button type="button" class="is-on" data-fx="storm">A2 · Буря</button>
+      <button type="button" data-fx="stormBranch">A2b · Клони</button>
+      <button type="button" data-fx="stormArc">A2c · Дъги</button>
     </div>
     <div class="tabs tabs--small" role="tablist">
+      <button type="button" data-fx="volt">A1 · Ток</button>
+      <button type="button" data-fx="surge">A3 · Вълна</button>
+      <button type="button" data-fx="charge">A4 · Заряд</button>
       <button type="button" data-fx="comet">B · Комета</button>
-      <button type="button" data-fx="pulse">C · Пулс</button>
+      <button type="button" data-fx="pulse">C</button>
     </div>
     <label class="strength">Сила <input type="range" id="strength" min="0.4" max="1.8" step="0.1" value="1"> <span id="strength-val">1.0</span></label>
     <p class="note" id="note"></p>
@@ -221,8 +225,16 @@
           note: 'A1 · Ток: златен ток пълзи по ръба и пращи на случайни места (първият вариант).',
           svg: '<path class="glow" d="' + D + '" fill="none" stroke="#f5d584" stroke-width="6" opacity="0.55"/>' + VOLT
         },
+        stormBranch: {
+          note: 'A2b · Клони: като Буря, но всяка мълния се разклонява и при удар целият ръб проблясва, с горещо петно на мястото.',
+          svg: null
+        },
+        stormArc: {
+          note: 'A2c · Дъги: токът „прескача“ по ръба с дъги между две точки, като на Тесла бобина; от време на време по-голяма дъга през ъгъла.',
+          svg: null
+        },
         storm: {
-          note: 'A2 · Буря: два слоя ток с различна честота, бяло-горещо ядро и малки мълнии, които изскачат от ръба навън.',
+          note: 'A2 · Буря (по-изчистена): плавно трептене вместо резки скокове, мълниите са с бяло ядро и златен ореол, ударите идват на неравни интервали.',
           svg: '<path class="glow" d="' + D + '" fill="none" stroke="#f5d584" stroke-width="8" opacity="0.6"/>' +
                '<path d="' + D + '" fill="none" stroke="#f5d584" stroke-width="2.6" filter="url(#volt)"/>' +
                '<path d="' + D + '" fill="none" stroke="#ffe7a8" stroke-width="1.6" filter="url(#volt2)" opacity="0.8"/>' +
@@ -283,13 +295,130 @@
         el.animate([{ opacity: 1 }, { opacity: 0.9, offset: 0.4 }, { opacity: 0 }], { duration: life, easing: 'ease-out' }).onfinish = function () { el.remove(); };
       }
 
+      FX.stormBranch.svg = FX.storm.svg;
+      FX.stormArc.svg = FX.storm.svg;
+
+      // a bolt as a glowing gold stroke with a white core; pts = [[x,y], …]
+      function bolt(pts, life, width) {
+        var g = document.getElementById('arcs');
+        if (!g) return;
+        var d = pts.map(function (q) { return q[0].toFixed(1) + ',' + q[1].toFixed(1); }).join(' ');
+        [['arc-glow', 1], ['arc', width || 1]].forEach(function (k) {
+          var el = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+          el.setAttribute('class', k[0]);
+          el.setAttribute('points', d);
+          if (k[0] === 'arc') el.style.strokeWidth = String(1.3 * k[1]);
+          g.appendChild(el);
+          el.animate([{ opacity: 1 }, { opacity: 0.85, offset: 0.35 }, { opacity: 0 }],
+            { duration: life, easing: 'cubic-bezier(0.2, 0.6, 0.3, 1)' }).onfinish = function () { el.remove(); };
+        });
+      }
+
+      // jagged points from (x,y) along (dx,dy) for len px
+      function jag(x, y, dx, dy, len, steps, wobble) {
+        var pts = [[x, y]];
+        for (var i = 1; i <= steps; i++) {
+          x += dx * len / steps + (Math.random() - 0.5) * wobble;
+          y += dy * len / steps + (Math.random() - 0.5) * wobble;
+          pts.push([x, y]);
+        }
+        return pts;
+      }
+
+      function outward(p) {
+        var dx = p.x - CX, dy = p.y - CY, d = Math.sqrt(dx * dx + dy * dy) || 1;
+        return [dx / d, dy / d];
+      }
+
+      // the edge flares for a moment (the glow layer), with a hot spot where the bolt left
+      function flare(p) {
+        var glow = body.querySelector('.glow');
+        if (glow) glow.animate([{ opacity: 1, strokeWidth: '11px' }, { opacity: 0.6, strokeWidth: '8px' }],
+          { duration: 260, easing: 'ease-out' });
+        var g = document.getElementById('arcs');
+        if (!g || !p) return;
+        var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        c.setAttribute('class', 'hot');
+        c.setAttribute('cx', p.x);
+        c.setAttribute('cy', p.y);
+        c.setAttribute('r', '5');
+        g.appendChild(c);
+        c.animate([{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(2.2)' }],
+          { duration: 300, easing: 'ease-out', transformOrigin: p.x + 'px ' + p.y + 'px' }).onfinish = function () { c.remove(); };
+      }
+
+      // a branching strike out of the edge
+      function strike(t, big) {
+        var p = edgePoint(t), o = outward(p);
+        var len = (big ? 26 : 16) * strength;
+        var main = jag(p.x, p.y, o[0], o[1], len, 5, 8);
+        bolt(main, big ? 260 : 190, big ? 1.4 : 1);
+        // one or two branches from the middle of the main bolt, bent sideways
+        var n = big ? 2 : 1;
+        for (var i = 0; i < n; i++) {
+          var from = main[2 + i];
+          var side = (Math.random() < 0.5 ? -1 : 1) * 0.8;
+          var bx = o[0] + -o[1] * side, by = o[1] + o[0] * side;
+          var bl = Math.sqrt(bx * bx + by * by);
+          bolt(jag(from[0], from[1], bx / bl, by / bl, len * 0.5, 3, 6), big ? 220 : 160, 0.7);
+        }
+        if (big) flare(p);
+      }
+
+      // an arc jumping between two points on the edge, bowing outward
+      function edgeArc(t, span, life) {
+        var a = edgePoint(t), b = edgePoint(t + span), m = edgePoint(t + span / 2), o = outward(m);
+        var bow = (8 + Math.random() * 6) * strength;
+        var pts = [], steps = 7;
+        for (var i = 0; i <= steps; i++) {
+          var k = i / steps;
+          var x = a.x + (b.x - a.x) * k + o[0] * bow * Math.sin(Math.PI * k);
+          var y = a.y + (b.y - a.y) * k + o[1] * bow * Math.sin(Math.PI * k);
+          if (i && i < steps) { x += (Math.random() - 0.5) * 5; y += (Math.random() - 0.5) * 5; }
+          pts.push([x, y]);
+        }
+        bolt(pts, life, 1.1);
+      }
+
       var strength = 1;
       var timers = [];
       var raf = 0;
       function stopAll() {
-        timers.forEach(clearInterval);
+        timers.forEach(function (t) { if (t && t.stop) t.stop(); else { clearInterval(t); clearTimeout(t); } });
         timers = [];
         cancelAnimationFrame(raf);
+      }
+
+      // the storm's flicker: the line's shake eases toward a new target instead of jumping.
+      // The filter is redrawn ~14 times a second, not every frame (it's expensive)
+      function smoothNoise(mul) {
+        var n1 = document.getElementById('volt-noise'), n2 = document.getElementById('volt-noise2');
+        var d1 = n1.parentNode.lastElementChild, d2 = n2.parentNode.lastElementChild;
+        var cur = 7;
+        timers.push(setInterval(function () {
+          n1.setAttribute('seed', String(Math.floor(Math.random() * 1000)));
+          n2.setAttribute('seed', String(Math.floor(Math.random() * 1000)));
+          var target = (6 + Math.random() * 4) * mul * strength;
+          cur += (target - cur) * 0.5;
+          d1.setAttribute('scale', cur.toFixed(2));
+          d2.setAttribute('scale', (cur * 0.7).toFixed(2));
+        }, 70));
+      }
+
+      // strikes at uneven intervals
+      function every(min, max, fn) {
+        var alive = true;
+        (function next() {
+          var id = setTimeout(function () {
+            var i = timers.indexOf(id);
+            if (i >= 0) timers.splice(i, 1);
+            if (!alive) return;
+            fn();
+            next();
+          }, min + Math.random() * (max - min));
+          timers.push(id);
+        })();
+        timers.push({ stop: function () { alive = false; } });
       }
 
       function noiseLoop(seconds) {
@@ -313,12 +442,28 @@
         });
         if (name === 'volt') noiseLoop();
         if (name === 'storm') {
-          noiseLoop(1.15);
-          // bolts: one every ~200ms somewhere on the edge, now and then a pair
-          timers.push(setInterval(function () {
-            if (Math.random() < 0.7 * strength) arc(Math.random(), 10 + Math.random() * 12 * strength, 160);
-            if (Math.random() < 0.15 * strength) { var t = Math.random(); arc(t, 16 * strength, 220); arc(t + 0.01, 12, 200); }
-          }, 200));
+          smoothNoise(1.1);
+          // small bolts at uneven intervals, now and then a bigger one with a flare
+          every(140, 420, function () {
+            var t = Math.random();
+            bolt(jag(edgePoint(t).x, edgePoint(t).y, outward(edgePoint(t))[0], outward(edgePoint(t))[1], (10 + Math.random() * 12) * strength, 4, 8), 180, 1);
+            if (Math.random() < 0.18) { flare(edgePoint(t)); }
+          });
+        }
+        if (name === 'stormBranch') {
+          smoothNoise(1.1);
+          every(260, 700, function () { strike(Math.random(), Math.random() < 0.3); });
+        }
+        if (name === 'stormArc') {
+          smoothNoise(0.9);
+          every(120, 380, function () { edgeArc(Math.random(), 0.02 + Math.random() * 0.03, 170); });
+          // now and then a big arc across a corner
+          var CORNERS = [0.01, 0.27, 0.5, 0.77];
+          every(1400, 2600, function () {
+            var c = CORNERS[Math.floor(Math.random() * 4)];
+            edgeArc(c - 0.04, 0.09, 260);
+            flare(edgePoint(c + 0.005));
+          });
         }
         if (name === 'surge') {
           noiseLoop(0.8);
@@ -357,7 +502,7 @@
         }
       }
 
-      var shown = 'volt';
+      var shown = 'storm';
       document.getElementById('strength').addEventListener('input', function (e) {
         strength = parseFloat(e.target.value);
         document.getElementById('strength-val').textContent = strength.toFixed(1);
@@ -366,7 +511,7 @@
       document.querySelectorAll('.tabs button').forEach(function (b) {
         b.addEventListener('click', function () { shown = b.getAttribute('data-fx'); show(shown); });
       });
-      show('volt');
+      show('storm');
 
       // ---------- the slam: lift, hit the table, shock ----------
       var stage = document.getElementById('stage');
@@ -409,56 +554,65 @@
           s.style.left = x + 'px';
           s.style.top = y + 'px';
           stage.appendChild(s);
-          var a = Math.random() * Math.PI * 2;
-          var d = 70 + Math.random() * 90;
+          var a = -Math.PI * (0.05 + Math.random() * 0.9); // upward and sideways, off the table
+          var d = 50 + Math.random() * 80;
+          var tx = Math.cos(a) * d, ty = Math.sin(a) * d;
           s.animate([
             { transform: 'translate(0,0) scale(1)', opacity: 1 },
-            { transform: 'translate(' + Math.cos(a) * d + 'px,' + Math.sin(a) * d + 'px) scale(0.2)', opacity: 0 }
-          ], { duration: 500 + Math.random() * 300, easing: 'cubic-bezier(0.1, 0.7, 0.3, 1)' }).onfinish = s.remove.bind(s);
+            { transform: 'translate(' + tx * 0.7 + 'px,' + ty * 0.8 + 'px) scale(0.8)', opacity: 0.9, offset: 0.5 },
+            { transform: 'translate(' + tx + 'px,' + (ty * 0.6 + 18) + 'px) scale(0.2)', opacity: 0 }
+          ], { duration: 650 + Math.random() * 350, easing: 'cubic-bezier(0.2, 0.6, 0.4, 1)' }).onfinish = s.remove.bind(s);
         }
       }
 
+      // One timeline (no chained steps, so nothing stutters between them), 720ms:
+      // lift and lean back (0 → 300ms, easing out), hold a beat, drop with acceleration and
+      // land at 430ms, a soft squash and settle with a small overshoot. The shock (shake, glow,
+      // ring, sparks, thud, vibration) is timed to the landing.
+      var LAND = 430, TOTAL = 720;
       document.getElementById('apply').addEventListener('click', function () {
         if (busy) return;
         busy = true;
-        if (document.getElementById('opt-sound').checked) setTimeout(thud, 260);
-        // 1. the lift: the card rises toward you and leans back (anticipation)
-        var lift = card.animate([
-          { transform: 'none', filter: 'brightness(1)' },
-          { transform: 'translateY(-26px) scale(1.12) rotateX(14deg)', filter: 'brightness(1.25)', offset: 0.85 },
-          { transform: 'translateY(-26px) scale(1.12) rotateX(14deg)', filter: 'brightness(1.25)' }
-        ], { duration: 260, easing: 'cubic-bezier(0.3, 0, 0.2, 1)', fill: 'forwards' });
-        lift.onfinish = function () {
-          // 2. the hit: down hard, a little squash
-          card.animate([
-            { transform: 'translateY(-26px) scale(1.12) rotateX(14deg)' },
-            { transform: 'translateY(6px) scale(0.94, 0.9)', offset: 0.55 },
-            { transform: 'translateY(0) scale(1.02, 0.99)', offset: 0.8 },
-            { transform: 'none' }
-          ], { duration: 260, easing: 'cubic-bezier(0.6, 0, 0.9, 0.4)' }).onfinish = function () { busy = false; };
-          lift.cancel();
-          setTimeout(function () {
-            // 3. the shock: the sheet shakes, a flash, a gold ring and sparks from under the card
-            stage.animate([
-              { transform: 'translate(0,0)' }, { transform: 'translate(-6px,4px)' }, { transform: 'translate(5px,-3px)' },
-              { transform: 'translate(-3px,2px)' }, { transform: 'translate(2px,-1px)' }, { transform: 'translate(0,0)' }
-            ], { duration: 320, easing: 'ease-out' });
-            document.getElementById('flash').animate([{ opacity: 0.35 }, { opacity: 0 }], { duration: 260, easing: 'ease-out' });
-            var r = card.getBoundingClientRect(), sr = stage.getBoundingClientRect();
-            var x = r.left - sr.left + r.width / 2, y = r.top - sr.top + r.height * 0.85;
+        var k = function (ms) { return ms / TOTAL; };
+        card.animate([
+          { transform: 'translateY(0) scale(1) rotateX(0deg)', filter: 'brightness(1)', easing: 'cubic-bezier(0.2, 0.8, 0.3, 1)' },
+          { transform: 'translateY(-22px) scale(1.1) rotateX(12deg)', filter: 'brightness(1.2)', offset: k(300), easing: 'linear' },
+          { transform: 'translateY(-24px) scale(1.11) rotateX(13deg)', filter: 'brightness(1.22)', offset: k(340), easing: 'cubic-bezier(0.55, 0, 0.9, 0.5)' },
+          { transform: 'translateY(4px) scale(0.97, 0.95) rotateX(0deg)', filter: 'brightness(1.35)', offset: k(LAND), easing: 'cubic-bezier(0.2, 0.7, 0.3, 1)' },
+          { transform: 'translateY(-2px) scale(1.012, 1.01)', filter: 'brightness(1.1)', offset: k(560), easing: 'cubic-bezier(0.4, 0, 0.3, 1)' },
+          { transform: 'translateY(0) scale(1) rotateX(0deg)', filter: 'brightness(1)' }
+        ], { duration: TOTAL }).onfinish = function () { busy = false; };
+
+        if (document.getElementById('opt-sound').checked) setTimeout(thud, LAND - 10);
+        setTimeout(function () {
+          // a softer, decaying shake: three swings, each smaller
+          stage.animate([
+            { transform: 'translate(0, 0)' },
+            { transform: 'translate(0, 5px)', offset: 0.18 },
+            { transform: 'translate(-2px, -3px)', offset: 0.4 },
+            { transform: 'translate(1px, 1.5px)', offset: 0.65 },
+            { transform: 'translate(0, 0)' }
+          ], { duration: 380, easing: 'cubic-bezier(0.3, 0.6, 0.4, 1)' });
+          // a warm glow instead of a hard flash
+          document.getElementById('flash').animate([{ opacity: 0 }, { opacity: 0.22, offset: 0.2 }, { opacity: 0 }],
+            { duration: 420, easing: 'ease-out' });
+          var r = card.getBoundingClientRect(), sr = stage.getBoundingClientRect();
+          var x = r.left - sr.left + r.width / 2, y = r.top - sr.top + r.height * 0.88;
+          [0, 90].forEach(function (delay, i) {
             var ring = document.createElement('span');
             ring.className = 'ring';
             ring.style.left = x + 'px';
             ring.style.top = y + 'px';
             stage.appendChild(ring);
             ring.animate([
-              { transform: 'scale(0.4) scaleY(0.35)', opacity: 1, borderWidth: '4px' },
-              { transform: 'scale(5.5) scaleY(0.35)', opacity: 0, borderWidth: '1px' }
-            ], { duration: 600, easing: 'cubic-bezier(0.1, 0.7, 0.3, 1)' }).onfinish = ring.remove.bind(ring);
-            burst(x, y);
-            if (document.getElementById('opt-buzz').checked && navigator.vibrate) navigator.vibrate([25, 30, 60]);
-          }, 140);
-        };
+              { transform: 'scale(0.5) scaleY(0.32)', opacity: i ? 0.5 : 0.9 },
+              { transform: 'scale(' + (i ? 4.2 : 5.8) + ') scaleY(0.32)', opacity: 0 }
+            ], { duration: 820, delay: delay, easing: 'cubic-bezier(0.15, 0.6, 0.25, 1)', fill: 'backwards' })
+              .onfinish = ring.remove.bind(ring);
+          });
+          burst(x, y);
+          if (document.getElementById('opt-buzz').checked && navigator.vibrate) navigator.vibrate([25, 30, 60]);
+        }, LAND);
       });
     })();
   </script>
