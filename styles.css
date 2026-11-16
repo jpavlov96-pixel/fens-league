@@ -5032,99 +5032,6 @@ html.predict-sheet-open body { overflow: hidden; }
   cursor: default;
 }
 
-/* The power card list behind "Избери Коз" (not in Figma): over the sheet under its head,
-   the six cards in the Правила list's style */
-.predict-sheet__picker {
-  top: 61px;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  padding: 0 10px;
-  background: #121212;
-}
-
-.predict-sheet__picker[hidden] { display: none; }
-
-.predict-sheet__picker-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 34px;
-}
-
-.predict-sheet__picker-title {
-  font-family: "Montserrat", sans-serif;
-  font-size: 15px;
-  font-style: italic;
-  font-weight: 800;
-  color: #ffffff;
-  font-feature-settings: "locl" 0;
-}
-
-.predict-sheet__picker-back {
-  padding: 6px 0 6px 12px;
-  border: 0;
-  background: none;
-  font: inherit;
-  font-size: 12px;
-  color: #f5d584;
-  cursor: pointer;
-}
-
-.predict-sheet__picker-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.predict-sheet__pick {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  height: 54px;
-  padding: 4px 10px;
-  border: 1px solid #ffffff14;
-  border-radius: 8px;
-  background: #ffffff0a;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-
-.predict-sheet__pick.is-picked { border-color: #f5d58499; }
-
-.predict-sheet__pick.is-blocked {
-  opacity: 0.4;
-  cursor: default;
-}
-
-.predict-sheet__pick-card {
-  flex-shrink: 0;
-  width: 30px;
-  height: 45px;
-}
-
-.predict-sheet__pick-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.predict-sheet__pick-name {
-  font-size: 13px;
-  font-weight: 700;
-  color: #ffffff;
-}
-
-.predict-sheet__pick-note {
-  font-size: 12px;
-  color: #929295;
-}
 
 /* ---------- the points table under the info icon: Group 61 (448:19962). Placed from the
    head as in Figma (head at y 188: pointer at y 226, box at y 235) ---------- */
@@ -5316,3 +5223,134 @@ html.predict-sheet-open body { overflow: hidden; }
   transform: rotate(-1.85deg);
   font-feature-settings: "locl" 0;
 }
+
+/* ---------- "Избери Коз" (Figma 449:20222): the sheet grows to 500px and shows the available
+   cards in the lobby's carousel at the picker's sizes (components/trump-carousel.js,
+   data-size="picker"), the middle card's rule, "Назад" and "Приложи Коз". Placed from inside
+   the sheet's top border, as the rest of the sheet ---------- */
+.predict-sheet__panel { transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1), height 0.3s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.predict-sheet.is-picking .predict-sheet__panel { height: 500px; }
+
+.predict-sheet__picker {
+  inset: 0;
+  z-index: 3;
+  background: #171717 url("data:image/svg+xml;utf8,<svg viewBox='0 0 375 500' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-63.75 -160.9 120.68 -216.44 646.25 1609)'><stop stop-color='rgba(0,0,0,1)' offset='0'/><stop stop-color='rgba(6,6,6,1)' offset='0.2'/><stop stop-color='rgba(12,12,12,1)' offset='0.4'/><stop stop-color='rgba(23,23,23,1)' offset='0.8'/></radialGradient></defs></svg>") 0 0 / 100% 100%;
+}
+
+.predict-sheet__picker[hidden] { display: none; }
+.predict-sheet__picker > * { position: absolute; }
+
+/* Frame 2147208144: "Избери Коз" / "От наличните ти" and the count */
+.predict-sheet__picker-head {
+  top: 7px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 355px;
+  height: 45px;
+}
+
+.predict-sheet__picker-head .predict-sheet__titles { height: 45px; margin-top: 0; }
+.predict-sheet__label--picker { top: 31px; }
+
+.predict-sheet__picker-count {
+  font-family: "Montserrat", sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  line-height: normal;
+  color: #f5d584;
+  text-align: right;
+  font-feature-settings: "locl" 0;
+}
+
+/* cards-slider: the middle card at y 62 */
+.predict-sheet__picker-cards {
+  top: 62px;
+  left: 0;
+  width: 100%;
+  height: 269px;
+}
+
+/* the picker's cards: the name centred, white, no description (Figma's power-card here) */
+.trumps--picker .trump { gap: 9.276px; }
+.trumps--picker .trump__content { gap: 11.131px; }
+.trumps--picker .trump__text { gap: 1.855px; }
+.trumps--picker .trump__name { color: #ffffff; text-align: center; }
+.trumps--picker .trump__link { height: 14.841px; }
+.trumps--picker .trump__info { font-size: 16.697px; color: #dbdbdb; }
+.trumps--picker .trump__info--small { font-size: 14.841px; }
+
+/* the middle card's rule: Montserrat 13, white, its key part gold semibold italic; bottom at y 415 */
+.predict-sheet__picker-rule {
+  bottom: 82px;
+  left: 10px;
+  width: 355px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 13px;
+  line-height: normal;
+  color: #ffffff;
+  text-align: center;
+  font-feature-settings: "locl" 0;
+}
+
+.predict-sheet__picker-rule b {
+  font-style: italic;
+  font-weight: 600;
+  color: #f5d584;
+}
+
+/* not in Figma: why the middle card can't go on this prediction */
+.predict-sheet__picker-why { color: #929295; }
+
+/* Frame 2147208145: "Назад" */
+.predict-sheet__picker-back {
+  top: 435px;
+  left: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 130px;
+  height: 42px;
+  padding: 8px 32px;
+  border: 1px solid #ffffff0d;
+  border-radius: 60px;
+  background: none;
+  font: inherit;
+  font-size: 15px;
+  line-height: 17px;
+  color: #c9c9c9;
+  text-shadow: 0 0 3px #00000059;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.predict-sheet__picker-back img { width: 10px; height: 10px; }
+
+/* Frame 132: "Приложи Коз", the green button of "Запази Прогноза" */
+.predict-sheet__picker-apply {
+  top: 435px;
+  left: 193px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 167px;
+  height: 42px;
+  padding: 8px 32px;
+  border: 1px solid #ffffff26;
+  border-radius: 60px;
+  background: #19b14e;
+  box-shadow: 0 0 6px #19b14ebf;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 17px;
+  color: #ffffff;
+  text-shadow: 0 0 3px #00000059;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.predict-sheet__picker-apply:disabled { opacity: 0.4; cursor: default; }

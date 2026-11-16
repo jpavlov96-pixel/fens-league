@@ -25,21 +25,27 @@
   // The six power cards (official names)
   var TRUMPS = [
     { id: 'even', name: 'Равенство', file: 'even',
+      info: 'X', rule: 'Единственият начин да прогнозираш <b>равенство</b>. Не използва отбор. Познато равенство носи 3 точки, точен равен резултат — 4.',
       short: 'Единственият начин да прогнозираш равенство.',
       panel: 'Прогнозата за равен резултат е <b>валидна</b>.' },
     { id: 'repeat', name: 'Повторен избор', file: 'repeat',
+      info: '<img src="assets/lobby-main/icon-card-swap.svg" alt="" width="14" height="14">', rule: 'Избери за победител <b>вече използван отбор</b> още веднъж. Отборът остава използван, точките са обичайните.',
       short: 'Избери за победител вече използван отбор.',
       panel: 'Избери отново <b>вече използван</b> отбор.' },
     { id: 'scorer', name: 'Голмайстор', file: 'scorer',
+      info: 'x2', rule: 'Избери играч от мача. Ако отбележи в редовното или добавеното време, точките ти се <b>удвояват</b>.',
       short: 'Ако избраният играч отбележи: двойни точки.',
       panel: 'Ако избраният играч отбележи, точките се <b>удвояват</b>.' },
     { id: 'all-or-nothing', name: 'Всичко или нищо', file: 'all-or-nothing',
+      info: '6/0', rule: 'Само за точен резултат: познатият носи <b>6 точки</b>, всеки друг резултат — 0.',
       short: 'Само за точен резултат: 6 точки или 0.',
       panel: 'Познат точен резултат носи <b>6 точки</b>, иначе 0.' },
     { id: 'rest', name: 'Почивка', file: 'rest',
+      info: '+1', rule: 'Пропускаш кръга и получаваш <b>1 точка</b>, без да използваш отбор. Серията ти се запазва.',
       short: 'Пропусни кръга и вземи 1 точка.',
       panel: 'Пропускаш кръга и получаваш <b>1 точка</b>.' },
     { id: 'clean-sheet', name: 'Чиста мрежа', file: 'clean-sheet',
+      info: '+2', rule: 'Получаваш <b>2 допълнителни точки</b>, ако избраният отбор спечели, без да допусне гол. В противен случай получаваш обичайните точки за прогнозата си.',
       short: 'При победа без допуснат гол: +2 точки.',
       panel: 'При победа без допуснат гол получаваш <b>+2 точки.</b>' }
   ];
@@ -213,6 +219,12 @@
       save(settle(p), slot);
     });
     slot.addEventListener('click', function (e) {
+      // the card icons in the corner (no card on yet): the sheet on "Избери Коз"
+      // (components/prediction-sheet.js), for this prediction
+      if (e.target.closest('.event__trump') && memory && window.openPredictionPicker) {
+        window.openPredictionPicker(memory, slot.getAttribute('data-next-round') || 'Кръг 7');
+        return;
+      }
       if (!e.target.closest('[data-trump-off]') || !memory) return;
       save(settle(Object.assign({}, memory, { trump: '' })), null); // redraws the slot: label off, corner cards on
     });

@@ -82,13 +82,21 @@
         '</button>' +
         // Frame 132
         '<button class="predict-sheet__save" type="button" data-save>Запази Прогноза</button>' +
-        // the power card list (not in Figma)
+        // "Избери Коз" (Figma 449:20222): the available cards in a carousel, the middle card's
+        // rule under it, "Назад" and "Приложи Коз"
         '<div class="predict-sheet__picker" hidden>' +
           '<div class="predict-sheet__picker-head">' +
-            '<p class="predict-sheet__picker-title">Избери Коз</p>' +
-            '<button class="predict-sheet__picker-back" type="button" data-picker-close>Назад</button>' +
+            '<div class="predict-sheet__titles">' +
+              '<p class="predict-sheet__round">Избери Коз</p>' +
+              '<p class="predict-sheet__label predict-sheet__label--picker">От наличните ти</p>' +
+            '</div>' +
+            '<p class="predict-sheet__picker-count"></p>' +
           '</div>' +
-          '<ul class="predict-sheet__picker-list"></ul>' +
+          '<div class="trumps trumps--picker predict-sheet__picker-cards" data-size="picker" tabindex="0" aria-label="Козове"></div>' +
+          '<p class="predict-sheet__picker-rule"></p>' +
+          '<button class="predict-sheet__picker-back" type="button" data-picker-close>' +
+            '<img src="' + A + 'icon-arrow-back.svg" alt="" width="10" height="10">Назад</button>' +
+          '<button class="predict-sheet__picker-apply" type="button" data-picker-apply>Приложи Коз</button>' +
         '</div>' +
       '</div>' +
     '</div>';
@@ -231,16 +239,68 @@
         '<img src="' + A + 'icon-bin.svg" alt="" width="14.3333" height="16"></button>';
   }
 
+  // The available cards (not the used ones), in the carousel; it opens on the picked card, or
+  // the first one that applies to the prediction as it is
+  var pickerCards = [];
+  var pickerAt = 0;
   function drawPicker() {
-    var p = read();
-    q('.predict-sheet__picker-list').innerHTML = TRUMPS.map(function (t) {
-      var why = blocked(t.id, p);
-      return '<li><button class="predict-sheet__pick' + (why ? ' is-blocked' : '') + (t.id === trump ? ' is-picked' : '') +
-        '" type="button" data-trump="' + t.id + '"' + (why ? ' disabled' : '') + '>' +
-        '<img class="predict-sheet__pick-card" src="' + CARDS + t.file + '-small.webp" alt="" width="30" height="45">' +
-        '<span class="predict-sheet__pick-text"><span class="predict-sheet__pick-name">' + esc(t.name) + '</span>' +
-        '<span class="predict-sheet__pick-note">' + esc(why || t.short) + '</span></span></button></li>';
+    pickerCards = TRUMPS.filter(function (t) { return P.USED.indexOf(t.id) < 0; });
+    var start = pickerCards.map(function (t) { return t.id; }).indexOf(trump);
+    if (start < 0) {
+      start = 0;
+      for (var i = 0; i < pickerCards.length; i++) if (!blocked(pickerCards[i].id)) { start = i; break; }
+    }
+    q('.predict-sheet__picker-count').textContent = pickerCards.length;
+    var old = q('.predict-sheet__picker-cards');
+    var track = old.cloneNode(false); // a fresh track: the carousel sets itself up on it
+    track.setAttribute('data-start', start);
+    track.innerHTML = pickerCards.map(function (t) {
+      return '<div class="trump">' +
+          '<img class="trump__bgr" src="' + CARDS + t.file + '.webp" alt="" draggable="false">' +
+          '<div class="trump__info' + (t.info === '6/0' ? ' trump__info--small' : '') + '">' + t.info + '</div>' +
+          '<div class="trump__content"><div class="trump__text">' +
+            '<p class="trump__name">' + esc(t.name.toUpperCase()).replace(' ', '<br>') + '</p>' +
+          '</div><span class="trump__link" aria-hidden="true"></span></div>' +
+        '</div>';
     }).join('');
+    old.replaceWith(track);
+    track.addEventListener('trumpcentre', function (e) { pickerAt = e.detail.index; drawRule(); });
+    pickerAt = start;
+    drawRule();
+    return track;
+  }
+
+  // the middle card's rule; when it can't go on this prediction, the reason instead and
+  // "Приложи Коз" dimmed
+  function drawRule() {
+    var t = pickerCards[pickerAt];
+    if (!t) return;
+    var why = blocked(t.id);
+    var rule = q('.predict-sheet__picker-rule');
+    rule.innerHTML = why ? '<span class="predict-sheet__picker-why">' + esc(why) + '</span>' : t.rule;
+    q('[data-picker-apply]').disabled = !!why;
+  }
+
+  function setPicker(on) {
+    var picker = q('.predict-sheet__picker');
+    if (on) {
+      picker.hidden = false;
+      root.classList.add('is-picking');
+      var track = drawPicker();
+      if (window.initTrumpCarousel) window.initTrumpCarousel(track);
+    } else {
+      picker.hidden = true;
+      root.classList.remove('is-picking');
+    }
+  }
+
+  function applyTrump(id) {
+    trump = id;
+    // Равенство in Изход от мача: the prediction becomes the draw ("Равен", both teams)
+    if (trump === 'even' && event.getAttribute('variant') !== 'correct-score') event.setAttribute('pick', 'draw');
+    setPicker(false);
+    drawTrump();
+    update();
   }
 
   // Everything that follows the prediction: the card's allow-* flags, the card that stopped
@@ -266,7 +326,9 @@
     q('[data-save]').disabled = !valid(p);
   }
 
-  function open(m) {
+  // m: the match; saved (optional): a saved prediction to start from; picker: open on
+  // "Избери Коз" (the card icons in a saved prediction's corner)
+  function open(m, saved, picker) {
     match = m;
     trump = '';
     suggest = '';
@@ -284,6 +346,13 @@
     event.setAttribute('away-crest', m.awayCrest);
     if (m.homeUsed) event.setAttribute('home-used', m.homeUsed);
     if (m.awayUsed) event.setAttribute('away-used', m.awayUsed);
+    if (saved) {
+      event.setAttribute('variant', saved.variant);
+      event.setAttribute('pick', saved.pick || '');
+      event.setAttribute('home-score', saved.homeScore);
+      event.setAttribute('away-score', saved.awayScore);
+      trump = saved.trump || '';
+    }
     box.appendChild(event);
     event.addEventListener('change', update);
     event.addEventListener('warning', function (e) {
@@ -293,13 +362,14 @@
     q('.predict-sheet__h2h-text').textContent =
       m.home.replace(/\n/g, ' ') + ': 5 победи · ' + m.away.replace(/\n/g, ' ') + ': 5 победи';
     setH2h(false);
-    q('.predict-sheet__picker').hidden = true;
+    setPicker(false);
     setTip(false);
     drawTrump();
     q('.predict-sheet__points-num').textContent = '0';
     update();
 
     root.hidden = false;
+    if (picker) setPicker(true);
     document.documentElement.classList.add('predict-sheet-open');
     root.classList.remove('is-closing');
     void root.offsetWidth;
@@ -345,6 +415,16 @@
     };
   }
 
+  // a saved prediction's sheet, straight on "Избери Коз" (components/next-prediction.js: the
+  // card icons in its corner)
+  window.openPredictionPicker = function (saved, round) {
+    open({
+      round: round, date: saved.date, home: saved.home, away: saved.away,
+      homeCrest: saved.homeCrest, awayCrest: saved.awayCrest,
+      homeUsed: saved.homeUsed || '', awayUsed: saved.awayUsed || ''
+    }, saved, true);
+  };
+
   document.addEventListener('click', function (e) {
     var btn = e.target.closest('.match-card__middle--action .secondary-btn');
     var list = btn && btn.closest('[data-predict-list]');
@@ -363,25 +443,16 @@
       setH2h(!q('.predict-sheet__h2h').classList.contains('is-open'));
       return;
     }
-    if (e.target.closest('[data-picker-open]')) {
-      drawPicker();
-      q('.predict-sheet__picker').hidden = false;
+    if (e.target.closest('[data-picker-open]')) { setPicker(true); return; }
+    if (e.target.closest('[data-picker-close]')) { setPicker(false); return; }
+    var apply = e.target.closest('[data-picker-apply]');
+    if (apply) {
+      if (!apply.disabled && pickerCards[pickerAt]) applyTrump(pickerCards[pickerAt].id);
       return;
     }
-    if (e.target.closest('[data-picker-close]')) {
-      q('.predict-sheet__picker').hidden = true;
-      return;
-    }
+    // the offers' "Използвай" (Равенство, Повторен избор)
     var pick = e.target.closest('[data-trump]');
-    if (pick && !pick.disabled) {
-      trump = pick.getAttribute('data-trump');
-      // Равенство in Изход от мача: the prediction becomes the draw ("Равен", both teams)
-      if (trump === 'even' && event.getAttribute('variant') !== 'correct-score') event.setAttribute('pick', 'draw');
-      q('.predict-sheet__picker').hidden = true;
-      drawTrump();
-      update();
-      return;
-    }
+    if (pick && !pick.disabled) { applyTrump(pick.getAttribute('data-trump')); return; }
     if (e.target.closest('[data-trump-remove]')) {
       trump = '';
       drawTrump();
@@ -403,6 +474,7 @@
   var draggedAt = 0;
   panel.addEventListener('pointerdown', function (e) {
     if (e.button !== 0 || root.classList.contains('is-closing')) return;
+    if (e.target.closest('.trumps')) return; // the card carousel swipes sideways
     drag = { id: e.pointerId, y: e.clientY, dy: 0, t: e.timeStamp, v: 0, moving: false };
   });
   panel.addEventListener('pointermove', function (e) {

@@ -16,8 +16,13 @@
 // Each .trumps track is its own carousel, with the .pagination right after it: the lobby has
 // two, Налични and Използвани (the used cards, Figma 444:15907), one shown at a time. A hidden
 // track has no width, so each one lays itself out again when its size changes (shown).
+// The prediction sheet's "Избери Коз" (Figma 449:20222) uses it too, with its own sizes
+// (data-size="picker": 179 × 269 in the middle, 162.3 × 244 at the sides, names only):
+// window.initTrumpCarousel(track) sets up a track added later, and every track fires
+// "trumpcentre" (detail.index) when a card settles in the middle.
 (function () {
   Array.prototype.forEach.call(document.querySelectorAll('.trumps'), init);
+  window.initTrumpCarousel = init;
 
   function init(track) {
   var cards = Array.prototype.slice.call(track.querySelectorAll('.trump'));
@@ -26,14 +31,15 @@
     ? Array.prototype.slice.call(pager.querySelectorAll('span')) : [];
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  var SMALL = { w: 175, h: 263, name: 20, desc: 12 };
-  var BIG = { w: 193, h: 290, name: 20, desc: 13 };
-  var GAP = 10;
-  var BLUR = 1.5; // px, on the side cards
+  var picker = track.getAttribute('data-size') === 'picker';
+  var SMALL = picker ? { w: 162.328, h: 243.955, name: 19.433, desc: 12 } : { w: 175, h: 263, name: 20, desc: 12 };
+  var BIG = picker ? { w: 179.024, h: 269, name: 22.502, desc: 13 } : { w: 193, h: 290, name: 20, desc: 13 };
+  var GAP = picker ? 9.276 : 10;
+  var BLUR = picker ? 1.391 : 1.5; // px, on the side cards
   var NEXT = BIG.w / 2 + GAP + SMALL.w / 2; // middle card's centre to its neighbour's: 194
   var STEP = SMALL.w + GAP;                  // between two side cards: 185
 
-  var PAD = 12; // each card's padding (as in styles.css)
+  var PAD = picker ? 11.131 : 12; // each card's padding (as in styles.css)
 
   // Each description stays on its own lines (as in Figma); a line that would be wider than
   // the card makes that card's text a touch smaller instead of wrapping. Measured once per
@@ -42,6 +48,7 @@
   function measure() {
     descWidth = cards.map(function (card) {
       var desc = card.querySelector('.trump__desc');
+      if (!desc) return 0;
       var keep = desc.style.fontSize;
       desc.style.fontSize = BIG.desc + 'px';
       var w = desc.scrollWidth;
@@ -69,6 +76,7 @@
     return d;
   }
   var anim = null;
+  var shownCentre = -1;
   var heading = pos; // where it's moving to; quick repeated presses continue from here
 
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -102,15 +110,23 @@
       card.style.transform = 'translate(' + x + 'px, ' + (BIG.h - h) / 2 + 'px)';
       card.style.filter = t < 1 ? 'blur(' + BLUR * (1 - t) + 'px)' : '';
       card.querySelector('.trump__name').style.fontSize = lerp(SMALL.name, BIG.name, t) + 'px';
-      var size = lerp(SMALL.desc, BIG.desc, t);
-      var need = descWidth[i] * size / BIG.desc;
-      var room = w - 2 * PAD;
-      if (need > room) size *= room / need;
-      card.querySelector('.trump__desc').style.fontSize = size + 'px';
+      if (picker) card.style.padding = lerp(9.276, 11.131, t) + 'px'; // Figma: 9.276 at the sides, 11.131 in the middle
+      var descEl = card.querySelector('.trump__desc');
+      if (descEl) {
+        var size = lerp(SMALL.desc, BIG.desc, t);
+        var need = descWidth[i] * size / BIG.desc;
+        var room = w - 2 * PAD;
+        if (need > room) size *= room / need;
+        descEl.style.fontSize = size + 'px';
+      }
       card.classList.toggle('is-centre', wrap(Math.round(pos)) === i);
     });
     var active = wrap(Math.round(pos));
     dots.forEach(function (dot, i) { dot.classList.toggle('is-active', i === active); });
+    if (active !== shownCentre) {
+      shownCentre = active;
+      track.dispatchEvent(new CustomEvent('trumpcentre', { detail: { index: active } }));
+    }
   }
 
   function clamp(i) { return loop ? i : Math.max(0, Math.min(count - 1, i)); }
