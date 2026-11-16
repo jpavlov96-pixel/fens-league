@@ -240,8 +240,10 @@
       '<p class="predict-sheet__trump-title">' + esc(t.name.toUpperCase()) + '</p>' +
       '<p class="predict-sheet__trump-text">' + t.panel + '</p>' +
       '<span class="predict-sheet__trump-divider" aria-hidden="true"></span>' +
+      // an X in place of Figma's bin (the user's request, 2026-11-16): the "Премахни" label's
+      // X (icon-close.svg) in the bin's grey
       '<button class="predict-sheet__trump-bin" type="button" data-trump-remove aria-label="Махни коза">' +
-        '<img src="' + A + 'icon-bin.svg" alt="" width="14.3333" height="16"></button>';
+        '<img src="' + A + 'icon-close-grey.svg" alt="" width="12" height="12"></button>';
   }
 
   // The available cards (not the used ones), in the carousel; it opens on the picked card, or
@@ -331,6 +333,17 @@
       if (warn) event.setAttribute('trump-warning', warn);
       else event.removeAttribute('trump-warning');
     }
+    // Почивка on: the match card makes way for the Почивка panel (event-container
+    // variant="rest", Figma 458:22492), as in the slots
+    var box = q('.predict-sheet__event');
+    var rest = box.querySelector('[data-sheet-rest]');
+    if (trump === 'rest' && !rest) {
+      rest = document.createElement('event-container');
+      rest.setAttribute('variant', 'rest');
+      rest.setAttribute('data-sheet-rest', '');
+      box.appendChild(rest);
+    } else if (trump !== 'rest' && rest) rest.remove();
+    box.classList.toggle('is-rest', trump === 'rest');
     var p = read();
     if (!q('.predict-sheet__tip').hidden) drawTip();
     setPoints(points(p));

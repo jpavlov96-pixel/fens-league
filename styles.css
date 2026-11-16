@@ -4927,9 +4927,8 @@ html.predict-sheet-open body { overflow: hidden; }
 }
 
 .predict-sheet__trump-bin img {
-  width: 14.3333px;
-  height: 16px;
-  margin-left: 1px; /* the icon sits 6.25% in from the left of its 16px box */
+  width: 12px;
+  height: 12px;
 }
 
 /* Frame 76: head-to-head, 24px closed, 48px open */
@@ -5365,3 +5364,6 @@ html.predict-sheet-open body { overflow: hidden; }
 
 /* the slot's Почивка panel opens the sheet */
 [data-rest-open] { cursor: pointer; }
+
+/* the sheet with Почивка on: the Почивка panel in place of the match card */
+.predict-sheet__event.is-rest event-container:not([data-sheet-rest]) { display: none; }
