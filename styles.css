@@ -1887,7 +1887,12 @@ img { display: block; }
   flex-shrink: 0;
   align-items: center;
   gap: 5px;
+  /* "3 / 5 / 10" sits over the achievement art: a dark halo keeps it readable there (the
+     user's request, 2026-11-16; the text stays where it is) */
+  text-shadow: 0 0 1px #000000, 0 0 2px #000000, 0 0 3px #000000, 0 0 6px #000000, 0 0 8px #000000;
 }
+
+.mission__steps img { filter: drop-shadow(0 0 1px #000000) drop-shadow(0 0 2px #000000) drop-shadow(0 0 4px #000000); }
 
 .mission__steps b {
   font-weight: 700;
