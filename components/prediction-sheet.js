@@ -213,7 +213,9 @@
     box.innerHTML =
       '<span class="predict-sheet__trump-cards" aria-hidden="true">' +
         '<span class="predict-sheet__trump-back"><img src="' + CARDS + 'b-small.webp" alt=""></span>' +
-        '<span class="predict-sheet__trump-front"><img src="' + CARDS + t.file + '-small.webp" alt=""></span>' +
+        '<span class="predict-sheet__trump-front"><img src="' + CARDS + t.file + '-small.webp" alt="">' +
+          // the card's name printed on its front, as on the Равенство offer (the user's request)
+          '<span class="predict-sheet__trump-front-name">' + esc(t.name.toUpperCase()).replace(' ', '<br>') + '</span></span>' +
       '</span>' +
       '<p class="predict-sheet__trump-title">' + esc(t.name.toUpperCase()) + '</p>' +
       '<p class="predict-sheet__trump-text">' + t.panel + '</p>' +

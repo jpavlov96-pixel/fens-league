@@ -5295,3 +5295,23 @@ html.predict-sheet-open body { overflow: hidden; }
   transform: rotate(-3.24deg);
   font-feature-settings: "locl" 0;
 }
+
+/* the picked card's name on its front (the user's request, 2026-11-16, as on the Равенство
+   offer): white Montserrat ExtraBold Italic 4px, centred in the lower part of the card, turned
+   with it (-1.85°) */
+.predict-sheet__trump-front-name {
+  position: absolute;
+  right: 0;
+  bottom: 9px;
+  left: 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: 4px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: 4.5px;
+  color: #ffffff;
+  text-align: center;
+  white-space: nowrap;
+  transform: rotate(-1.85deg);
+  font-feature-settings: "locl" 0;
+}
