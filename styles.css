@@ -5427,3 +5427,48 @@ html.predict-sheet-open body { overflow: hidden; }
 /* while the card is slammed, the picker's buttons wait */
 .predict-sheet.is-slamming .predict-sheet__picker-back,
 .predict-sheet.is-slamming .predict-sheet__picker-apply { pointer-events: none; }
+
+/* ---------- Power card details (components/trump-details.js): Figma 458:22339, the picker's
+   500px sheet with the lobby card's head, the cards at y 82, the rule and "Към Прогнозите" ---------- */
+.trump-sheet__head {
+  top: 7px;
+  left: 10px;
+  width: 355px;
+}
+
+.trump-sheet__cards {
+  top: 82px;
+  left: 0;
+  width: 100%;
+  height: 269px;
+}
+
+/* Figma's text box starts at y 364 */
+.trump-sheet__rule { top: 364px; }
+
+/* Frame 132 (458:22341): "Към Прогнозите", the green button, x 94 */
+.trump-sheet__go {
+  top: 435px;
+  left: 94px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 187px;
+  height: 42px;
+  padding: 8px 32px;
+  border: 1px solid #ffffff26;
+  border-radius: 60px;
+  background: #19b14e;
+  box-shadow: 0 0 6px #19b14ebf;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 17px;
+  color: #ffffff;
+  text-shadow: 0 0 3px #00000059;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* the lobby's cards open it */
+.trumps-card .trump { cursor: pointer; }

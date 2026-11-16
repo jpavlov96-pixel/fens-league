@@ -5,7 +5,9 @@
      flare. One SVG, moved onto whichever card is in the middle.
    - the slam on "Приложи Коз": the card rises and leans back, holds a beat, drops and lands,
      then settles (one 720ms timeline); on the landing a decaying shake, a warm glow, two gold
-     rings, sparks, a low thud (Web Audio, no file) and a vibration (Android).
+     rings, sparks and a vibration (Android). No sound (the user's request).
+   - the middle card trembles a tiny bit with the current: each arc nudges it ~0.6px, a corner
+     flare ~1.4px (the CSS "translate" property, so the carousel's own transform is untouched).
 
    window.CardFx.attach(cardEl)  puts the current on that card (starts it if needed)
    window.CardFx.stop()          stops it and takes it off
@@ -90,6 +92,20 @@
     c.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, easing: 'ease-out' }).onfinish = function () { c.remove(); };
   }
 
+  // the card trembles with the current: a short nudge (translate, apart from the carousel's
+  // transform), strength in px
+  function tremble(px) {
+    var card = svg && svg.parentNode;
+    if (!card || !card.animate || card.classList.contains('is-slammed')) return;
+    var a = Math.random() * Math.PI * 2, x = Math.cos(a) * px, y = Math.sin(a) * px;
+    card.animate([
+      { translate: '0 0' },
+      { translate: x.toFixed(2) + 'px ' + y.toFixed(2) + 'px', offset: 0.3 },
+      { translate: (-x * 0.5).toFixed(2) + 'px ' + (-y * 0.5).toFixed(2) + 'px', offset: 0.65 },
+      { translate: '0 0' }
+    ], { duration: 140, easing: 'ease-out' });
+  }
+
   // an arc between two points of the edge, bowing outward
   function edgeArc(t, span, life) {
     var a = edgePoint(t), b = edgePoint(t + span), o = outward(edgePoint(t + span / 2));
@@ -130,12 +146,13 @@
       d1.setAttribute('scale', cur.toFixed(2));
       d2.setAttribute('scale', (cur * 0.7).toFixed(2));
     }, 70));
-    every(120, 380, function () { edgeArc(Math.random(), 0.02 + Math.random() * 0.03, 170); });
+    every(120, 380, function () { edgeArc(Math.random(), 0.02 + Math.random() * 0.03, 170); tremble(0.6); });
     var CORNERS = [0.01, 0.27, 0.5, 0.77];
     every(1400, 2600, function () {
       var c = CORNERS[Math.floor(Math.random() * 4)];
       edgeArc(c - 0.04, 0.09, 260);
       flare(edgePoint(c + 0.005));
+      tremble(1.4);
     });
   }
 
@@ -155,32 +172,6 @@
   }
 
   // ---------- the slam ----------
-  function thud() {
-    var Ctx = window.AudioContext || window.webkitAudioContext;
-    if (!Ctx) return;
-    try {
-      var ctx = thud.ctx || (thud.ctx = new Ctx());
-      var t = ctx.currentTime;
-      var osc = ctx.createOscillator(), gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(140, t);
-      osc.frequency.exponentialRampToValueAtTime(38, t + 0.25);
-      gain.gain.setValueAtTime(0.9, t);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
-      osc.connect(gain).connect(ctx.destination);
-      osc.start(t);
-      osc.stop(t + 0.4);
-      // the slap on the felt: a short burst of noise
-      var len = Math.floor(ctx.sampleRate * 0.06), buf = ctx.createBuffer(1, len, ctx.sampleRate), data = buf.getChannelData(0);
-      for (var i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
-      var src = ctx.createBufferSource(), g2 = ctx.createGain();
-      g2.gain.value = 0.5;
-      src.buffer = buf;
-      src.connect(g2).connect(ctx.destination);
-      src.start(t);
-    } catch (e) { /* no sound */ }
-  }
-
   function burst(stage, x, y) {
     for (var i = 0; i < 18; i++) {
       var s = document.createElement('span');
@@ -203,6 +194,7 @@
     if (reduced || !card.animate) { done(); return; }
     var k = function (ms) { return ms / TOTAL; };
     var base = card.style.transform; // the carousel's own place and size for the card
+    card.classList.add('is-slammed');
     function tf(t) { return base + ' ' + t; }
     card.animate([
       { transform: tf('translateY(0) scale(1) rotateX(0deg)'), filter: 'brightness(1)', easing: 'cubic-bezier(0.2, 0.8, 0.3, 1)' },
@@ -211,9 +203,8 @@
       { transform: tf('translateY(4px) scale(0.97, 0.95) rotateX(0deg)'), filter: 'brightness(1.35)', offset: k(LAND), easing: 'cubic-bezier(0.2, 0.7, 0.3, 1)' },
       { transform: tf('translateY(-2px) scale(1.012, 1.01)'), filter: 'brightness(1.1)', offset: k(560), easing: 'cubic-bezier(0.4, 0, 0.3, 1)' },
       { transform: tf('translateY(0) scale(1) rotateX(0deg)'), filter: 'brightness(1)' }
-    ], { duration: TOTAL }).onfinish = function () { done(); };
+    ], { duration: TOTAL }).onfinish = function () { card.classList.remove('is-slammed'); done(); };
 
-    setTimeout(thud, LAND - 10);
     setTimeout(function () {
       // a decaying shake: three swings, each smaller
       stage.animate([
