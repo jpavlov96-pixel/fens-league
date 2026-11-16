@@ -5472,3 +5472,8 @@ html.predict-sheet-open body { overflow: hidden; }
 
 /* the lobby's cards open it */
 .trumps-card .trump { cursor: pointer; }
+
+/* the details sheet's Използвани: the lobby's used look (grey name, grey corner mark), over the
+   picker's white names */
+.trumps--picker.trumps--used .trump__name { color: #434343; }
+.trumps--picker.trumps--used .trump__info { color: #929295; }

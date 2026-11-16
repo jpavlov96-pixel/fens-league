@@ -45,7 +45,31 @@
   // the card makes that card's text a touch smaller instead of wrapping. Measured once per
   // card at the middle size: the width of its widest line.
   var descWidth = [];
+  // a name that's wider than the card at the middle size (a long single word such as
+  // ГОЛМАЙСТОР at the picker's 22.5px) is set a touch smaller so it fits: its widest line
+  var nameWidth = [];
   function measure() {
+    nameWidth = cards.map(function (card) {
+      var name = card.querySelector('.trump__name');
+      if (!name) return 0;
+      var keep = name.style.fontSize, ws = name.style.whiteSpace, w = name.style.width;
+      name.style.fontSize = BIG.name + 'px';
+      name.style.whiteSpace = 'nowrap';
+      name.style.width = 'max-content';
+      var width = 0;
+      // each line on its own (the names break at <br>)
+      name.innerHTML.split(/<br\s*\/?>/i).forEach(function (part) {
+        var probe = document.createElement('span');
+        probe.innerHTML = part;
+        name.appendChild(probe);
+        width = Math.max(width, probe.offsetWidth);
+        probe.remove();
+      });
+      name.style.fontSize = keep;
+      name.style.whiteSpace = ws;
+      name.style.width = w;
+      return width;
+    });
     descWidth = cards.map(function (card) {
       var desc = card.querySelector('.trump__desc');
       if (!desc) return 0;
@@ -104,12 +128,17 @@
       var x = centre + offset(d) - w / 2;
       if (count === 2) {
         var row = BIG.w + GAP + SMALL.w;
-        var shift = (track.clientWidth - row) * Math.max(0, Math.min(1, pos)); // 0 → left, 1 → right
+        var inset = picker ? 10 : 0; // the sheets: lined up with the head's 10px
+        var shift = inset + (track.clientWidth - 2 * inset - row) * Math.max(0, Math.min(1, pos)); // 0 → left, 1 → right
         x = shift + (i === 0 ? 0 : lerp(SMALL.w, BIG.w, Math.max(0, 1 - Math.abs(distance(0)))) + GAP);
       }
       card.style.transform = 'translate(' + x + 'px, ' + (BIG.h - h) / 2 + 'px)';
       card.style.filter = t < 1 ? 'blur(' + BLUR * (1 - t) + 'px)' : '';
-      card.querySelector('.trump__name').style.fontSize = lerp(SMALL.name, BIG.name, t) + 'px';
+      var nameSize = lerp(SMALL.name, BIG.name, t);
+      var nameNeed = (nameWidth[i] || 0) * nameSize / BIG.name;
+      var nameRoom = w - 2 * PAD - 4;
+      if (nameNeed > nameRoom) nameSize *= nameRoom / nameNeed;
+      card.querySelector('.trump__name').style.fontSize = nameSize + 'px';
       if (picker) card.style.padding = lerp(9.276, 11.131, t) + 'px'; // Figma: 9.276 at the sides, 11.131 in the middle
       var descEl = card.querySelector('.trump__desc');
       if (descEl) {
