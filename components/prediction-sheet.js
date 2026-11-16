@@ -272,6 +272,15 @@
     }).join('');
     old.replaceWith(track);
     track.addEventListener('trumpcentre', function (e) { pickerAt = e.detail.index; drawRule(); });
+    // the rule moves with the cards (the user's request): as the middle card leaves, its text
+    // fades out and drifts the same way; the next one's comes in as that card arrives, and is
+    // fully there once it has settled
+    track.addEventListener('trumpmove', function (e) {
+      var d = e.detail.offset;
+      var rule = q('.predict-sheet__picker-rule');
+      rule.style.opacity = String(Math.max(0, 1 - Math.abs(d) * 2));
+      rule.style.transform = d ? 'translateX(' + (-d * 40) + 'px)' : '';
+    });
     pickerAt = start;
     drawRule();
     return track;

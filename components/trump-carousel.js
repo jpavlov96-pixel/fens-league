@@ -127,6 +127,9 @@
       shownCentre = active;
       track.dispatchEvent(new CustomEvent('trumpcentre', { detail: { index: active } }));
     }
+    // where it is between two cards (-0.5 … 0.5 from the middle card), on every frame, so
+    // things outside the track can move with it (the card picker's rule text)
+    track.dispatchEvent(new CustomEvent('trumpmove', { detail: { offset: pos - Math.round(pos) } }));
   }
 
   function clamp(i) { return loop ? i : Math.max(0, Math.min(count - 1, i)); }
