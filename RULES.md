@@ -2,6 +2,8 @@
 
 From the user, 2026-11-14. This is the source for the Правила page and for any copy that states a rule. Not served on the site (`.assetsignore`).
 
+**Superseded (2026-11-16)** by the official rules in `docs/fan-league-rules-bg.md` / `docs/fan-league-rules-en.md`. Where they differ, the official files win.
+
 ## Season
 - A season has 26 rounds, split into two half-seasons.
 - Each round you pick one match and make one prediction.
