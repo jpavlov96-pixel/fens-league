@@ -51,6 +51,8 @@
   }
 
   var count = cards.length;
+  // one card: big, centred, still (nothing to swipe to) and no page dots
+  if (count === 1 && pager) pager.classList.add('pagination--single');
   var loop = count >= 3;
   var pos = parseInt(track.getAttribute('data-start'), 10) || 0; // the card in the middle, fractional while moving
 
@@ -87,7 +89,17 @@
       var h = lerp(SMALL.h, BIG.h, t);
       card.style.width = w + 'px';
       card.style.height = h + 'px';
-      card.style.transform = 'translate(' + (centre + offset(d) - w / 2) + 'px, ' + (BIG.h - h) / 2 + 'px)';
+      // where the card's left edge goes: centred on its offset; with two cards, Figma's
+      // "Only 2 available cards" (427:13946): the pair lines up from the left edge, the active
+      // card big, the other small beside it (cut off at the card's edge), and from the right edge
+      // once the second is active
+      var x = centre + offset(d) - w / 2;
+      if (count === 2) {
+        var row = BIG.w + GAP + SMALL.w;
+        var shift = (track.clientWidth - row) * Math.max(0, Math.min(1, pos)); // 0 → left, 1 → right
+        x = shift + (i === 0 ? 0 : lerp(SMALL.w, BIG.w, Math.max(0, 1 - Math.abs(distance(0)))) + GAP);
+      }
+      card.style.transform = 'translate(' + x + 'px, ' + (BIG.h - h) / 2 + 'px)';
       card.style.filter = t < 1 ? 'blur(' + BLUR * (1 - t) + 'px)' : '';
       card.querySelector('.trump__name').style.fontSize = lerp(SMALL.name, BIG.name, t) + 'px';
       var size = lerp(SMALL.desc, BIG.desc, t);

@@ -5269,3 +5269,6 @@ html.predict-sheet-open body { overflow: hidden; }
 /* Прогнози's next-round slot: the empty state without "Прогнозирай" (the match list under it
    has its own); the title and note stay centred in the 140px card */
 [data-next-slot][data-no-predict] .event__primary-btn { display: none; }
+
+/* Козове with a single card: no page dots (components/trump-carousel.js) */
+.pagination--single { display: none; }
