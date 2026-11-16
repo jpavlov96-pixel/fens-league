@@ -5285,17 +5285,16 @@ html.predict-sheet-open body { overflow: hidden; }
 .trumps--picker .trump__info { font-size: 16.697px; color: #dbdbdb; }
 .trumps--picker .trump__info--small { font-size: 14.841px; }
 
-/* the middle card's rule: Montserrat 13, white, its key part gold semibold italic. Centred
-   in the space between the cards (bottom at y 331) and the buttons (top at y 435), the
-   user's request; placed from the top so it doesn't move while the sheet grows */
+/* the middle card's rule: Montserrat 13, white, its key part gold semibold italic. It starts
+   20px under the cards (bottom at y 331), nearer them than the buttons (the user's request;
+   20px is where Figma's three-line text starts); placed from the top so it doesn't move
+   while the sheet grows */
 .predict-sheet__picker-rule {
-  top: 331px;
+  top: 351px;
   left: 10px;
   display: flex;
-  align-items: center;
   justify-content: center;
   width: 355px;
-  height: 104px;
   font-family: "Montserrat", sans-serif;
   font-size: 13px;
   line-height: normal;
