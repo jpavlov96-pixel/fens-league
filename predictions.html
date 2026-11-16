@@ -85,8 +85,10 @@
 
         <!-- Следващ: the next round's saved prediction (components/next-prediction.js), the same
              as the lobby's panel: the empty state (No Match Selected) until one is saved, then the
-             match card, with the active-trump-label ("Премахни") over it when a power card is on -->
-        <div class="round-stack" data-round="0" data-next-slot></div>
+             match card, with the active-trump-label ("Премахни") over it when a power card is on.
+             The empty state has no "Прогнозирай" here (data-no-predict, the user's request): the
+             match list with its own buttons is right under it -->
+        <div class="round-stack" data-round="0" data-next-slot data-no-predict></div>
 
         <!-- Locked: "Инфо" on the label, Match Outcome locked -->
         <div class="round-stack" data-round="1" hidden>
@@ -596,15 +598,6 @@
         box.classList.toggle('prediction--locked', i === 1);
       });
 
-      // The empty state's "Прогнозирай" (no prediction saved yet): to the match list, on График
-      document.addEventListener('predict', function () {
-        var schedule = document.querySelector('.tab-primary__item[data-tab="schedule"]');
-        if (schedule && !schedule.classList.contains('is-active')) schedule.click();
-        var row = document.querySelector('.tab-primary-row');
-        var top = row.getBoundingClientRect().top + window.pageYOffset - 10;
-        var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        window.scrollTo({ top: top, behavior: still ? 'auto' : 'smooth' });
-      });
 
       // Opened from the lobby's empty state ("Прогнозирай"): the page scrolls to the tab row
       // (below). It always opens on Следващ, never Текущ (the user's request, 2026-11-14)
