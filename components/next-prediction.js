@@ -91,7 +91,9 @@
   function get() {
     try {
       var raw = localStorage.getItem(KEY);
-      return raw ? JSON.parse(raw) : null;
+      var p = raw ? JSON.parse(raw) : null;
+      // anything that isn't a whole prediction counts as none (the empty state)
+      return p && p.home && p.away && p.homeCrest && p.awayCrest && p.variant ? p : null;
     } catch (e) { return null; }
   }
 

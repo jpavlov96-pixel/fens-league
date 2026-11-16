@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Фенска Лига DEMO</title>
+  <title>Fens League Demo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Montserrat:ital,wght@0,700;0,800;0,900;1,800&display=swap" rel="stylesheet">
@@ -47,11 +47,30 @@
       </nav>
     </header>
 
-    <!-- Figma: "Фенска Лига DEMO" (329:12822) -->
-    <h1 class="demo-title">Фенска Лига<br>DEMO</h1>
+    <!-- Figma: "Фенска Лига DEMO" (329:12822); the text is "Fens League Demo" (the user's
+         request, 2026-11-16) -->
+    <h1 class="demo-title">Fens League<br>Demo</h1>
+    <!-- Restarts the demo (the user's request, 2026-11-16): the saved prediction for the round
+         you predict now (components/next-prediction.js) is cleared, so the lobby and Прогнози
+         are back to the empty state. The green button of the match cards' "Прогнозирай" -->
+    <button class="demo-restart" type="button" data-demo-restart>Рестартирай демото</button>
   </div>
 
   <script>
+    // "Рестартирай демото": no prediction for the round any more
+    (function () {
+      var btn = document.querySelector('[data-demo-restart]');
+      btn.addEventListener('click', function () {
+        try {
+          localStorage.removeItem('fens-next-prediction');
+          ['fens-predictions-scroll', 'fens-predictions-tab', 'fens-rules-section'].forEach(function (k) { sessionStorage.removeItem(k); });
+        } catch (e) { /* storage blocked: nothing was saved */ }
+        btn.textContent = 'Демото е рестартирано';
+        btn.disabled = true;
+        setTimeout(function () { btn.textContent = 'Рестартирай демото'; btn.disabled = false; }, 2000);
+      });
+    })();
+
     // The section you came for is the active link (Sport when none is given)
     (function () {
       var tab = new URLSearchParams(window.location.search).get('tab') || 'sport';

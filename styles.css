@@ -5232,3 +5232,31 @@ html.predict-sheet-open body { overflow: hidden; }
 .trumps--used .trump__desc { color: #929295; }
 .trumps--used .trump__link { color: #434343; }
 .trumps--used .trump__info { color: #929295; }
+
+/* "Рестартирай демото" on the landing page: the green button of the match cards'
+   "Прогнозирай" (event__primary-btn), under the title */
+.demo-restart {
+  position: absolute;
+  top: 375px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  height: 28px;
+  padding: 10px 16px;
+  border: 1px solid #ffffff26;
+  border-radius: 60px;
+  background: #19b14e;
+  filter: drop-shadow(0 0 3px #19b14ebf);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  color: #ffffff;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
+
+.demo-restart:disabled { cursor: default; }
