@@ -22,6 +22,11 @@
      is Figma's sample ("5 победи" each) for every match.
    - "Запази Прогноза" is dimmed while the prediction can't be saved, and closes the sheet.
 
+   The info icon by the points opens the points table (Group 61, 448:19962): Figma's four rows,
+   and a row for the picked card when it adds points (Figma shows "Чиста Мрежа" 2т; the others
+   follow the rules: Голмайстор ×2, Всичко или нищо 6т, Почивка 1т), highlighted. A tap
+   anywhere else closes it.
+
    Close: a tap on the dimmed page, dragging the sheet down, or Escape. */
 (function () {
   var lists = document.querySelectorAll('[data-predict-list]');
@@ -72,11 +77,17 @@
             '<p class="predict-sheet__label">Прогноза за максимум:</p>' +
           '</div>' +
           '<div class="predict-sheet__points">' +
-            '<img src="' + A + 'icon-info-gold.svg" alt="" width="17.0625" height="17.0625">' +
+            '<button class="predict-sheet__info" type="button" aria-label="Как се смятат точките" aria-expanded="false" data-info>' +
+              '<img src="' + A + 'icon-info-gold.svg" alt="" width="17.0625" height="17.0625"></button>' +
             '<p class="predict-sheet__points-value"><span class="predict-sheet__points-num">0</span><span class="predict-sheet__points-unit">т.</span></p>' +
           '</div>' +
         '</div>' +
         '<div class="predict-sheet__event"></div>' +
+        // Group 61 (448:19962): the points table under the info icon
+        '<div class="predict-sheet__tip" hidden>' +
+          '<img class="predict-sheet__tip-pointer" src="' + A + 'points-info-pointer.svg" alt="" width="20.5742" height="9.46677">' +
+          '<div class="predict-sheet__tip-box"></div>' +
+        '</div>' +
         '<div class="predict-sheet__trump"></div>' +
         // Frame 76: the last 10 meetings
         '<button class="predict-sheet__h2h" type="button" aria-expanded="false">' +
@@ -149,6 +160,41 @@
     return base;
   }
 
+  // The points table (Figma's four rows), plus a row for the picked card when it adds points
+  var CARD_ROW = { 'clean-sheet': '2', scorer: '×2', 'all-or-nothing': '6', rest: '1' };
+  function drawTip() {
+    var rows = [
+      ['Познат победител и точен резултат', '4'],
+      ['Познат победител', '3'],
+      ['Познат победител, грешен резултат', '2'],
+      ['Грешен победител', '0']
+    ];
+    var t = TRUMPS.filter(function (x) { return x.id === trump; })[0];
+    if (t && CARD_ROW[t.id]) rows.push(['Коз “' + t.name.replace(/ (\S)/g, function (m, c) { return ' ' + c.toUpperCase(); }) + '”', CARD_ROW[t.id], true]);
+    q('.predict-sheet__tip-box').innerHTML = rows.map(function (r, i) {
+      var num = r[1].charAt(0) === '×' ? r[1] : r[1] + '<small>т</small>';
+      return (i ? '<span class="predict-sheet__tip-divider"></span>' : '') +
+        '<p class="predict-sheet__tip-row' + (r[2] ? ' is-trump' : '') + '"><span>' + esc(r[0]) + '</span><b>' + num + '</b></p>';
+    }).join('');
+  }
+
+  function setTip(on) {
+    var tip = q('.predict-sheet__tip');
+    if (on) drawTip();
+    tip.hidden = !on;
+    if (on) {
+      // the pointer stays under the icon, which moves with the points' width (Figma: x 313)
+      var icon = q('[data-info]').getBoundingClientRect();
+      var ptr = q('.predict-sheet__tip-pointer');
+      ptr.style.left = (icon.left + icon.width / 2 - tip.getBoundingClientRect().left - ptr.offsetWidth / 2) + 'px';
+    }
+    q('[data-info]').setAttribute('aria-expanded', String(on));
+    if (on && tip.animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      tip.animate([{ opacity: 0, transform: 'translateY(-4px) scale(0.97)' }, { opacity: 1, transform: 'none' }],
+        { duration: 180, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)' });
+    }
+  }
+
   function setPoints(n) {
     var num = q('.predict-sheet__points-num');
     if (num.textContent === String(n)) return;
@@ -215,6 +261,7 @@
       }
     });
     var p = read();
+    if (!q('.predict-sheet__tip').hidden) drawTip();
     setPoints(points(p));
     q('[data-save]').disabled = !valid(p);
   }
@@ -242,6 +289,7 @@
       m.home.replace(/\n/g, ' ') + ': 5 победи · ' + m.away.replace(/\n/g, ' ') + ': 5 победи';
     setH2h(false);
     q('.predict-sheet__picker').hidden = true;
+    setTip(false);
     drawTrump();
     q('.predict-sheet__points-num').textContent = '0';
     update();
@@ -301,6 +349,11 @@
   });
 
   root.addEventListener('click', function (e) {
+    if (e.target.closest('[data-info]')) {
+      setTip(q('.predict-sheet__tip').hidden);
+      return;
+    }
+    if (!q('.predict-sheet__tip').hidden && !e.target.closest('.predict-sheet__tip')) setTip(false);
     if (e.target.closest('[data-close]')) { close(); return; }
     if (e.target.closest('.predict-sheet__h2h')) {
       setH2h(!q('.predict-sheet__h2h').classList.contains('is-open'));
