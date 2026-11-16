@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Card Effects · Fens League</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,800;1,800&display=swap" rel="stylesheet">
+  <!-- A proposal for the card picker (Избери Коз), 2026-11-16: three edge effects for the middle
+       card and the "Приложи Коз" slam. Not linked from the site; kept off it (.assetsignore). -->
+  <style>
+    * { box-sizing: border-box; margin: 0; }
+    html, body { background: #0c0c0c; }
+    body {
+      min-height: 100vh;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: #ffffff;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .page { max-width: 375px; margin: 0 auto; padding: 16px 16px 40px; }
+    h1 { font-family: "Montserrat", sans-serif; font-size: 20px; font-weight: 900; }
+    .lead { margin-top: 4px; font-size: 12px; color: #929295; }
+
+    /* the three options */
+    .tabs { display: flex; gap: 6px; margin-top: 16px; }
+    .tabs button {
+      flex: 1 0 0;
+      height: 34px;
+      border: 1px solid #ffffff1f;
+      border-radius: 60px;
+      background: #ffffff0a;
+      font: inherit;
+      font-size: 12px;
+      color: #c9c9c9;
+      cursor: pointer;
+    }
+    .tabs button.is-on { border-color: #f5d584; color: #f5d584; }
+    .note { min-height: 48px; margin-top: 10px; font-size: 12px; line-height: 16px; color: #b3b3b3; }
+
+    /* the stage: the sheet's dark gradient */
+    .stage {
+      position: relative;
+      height: 420px;
+      margin-top: 8px;
+      border-top: 3px solid #3e3e3e;
+      border-radius: 12px 12px 0 0;
+      background: radial-gradient(120% 90% at 50% 100%, #000000 0%, #0c0c0c 40%, #171717 80%);
+      overflow: hidden;
+    }
+
+    /* the card: 179 × 269, as the picker's middle card */
+    .card {
+      position: absolute;
+      top: 40px;
+      left: 50%;
+      width: 179px;
+      height: 269px;
+      margin-left: -89.5px;
+      transform-origin: 50% 60%;
+    }
+    .card__art { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 10px; }
+    .card__name {
+      position: absolute;
+      right: 0;
+      bottom: 36px;
+      left: 0;
+      font-family: "Montserrat", sans-serif;
+      font-size: 22.5px;
+      font-style: italic;
+      font-weight: 800;
+      line-height: 1.05;
+      text-align: center;
+      font-feature-settings: "locl" 0;
+    }
+    .card__fx { position: absolute; top: -14px; left: -14px; width: 207px; height: 297px; overflow: visible; pointer-events: none; }
+
+    /* A: high voltage, gold lightning crawling along the edge (SVG turbulence, reseeded) */
+    .fx-volt .glow { filter: url(#volt-glow); }
+
+    /* B: a comet of light running around the edge, with a softer one behind */
+    .fx-comet path { stroke-dasharray: 90 910; animation: comet 2.6s linear infinite; }
+    .fx-comet path.trail { stroke-dasharray: 220 780; animation: comet 2.6s linear infinite; opacity: 0.35; }
+    .fx-comet path.second { animation-delay: -1.3s; }
+    @keyframes comet { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -1000; } }
+
+    /* C: the gold edge breathes, brighter every few seconds */
+    .fx-pulse path { animation: pulse 2.2s ease-in-out infinite; }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.25; stroke-width: 2; }
+      50% { opacity: 1; stroke-width: 3; }
+    }
+
+    /* the buttons, as in the picker */
+    .btns { position: absolute; right: 7px; bottom: 16px; left: 7px; display: flex; justify-content: space-between; }
+    .back, .apply {
+      height: 42px;
+      padding: 8px 32px;
+      border-radius: 60px;
+      font: inherit;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .back { width: 130px; border: 1px solid #ffffff0d; background: none; color: #c9c9c9; }
+    .apply {
+      width: 167px;
+      border: 1px solid #ffffff26;
+      background: #19b14e;
+      box-shadow: 0 0 6px #19b14ebf;
+      font-weight: 500;
+      color: #ffffff;
+      text-shadow: 0 0 3px #00000059;
+    }
+
+    /* the slam's pieces */
+    .flash { position: absolute; inset: 0; background: #fff3cf; opacity: 0; pointer-events: none; }
+    .ring {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      margin: -30px 0 0 -30px;
+      border: 3px solid #f5d584;
+      border-radius: 50%;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .spark {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      margin: -2px 0 0 -2px;
+      border-radius: 50%;
+      background: #ffe6a3;
+      box-shadow: 0 0 6px #f5d584;
+      pointer-events: none;
+    }
+    .options { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: #b3b3b3; }
+    .options label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Ефекти за коза</h1>
+    <p class="lead">Предложение за „Избери Коз“: ефект по ръба на средната карта и удар при „Приложи Коз“.</p>
+
+    <div class="tabs" role="tablist">
+      <button type="button" class="is-on" data-fx="volt">A · Ток</button>
+      <button type="button" data-fx="comet">B · Комета</button>
+      <button type="button" data-fx="pulse">C · Пулс</button>
+    </div>
+    <p class="note" id="note"></p>
+
+    <div class="stage" id="stage">
+      <div class="card" id="card">
+        <img class="card__art" src="../assets/trump-cards/rest.webp" alt="">
+        <p class="card__name">ПОЧИВКА</p>
+        <svg class="card__fx" id="fx" viewBox="-14 -14 207 297" aria-hidden="true">
+          <defs>
+            <!-- A: the line is pushed about by noise; the seed changes ~16 times a second -->
+            <filter id="volt" x="-20%" y="-20%" width="140%" height="140%">
+              <feTurbulence id="volt-noise" type="turbulence" baseFrequency="0.045" numOctaves="2" seed="1" result="n"/>
+              <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+            <filter id="volt-glow" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="4"/>
+            </filter>
+            <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="3" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <g id="fx-body"></g>
+        </svg>
+      </div>
+      <div class="btns">
+        <button class="back" type="button">← Назад</button>
+        <button class="apply" type="button" id="apply">Приложи Коз</button>
+      </div>
+      <div class="flash" id="flash"></div>
+    </div>
+
+    <div class="options">
+      <label><input type="checkbox" id="opt-sound" checked> Звук (тъп удар)</label>
+      <label><input type="checkbox" id="opt-buzz" checked> Вибрация (Android)</label>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      // the card's frame: a rectangle with cut corners, like the card art's own frame
+      function edge() {
+        var w = 179, h = 269, c = 12;
+        return 'M' + c + ',0 H' + (w - c) + ' L' + w + ',' + c + ' V' + (h - c) + ' L' + (w - c) + ',' + h +
+          ' H' + c + ' L0,' + (h - c) + ' V' + c + ' Z';
+      }
+      var D = edge();
+      var body = document.getElementById('fx-body');
+      var note = document.getElementById('note');
+      var voltTimer = null;
+
+      var FX = {
+        volt: {
+          note: 'Златен ток пълзи по ръба и пращи на случайни места. Най-силно внушение за „заредена“ карта.',
+          svg: '<path class="glow" d="' + D + '" fill="none" stroke="#f5d584" stroke-width="6" opacity="0.55"/>' +
+               '<path d="' + D + '" fill="none" stroke="#f5d584" stroke-width="2.2" filter="url(#volt)"/>' +
+               '<path d="' + D + '" fill="none" stroke="#fff6dc" stroke-width="1" filter="url(#volt)" opacity="0.9"/>'
+        },
+        comet: {
+          note: 'Две светли „комети“ обикалят ръба на картата. По-спокойно, премиум усещане.',
+          svg: '<path class="trail" d="' + D + '" pathLength="1000" fill="none" stroke="#f5d584" stroke-width="3" filter="url(#soft)"/>' +
+               '<path d="' + D + '" pathLength="1000" fill="none" stroke="#fff6dc" stroke-width="2.5" stroke-linecap="round" filter="url(#soft)"/>' +
+               '<path class="trail second" d="' + D + '" pathLength="1000" fill="none" stroke="#f5d584" stroke-width="3" filter="url(#soft)"/>' +
+               '<path class="second" d="' + D + '" pathLength="1000" fill="none" stroke="#fff6dc" stroke-width="2.5" stroke-linecap="round" filter="url(#soft)"/>'
+        },
+        pulse: {
+          note: 'Златният ръб диша бавно. Най-дискретният вариант.',
+          svg: '<path d="' + D + '" fill="none" stroke="#f5d584" filter="url(#soft)"/>'
+        }
+      };
+
+      function show(name) {
+        document.getElementById('fx').setAttribute('class', 'card__fx fx-' + name);
+        body.innerHTML = FX[name].svg;
+        note.textContent = FX[name].note;
+        clearInterval(voltTimer);
+        if (name === 'volt') {
+          var noise = document.getElementById('volt-noise');
+          voltTimer = setInterval(function () {
+            noise.setAttribute('seed', String(Math.floor(Math.random() * 1000)));
+            // now and then a stronger crackle
+            noise.parentNode.lastElementChild.setAttribute('scale', Math.random() < 0.12 ? '14' : '7');
+          }, 60);
+        }
+        document.querySelectorAll('.tabs button').forEach(function (b) {
+          b.classList.toggle('is-on', b.getAttribute('data-fx') === name);
+        });
+      }
+      document.querySelectorAll('.tabs button').forEach(function (b) {
+        b.addEventListener('click', function () { show(b.getAttribute('data-fx')); });
+      });
+      show('volt');
+
+      // ---------- the slam: lift, hit the table, shock ----------
+      var stage = document.getElementById('stage');
+      var card = document.getElementById('card');
+      var busy = false;
+
+      // a low, short thud (Web Audio, made on the spot: no sound file)
+      function thud() {
+        var Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return;
+        var ctx = thud.ctx || (thud.ctx = new Ctx());
+        var t = ctx.currentTime;
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(140, t);
+        osc.frequency.exponentialRampToValueAtTime(38, t + 0.25);
+        gain.gain.setValueAtTime(0.9, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.4);
+        // the slap on the felt: a burst of noise
+        var len = Math.floor(ctx.sampleRate * 0.06);
+        var buf = ctx.createBuffer(1, len, ctx.sampleRate);
+        var data = buf.getChannelData(0);
+        for (var i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
+        var src = ctx.createBufferSource();
+        var g2 = ctx.createGain();
+        g2.gain.value = 0.5;
+        src.buffer = buf;
+        src.connect(g2).connect(ctx.destination);
+        src.start(t);
+      }
+
+      function burst(x, y) {
+        for (var i = 0; i < 18; i++) {
+          var s = document.createElement('span');
+          s.className = 'spark';
+          s.style.left = x + 'px';
+          s.style.top = y + 'px';
+          stage.appendChild(s);
+          var a = Math.random() * Math.PI * 2;
+          var d = 70 + Math.random() * 90;
+          s.animate([
+            { transform: 'translate(0,0) scale(1)', opacity: 1 },
+            { transform: 'translate(' + Math.cos(a) * d + 'px,' + Math.sin(a) * d + 'px) scale(0.2)', opacity: 0 }
+          ], { duration: 500 + Math.random() * 300, easing: 'cubic-bezier(0.1, 0.7, 0.3, 1)' }).onfinish = s.remove.bind(s);
+        }
+      }
+
+      document.getElementById('apply').addEventListener('click', function () {
+        if (busy) return;
+        busy = true;
+        if (document.getElementById('opt-sound').checked) setTimeout(thud, 260);
+        // 1. the lift: the card rises toward you and leans back (anticipation)
+        var lift = card.animate([
+          { transform: 'none', filter: 'brightness(1)' },
+          { transform: 'translateY(-26px) scale(1.12) rotateX(14deg)', filter: 'brightness(1.25)', offset: 0.85 },
+          { transform: 'translateY(-26px) scale(1.12) rotateX(14deg)', filter: 'brightness(1.25)' }
+        ], { duration: 260, easing: 'cubic-bezier(0.3, 0, 0.2, 1)', fill: 'forwards' });
+        lift.onfinish = function () {
+          // 2. the hit: down hard, a little squash
+          card.animate([
+            { transform: 'translateY(-26px) scale(1.12) rotateX(14deg)' },
+            { transform: 'translateY(6px) scale(0.94, 0.9)', offset: 0.55 },
+            { transform: 'translateY(0) scale(1.02, 0.99)', offset: 0.8 },
+            { transform: 'none' }
+          ], { duration: 260, easing: 'cubic-bezier(0.6, 0, 0.9, 0.4)' }).onfinish = function () { busy = false; };
+          lift.cancel();
+          setTimeout(function () {
+            // 3. the shock: the sheet shakes, a flash, a gold ring and sparks from under the card
+            stage.animate([
+              { transform: 'translate(0,0)' }, { transform: 'translate(-6px,4px)' }, { transform: 'translate(5px,-3px)' },
+              { transform: 'translate(-3px,2px)' }, { transform: 'translate(2px,-1px)' }, { transform: 'translate(0,0)' }
+            ], { duration: 320, easing: 'ease-out' });
+            document.getElementById('flash').animate([{ opacity: 0.35 }, { opacity: 0 }], { duration: 260, easing: 'ease-out' });
+            var r = card.getBoundingClientRect(), sr = stage.getBoundingClientRect();
+            var x = r.left - sr.left + r.width / 2, y = r.top - sr.top + r.height * 0.85;
+            var ring = document.createElement('span');
+            ring.className = 'ring';
+            ring.style.left = x + 'px';
+            ring.style.top = y + 'px';
+            stage.appendChild(ring);
+            ring.animate([
+              { transform: 'scale(0.4) scaleY(0.35)', opacity: 1, borderWidth: '4px' },
+              { transform: 'scale(5.5) scaleY(0.35)', opacity: 0, borderWidth: '1px' }
+            ], { duration: 600, easing: 'cubic-bezier(0.1, 0.7, 0.3, 1)' }).onfinish = ring.remove.bind(ring);
+            burst(x, y);
+            if (document.getElementById('opt-buzz').checked && navigator.vibrate) navigator.vibrate([25, 30, 60]);
+          }, 140);
+        };
+      });
+    })();
+  </script>
+</body>
+</html>
