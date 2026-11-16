@@ -5026,9 +5026,14 @@ html.predict-sheet-open body { overflow: hidden; }
   transition: opacity 0.2s;
 }
 
-/* not in Figma: dimmed while the prediction can't be saved */
-.predict-sheet__save:disabled {
-  opacity: 0.4;
+/* while the prediction can't be saved: Figma's disabled Frame 132 (449:21333), a dark
+   gradient #303030 → #191919, border white 5%, no glow, the text #c9c9c9 */
+.predict-sheet__save:disabled,
+.predict-sheet__picker-apply:disabled {
+  border-color: #ffffff0d;
+  background: linear-gradient(to bottom, #303030, #191919);
+  box-shadow: none;
+  color: #c9c9c9;
   cursor: default;
 }
 
@@ -5353,4 +5358,10 @@ html.predict-sheet-open body { overflow: hidden; }
   transition: opacity 0.2s;
 }
 
-.predict-sheet__picker-apply:disabled { opacity: 0.4; cursor: default; }
+
+/* Прогнози's Почивка feature-panel: hidden while Почивка is on for the round
+   (components/next-prediction.js) */
+.feature-panel.is-rest-on { display: none; }
+
+/* the slot's Почивка panel opens the sheet */
+[data-rest-open] { cursor: pointer; }

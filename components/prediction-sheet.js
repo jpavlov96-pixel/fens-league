@@ -428,6 +428,14 @@
 
   // a saved prediction's sheet, straight on "Избери Коз" (components/next-prediction.js: the
   // card icons in its corner)
+  window.openPredictionSheet = function (saved, round) {
+    open({
+      round: round, date: saved.date, home: saved.home, away: saved.away,
+      homeCrest: saved.homeCrest, awayCrest: saved.awayCrest,
+      homeUsed: saved.homeUsed || '', awayUsed: saved.awayUsed || ''
+    }, saved, false);
+  };
+
   window.openPredictionPicker = function (saved, round) {
     open({
       round: round, date: saved.date, home: saved.home, away: saved.away,

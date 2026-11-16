@@ -2,6 +2,8 @@
 // (276:9189, file "Last Fan"), as a reusable custom element. Styles: event-container.css.
 //
 // Five variants, as in Figma:
+//   variant="rest"                           "Днес гледаш от трибуните.": "Почивка" is on for the
+//                                            round (Variant=Power Card Rest, 458:22492)
 //   variant="no-match"                       "Топката е в твоето поле." with a green "Прогнозирай"
 //                                            (Variant=No Match Selected, State=Empty, 352:10051);
 //                                            optional note="…" replaces "Избери един мач от Кръг 7."
@@ -111,6 +113,24 @@
     }
 
     _render() {
+      // Variant=Power Card Rest, State=Empty (458:22492): "Почивка" is on for the round
+      if (this._get('variant', 'match-outcome') === 'rest') {
+        var C = 'assets/trump-cards/';
+        this.innerHTML =
+          '<div class="event event--empty event--rest">' +
+            '<img class="event__empty-bgr" src="' + ASSETS + 'event-empty-bgr.png" alt="">' +
+            '<span class="event__rest-cards" aria-hidden="true">' +
+              '<span class="event__rest-back"><img src="' + C + 'b-small.webp" alt=""></span>' +
+              '<span class="event__rest-front"><img src="' + C + 'rest-small.webp" alt="">' +
+                '<span class="event__rest-name">ПОЧИВКА</span></span>' +
+            '</span>' +
+            '<div class="event__rest-text">' +
+              '<p class="event__rest-title">Днес гледаш от трибуните.</p>' +
+              '<p class="event__rest-note">Пропускаш кръга, <b>вземаш +1т</b>.<br>и пазиш серията си. Нито един<br>отбор не се изразходва.</p>' +
+            '</div>' +
+          '</div>';
+        return;
+      }
       // Variant=No Match Selected, State=Empty (352:10051): no match picked for the round yet
       if (this._get('variant', 'match-outcome') === 'no-match') {
         this.innerHTML =

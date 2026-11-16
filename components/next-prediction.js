@@ -219,6 +219,12 @@
       slot.innerHTML = '<event-container variant="no-match"' + (note ? ' note="' + esc(note) + '"' : '') + '></event-container>';
       return;
     }
+    // Почивка on: the round is skipped, the slot shows "Днес гледаш от трибуните." (Figma's
+    // Power Card Rest, 458:22492) instead of the match card; a tap opens the sheet to change it
+    if (p.trump === 'rest') {
+      slot.innerHTML = '<event-container variant="rest" data-rest-open></event-container>';
+      return;
+    }
     var t = trumpOf(p.trump);
     slot.innerHTML = (t ? labelHtml(t) : '') + '<event-container></event-container>';
     cardAttrs(slot.querySelector('event-container'), p);
@@ -239,6 +245,11 @@
       save(settle(p), slot);
     });
     slot.addEventListener('click', function (e) {
+      // Почивка's panel: the sheet for this prediction, to change or take off the card
+      if (e.target.closest('[data-rest-open]') && memory && window.openPredictionSheet) {
+        window.openPredictionSheet(memory, slot.getAttribute('data-next-round') || 'Кръг 7');
+        return;
+      }
       // the card icons in the corner (no card on yet): the sheet on "Избери Коз"
       // (components/prediction-sheet.js), for this prediction
       if (e.target.closest('.event__trump') && memory && window.openPredictionPicker) {
@@ -253,7 +264,8 @@
   // follow a change: a full redraw when it came from elsewhere; in the slot that made the edit
   // only the trump label and the card's flags change, so its card keeps its animations
   function follow(slot, p, from) {
-    if (from !== slot) { draw(slot); return; }
+    var isRest = !!slot.querySelector('event-container[variant="rest"]');
+    if (from !== slot || isRest !== !!(p && p.trump === 'rest')) { draw(slot); restPanel(p); return; }
     var label = slot.querySelector('.trump-label');
     var t = p && trumpOf(p.trump);
     if (label && !t) label.remove();
@@ -264,10 +276,20 @@
     }
   }
 
+  // Прогнози's График ends with the Почивка feature-panel; with Почивка already on for the
+  // round it's hidden (the user's request, 2026-11-16)
+  function restPanel(p) {
+    document.querySelectorAll('[data-rest-panel]').forEach(function (el) {
+      el.classList.toggle('is-rest-on', !!(p && p.trump === 'rest'));
+    });
+  }
+
   function start() {
+    restPanel(memory);
     var slots = Array.prototype.slice.call(document.querySelectorAll('[data-next-slot]'));
     slots.forEach(wire);
     window.fensPrediction.onChange(function (p, from) {
+      restPanel(p);
       slots.forEach(function (slot) { follow(slot, p, from); });
     });
     // another tab saved: follow it
@@ -275,6 +297,7 @@
       if (e.key !== KEY) return;
       memory = get();
       slots.forEach(draw);
+      restPanel(memory);
     });
   }
 
