@@ -233,10 +233,12 @@
       var usedWinner = open && !level && winner && this._get(winner + '-used', '') && !this.hasAttribute('allow-used');
       var message = level ? 'Невалиден залог. Използвайте коз за <b>“Равенство”.</b>'
         : usedWinner ? 'Отборът е използван. Използвайте коз <b>“Повторен избор”.</b>' : '';
+      var kind = level ? 'draw' : usedWinner ? 'used' : '';
       if (this._warningShown && message && message !== this._warningText) {
         // a different reason: swap the text in place
         var shown = this.querySelector('.event__time--warning .event__time-text');
         if (shown) shown.innerHTML = message;
+        this._announce(kind);
       }
       this._warningText = message;
       var time = this.querySelector('.event__time:not(.event__time--warning)');
@@ -262,6 +264,7 @@
       if (!message) {
         if (!this._warningShown) return;
         this._warningShown = false;
+        this._announce('');
         if (!current) return;
         if (!motion) return current.remove();
         // rolls back up into the card's top edge while fading (clipped, it never moves, so
@@ -285,6 +288,7 @@
         if (!time.isConnected) return;
         var warning = addWarning();
         self._warningShown = true;
+        self._announce(kind);
         if (motion) {
           // unrolls down from the card's top edge over the date (clipped, so it stays inside
           // the card), soft and unhurried: the fade runs a little behind the unroll
@@ -295,6 +299,14 @@
           ], { duration: 480, easing: 'cubic-bezier(0.33, 0, 0.2, 1)' });
         }
       }, level ? 1350 : 0); // a used team shows at once; a level score waits (it may be passing through)
+    }
+
+    // Tells the page when the gold warning shows ("warning" event, detail.kind: 'draw' for a level
+    // score, 'used' for a used team) and goes ('')
+    _announce(kind) {
+      if (kind === this._announced) return;
+      this._announced = kind;
+      this.dispatchEvent(new CustomEvent('warning', { bubbles: true, detail: { kind: kind } }));
     }
 
     // Switching Match Outcome ↔ Correct Score: the middle ("vs" / score), the buttons row

@@ -5272,3 +5272,26 @@ html.predict-sheet-open body { overflow: hidden; }
 
 /* Козове with a single card: no page dots (components/trump-carousel.js) */
 .pagination--single { display: none; }
+
+/* The Равенство offer (449:21195): the "6 НАЛИЧНИ КОЗА" panel's look, with the card's name
+   printed small on its front (Figma: Montserrat ExtraBold Italic 4px, turned -3.24°, in a
+   25 × 19.3 box at x 17, bottom at y 55.33) */
+.predict-sheet__trump-mark {
+  position: absolute;
+  top: 36px;
+  left: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24.979px;
+  height: 19.327px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 4px;
+  font-style: italic;
+  font-weight: 800;
+  line-height: 18px;
+  color: #ffffff;
+  white-space: nowrap;
+  transform: rotate(-3.24deg);
+  font-feature-settings: "locl" 0;
+}

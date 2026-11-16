@@ -177,10 +177,26 @@
     }
   }
 
-  // Figma's two power card panels
+  // Figma's power card panels. While the card's "Невалиден залог" warning is up for a level
+  // score and no card is on, the panel offers Равенство (449:21195: the card, "Отключи прогноза
+  // за равенство.", "Използвай")
+  var suggest = '';
   function drawTrump() {
     var box = q('.predict-sheet__trump');
     var t = TRUMPS.filter(function (x) { return x.id === trump; })[0];
+    if (!t && suggest === 'draw' && P.USED.indexOf('even') < 0) {
+      box.className = 'predict-sheet__trump predict-sheet__trump--suggest';
+      box.innerHTML =
+        '<span class="predict-sheet__trump-cards" aria-hidden="true">' +
+          '<span class="predict-sheet__trump-back"><img src="' + CARDS + 'b-small.webp" alt=""></span>' +
+          '<span class="predict-sheet__trump-front"><img src="' + CARDS + 'even-small.webp" alt=""></span>' +
+          '<span class="predict-sheet__trump-mark">Равенство</span>' +
+        '</span>' +
+        '<p class="predict-sheet__trump-title">Равенство</p>' +
+        '<p class="predict-sheet__trump-text">Отключи прогноза за равенство.</p>' +
+        '<button class="predict-sheet__trump-btn" type="button" data-trump="even">Използвай</button>';
+      return;
+    }
     if (!t) {
       box.className = 'predict-sheet__trump';
       box.innerHTML =
@@ -241,6 +257,7 @@
   function open(m) {
     match = m;
     trump = '';
+    suggest = '';
     q('.predict-sheet__round').textContent = m.round;
     var box = q('.predict-sheet__event');
     box.innerHTML = '';
@@ -257,6 +274,10 @@
     if (m.awayUsed) event.setAttribute('away-used', m.awayUsed);
     box.appendChild(event);
     event.addEventListener('change', update);
+    event.addEventListener('warning', function (e) {
+      suggest = e.detail.kind;
+      if (!trump) drawTrump();
+    });
     q('.predict-sheet__h2h-text').textContent =
       m.home.replace(/\n/g, ' ') + ': 5 победи · ' + m.away.replace(/\n/g, ' ') + ': 5 победи';
     setH2h(false);
