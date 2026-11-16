@@ -237,10 +237,13 @@
   // Everything that follows the prediction: the card's allow-* flags, the card that stopped
   // applying, the points and the save button
   function update() {
-    if (trump && trump !== 'rest' && blocked(trump, read())) {
-      trump = '';
+    // the pick and the card kept in step (P.settle: Равенство in Изход от мача is the draw pick)
+    var s0 = P.settle(current());
+    if (s0.trump !== trump) {
+      trump = s0.trump;
       drawTrump();
     }
+    if ((event.getAttribute('pick') || '') !== s0.pick) event.setAttribute('pick', s0.pick);
     var want = { 'allow-used': trump === 'repeat', 'allow-draw': trump === 'even' };
     Object.keys(want).forEach(function (k) {
       if (want[k] !== event.hasAttribute(k)) {
@@ -363,6 +366,8 @@
     var pick = e.target.closest('[data-trump]');
     if (pick && !pick.disabled) {
       trump = pick.getAttribute('data-trump');
+      // Равенство in Изход от мача: the prediction becomes the draw ("Равен", both teams)
+      if (trump === 'even' && event.getAttribute('variant') !== 'correct-score') event.setAttribute('pick', 'draw');
       q('.predict-sheet__picker').hidden = true;
       drawTrump();
       update();

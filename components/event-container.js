@@ -18,7 +18,9 @@
 //                (&#10;) in the name is kept
 //   home-crest, away-crest   crest image URLs                 (default the two Figma crests)
 //   home-score, away-score   Correct Score numbers            (default 3 and 0)
-//   pick         "home" | "away" | "" (no pick)               (default "home")
+//   pick         "home" | "away" | "draw" | "" (no pick)     (default "home"); "draw" (the
+//                "Равенство" card in Match Outcome): "Равен" in the middle, both teams picked
+//                (green; Locked: both outlined)
 //   trump-card   present = the trump cards show in the top right corner
 //   form         present = the 150px card of the prediction sheet ("2.21 - Prediction / Open",
 //                330:17210): each team's last five results as dots under its crest
@@ -132,7 +134,7 @@
       }
 
       function teamBtn(side, name) {
-        var picked = pick === side;
+        var picked = pick === side || pick === 'draw';
         return '<button class="event__team-btn' + (picked ? ' is-selected' : '') + '" type="button" data-pick="' + side + '"' +
           ' aria-pressed="' + picked + '"' + dis + '>' + esc(name) + '</button>';
       }
@@ -155,7 +157,7 @@
             '<span class="event__score-num">' + this._score('home-score', 3) + '</span>' +
             '<span class="event__score-colon">:</span>' +
             '<span class="event__score-num">' + this._score('away-score', 0) + '</span></div>'
-        : '<span class="event__vs">vs</span>';
+        : '<span class="event__vs' + (pick === 'draw' ? ' event__vs--draw' : '') + '">' + (pick === 'draw' ? 'Равен' : 'vs') + '</span>';
 
       // Buttons row: the arrows only in Correct Score, Default; the team buttons otherwise
       var buttons = correctScore && !locked

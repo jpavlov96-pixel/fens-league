@@ -73,7 +73,8 @@
     var hasWinner = r.winner === 'home' || r.winner === 'away';
     switch (id) {
       case 'rest': return '';
-      case 'even': return r.exact && r.winner === 'draw' ? '' : 'Само за равен точен резултат.';
+      // Изход от мача: it makes the prediction a draw ("Равен"); Точен резултат: a level score
+      case 'even': return !r.exact || r.winner === 'draw' ? '' : 'Само за равен резултат.';
       case 'repeat': return r.used ? '' : 'Само за вече използван отбор.';
       case 'all-or-nothing':
         if (!r.exact) return 'Само за точен резултат.';
@@ -83,6 +84,20 @@
         if (!hasWinner) return 'Само за прогноза с победител.';
         return r.used ? 'Отборът е използван.' : '';
     }
+  }
+
+  // Keeps the pick and the card in step after a change (the user's request, 2026-11-16: a draw
+  // in Изход от мача is the Равенство card):
+  // - Изход от мача with Равенство is the draw pick; picking a team instead takes the card off
+  // - a draw pick without Равенство is no pick
+  // - any other card that stopped applying is taken off (Почивка always applies)
+  function settle(p) {
+    p = Object.assign({}, p);
+    var outcome = p.variant !== 'correct-score';
+    if (outcome && p.trump === 'even' && (p.pick === 'home' || p.pick === 'away')) p.trump = '';
+    if (outcome && p.trump !== 'even' && p.pick === 'draw') p.pick = '';
+    if (p.trump && p.trump !== 'rest' && blocked(p.trump, p)) p.trump = '';
+    return p;
   }
 
   function valid(p) {
@@ -124,7 +139,7 @@
   window.fensPrediction = {
     TRUMPS: TRUMPS, USED: USED, trumpOf: trumpOf, titleCase: titleCase,
     get: function () { return memory; }, save: save, clear: clear,
-    blocked: blocked, valid: valid, read: read,
+    blocked: blocked, valid: valid, read: read, settle: settle,
     onChange: function (fn) { listeners.push(fn); }
   };
 
@@ -190,13 +205,11 @@
         homeScore: +card.getAttribute('home-score') || 0,
         awayScore: +card.getAttribute('away-score') || 0
       });
-      // a card that no longer applies is taken off (Почивка always applies)
-      if (p.trump && p.trump !== 'rest' && blocked(p.trump, p)) p.trump = '';
-      save(p, slot);
+      save(settle(p), slot);
     });
     slot.addEventListener('click', function (e) {
       if (!e.target.closest('[data-trump-off]') || !memory) return;
-      save(Object.assign({}, memory, { trump: '' }), null); // redraws the slot: label off, corner cards on
+      save(settle(Object.assign({}, memory, { trump: '' })), null); // redraws the slot: label off, corner cards on
     });
   }
 
