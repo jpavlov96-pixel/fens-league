@@ -346,13 +346,13 @@
               <button class="filter__item" type="button" role="tab" aria-selected="false">Използвани</button>
             </div>
           </div>
-          <p class="card-head__count">6</p>
+          <p class="card-head__count"><span class="count" data-counts="6 3">6</span></p>
         </div>
         <div class="card-body">
           <!-- cards-slider: the full collection (Figma 231:11202, artworks 317:11985), a swipeable
                carousel (components/trump-carousel.js). The middle card is 193 × 290, the others
                175 × 263; it opens on Голмайстор, the 3rd of the 6 dots, as in the lobby design -->
-          <div class="trumps" tabindex="0" aria-label="Козове" data-start="2">
+          <div class="trumps" tabindex="0" aria-label="Козове" data-start="2" data-trump-list="0">
             <div class="trump">
               <img class="trump__bgr" src="assets/trump-cards/even.webp" alt="" loading="lazy" draggable="false">
               <div class="trump__info">X</div>
@@ -420,8 +420,50 @@
               </div>
             </div>
           </div>
-          <div class="pagination" aria-hidden="true">
+          <div class="pagination" aria-hidden="true" data-trump-list="0">
             <span></span><span></span><span class="is-active"></span><span></span><span></span><span></span>
+          </div>
+          <!-- Използвани (Figma 444:15907): the used cards, greyed out (the official art in
+               greyscale, as Figma's), grey texts and links; Figma's three, opening on Голмайстор.
+               Figma's side cards carry placeholder texts ("+1", Голмайстор's line): the cards'
+               own texts are used -->
+          <div class="trumps trumps--used" tabindex="0" aria-label="Използвани козове" data-start="1" data-trump-list="1" hidden>
+            <div class="trump">
+              <img class="trump__bgr" src="assets/trump-cards/all-or-nothing.webp" alt="" loading="lazy" draggable="false">
+              <div class="trump__info trump__info--small">6/0</div>
+              <div class="trump__content">
+                <div class="trump__text">
+                  <p class="trump__name">ВСИЧКО<br>ИЛИ НИЩО</p>
+                  <p class="trump__desc">Точен резултат: печелиш<br>шест точки или нула.</p>
+                </div>
+                <a class="trump__link" href="#trump-all-or-nothing" draggable="false">Детайли <img src="assets/lobby-main/icon-arrow-grey.svg" alt="" width="10" height="10"></a>
+              </div>
+            </div>
+            <div class="trump">
+              <img class="trump__bgr" src="assets/trump-cards/scorer.webp" alt="" loading="lazy" draggable="false">
+              <div class="trump__info">x2</div>
+              <div class="trump__content">
+                <div class="trump__text">
+                  <p class="trump__name">ГОЛМАЙСТОР</p>
+                  <p class="trump__desc">Ако избран играч<br>отбележи - двойни точки.</p>
+                </div>
+                <a class="trump__link" href="#trump-scorer" draggable="false">Детайли <img src="assets/lobby-main/icon-arrow-grey.svg" alt="" width="10" height="10"></a>
+              </div>
+            </div>
+            <div class="trump">
+              <img class="trump__bgr" src="assets/trump-cards/repeat.webp" alt="" loading="lazy" draggable="false">
+              <div class="trump__info"><img src="assets/lobby-main/icon-card-swap-grey.svg" alt="" width="14" height="14"></div>
+              <div class="trump__content">
+                <div class="trump__text">
+                  <p class="trump__name">ПОВТОРЕН<br>ИЗБОР</p>
+                  <p class="trump__desc">Избери вече използван<br>отбор отново.</p>
+                </div>
+                <a class="trump__link" href="#trump-repeat" draggable="false">Детайли <img src="assets/lobby-main/icon-arrow-grey.svg" alt="" width="10" height="10"></a>
+              </div>
+            </div>
+          </div>
+          <div class="pagination" aria-hidden="true" data-trump-list="1" hidden>
+            <span></span><span class="is-active"></span><span></span>
           </div>
           <div class="info-label">
             <img src="assets/lobby-main/icon-refresh-gold.svg" alt="" width="16" height="16">
@@ -711,6 +753,42 @@
             ], { duration: 280, delay: n * 30, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'backwards' });
           });
         };
+      });
+    });
+
+    // Козове: Налични / Използвани show their own carousel (data-trump-list = the filter's
+    // index) and the count goes 6 ↔ 3; the shown cards fade, the other set comes in
+    var trumpFilters = document.querySelectorAll('.trumps-card .filter__item');
+    var shownTrumps = 0;
+    trumpFilters.forEach(function (filter, i) {
+      filter.addEventListener('click', function () {
+        if (i === shownTrumps) return;
+        shownTrumps = i;
+        document.querySelectorAll('.trumps-card .count').forEach(function (el) {
+          countTo(el, parseInt(el.dataset.counts.split(' ')[i], 10));
+        });
+        var current = document.querySelectorAll('.trumps-card [data-trump-list]:not([hidden])');
+        var next = document.querySelectorAll('.trumps-card [data-trump-list="' + i + '"]');
+        function swap() {
+          current.forEach(function (el) { el.hidden = true; });
+          next.forEach(function (el) { el.hidden = false; });
+        }
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !Element.prototype.animate) { swap(); return; }
+        var outs = Array.prototype.map.call(current, function (el) {
+          return el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, easing: 'cubic-bezier(0.4, 0, 1, 1)', fill: 'forwards' });
+        });
+        var done = false;
+        outs[0].onfinish = function () {
+          if (done) return;
+          done = true;
+          outs.forEach(function (a) { a.cancel(); });
+          swap();
+          next.forEach(function (el) {
+            el.animate([{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }],
+              { duration: 280, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)' });
+          });
+        };
+        setTimeout(function () { if (outs[0].onfinish) outs[0].onfinish(); }, 250); // even if the animation is paused
       });
     });
 

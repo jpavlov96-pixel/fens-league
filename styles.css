@@ -5220,3 +5220,15 @@ html.predict-sheet-open body { overflow: hidden; }
   background: #ffffff;
   opacity: 0.05;
 }
+
+/* ---------- Козове, Използвани (Figma 444:15907): the used cards. The art is the official
+   card in greyscale (Figma's used images are the same art in grey); the name and "Детайли"
+   #434343, the description and the top-right info #929295 ---------- */
+.trumps[hidden],
+.pagination[hidden] { display: none; }
+
+.trumps--used .trump__bgr { filter: grayscale(1); }
+.trumps--used .trump__name { color: #434343; }
+.trumps--used .trump__desc { color: #929295; }
+.trumps--used .trump__link { color: #434343; }
+.trumps--used .trump__info { color: #929295; }

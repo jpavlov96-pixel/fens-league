@@ -13,11 +13,17 @@
 // Side cards are blurred, as the trump-card component's "State=Blur" variant (289:9269:
 // a layer blur of 3, CSS blur(1.5px)); the blur fades out as a card reaches the middle.
 
+// Each .trumps track is its own carousel, with the .pagination right after it: the lobby has
+// two, Налични and Използвани (the used cards, Figma 444:15907), one shown at a time. A hidden
+// track has no width, so each one lays itself out again when its size changes (shown).
 (function () {
-  var track = document.querySelector('.trumps');
-  if (!track) return;
+  Array.prototype.forEach.call(document.querySelectorAll('.trumps'), init);
+
+  function init(track) {
   var cards = Array.prototype.slice.call(track.querySelectorAll('.trump'));
-  var dots = Array.prototype.slice.call(document.querySelectorAll('.trumps-card .pagination span'));
+  var pager = track.nextElementSibling;
+  var dots = pager && pager.classList.contains('pagination')
+    ? Array.prototype.slice.call(pager.querySelectorAll('span')) : [];
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var SMALL = { w: 175, h: 263, name: 20, desc: 12 };
@@ -182,4 +188,14 @@
   measure();
   render();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { measure(); render(); });
+  // shown after being hidden (the other filter): measure and lay out again
+  if (window.ResizeObserver) {
+    var lastWidth = track.clientWidth;
+    new ResizeObserver(function () {
+      if (track.clientWidth === lastWidth) return;
+      lastWidth = track.clientWidth;
+      if (lastWidth) { measure(); render(); }
+    }).observe(track);
+  }
+  }
 })();
