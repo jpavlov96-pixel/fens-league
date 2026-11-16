@@ -30,6 +30,9 @@
 //                without it, its button is disabled and a Correct Score it wins shows the gold
 //                warning "Невалиден залог." 
 //   allow-draw   present = a level Correct Score is valid (the "Равенство" card)
+//   trump-warning  text for the gold strip when the power card on it won't be applied
+//                ("Коз “Чиста мрежа” няма да бъде приложен."); shown at once, after the level
+//                score and used team warnings
 //
 // When not locked, the "Точен Резултат" / "Изход от мача" button switches between the two
 // variants; switching to Correct Score starts the score at 1 : 0 for the picked team. Every change the user makes updates the attributes and fires a "change" event.
@@ -48,7 +51,7 @@
     static get observedAttributes() {
       return ['variant', 'state', 'date', 'home', 'away', 'home-crest', 'away-crest',
         'home-score', 'away-score', 'pick', 'trump-card', 'note', 'form', 'home-used', 'away-used',
-        'allow-used', 'allow-draw'];
+        'allow-used', 'allow-draw', 'trump-warning'];
     }
 
     connectedCallback() {
@@ -61,6 +64,8 @@
 
     attributeChangedCallback(name) {
       if (!this.isConnected || this._quiet) return;
+      // the power card's warning only changes the gold strip
+      if (name === 'trump-warning') { this._drawWarning(); return; }
       // the trump cards are added / taken away in place, so the rest of the card isn't redrawn
       var card = this.querySelector('.event');
       if (name === 'trump-card' && card && this._get('variant', '') !== 'no-match') {
@@ -240,7 +245,10 @@
       var usedWinner = open && !level && winner && this._get(winner + '-used', '') && !this.hasAttribute('allow-used');
       var message = level ? 'Невалиден залог. Използвайте коз за <b>“Равенство”.</b>'
         : usedWinner ? 'Невалиден залог.' : '';
-      var kind = level ? 'draw' : usedWinner ? 'used' : '';
+      // last: the page's word that the power card on it won't be applied (trump-warning)
+      var cardText = open ? this._get('trump-warning', '') : '';
+      if (!message && cardText) message = cardText;
+      var kind = level ? 'draw' : usedWinner ? 'used' : cardText && message === cardText ? 'trump' : '';
       if (this._warningShown && message && message !== this._warningText) {
         // a different reason: swap the text in place
         var shown = this.querySelector('.event__time--warning .event__time-text');
@@ -305,7 +313,7 @@
             { opacity: 1, clipPath: 'inset(0 0 0 0)' }
           ], { duration: 480, easing: 'cubic-bezier(0.33, 0, 0.2, 1)' });
         }
-      }, level ? 1350 : 0); // a used team shows at once; a level score waits (it may be passing through)
+      }, level ? 1350 : 0); // a used team or a card shows at once; a level score waits (it may be passing through)
     }
 
     // Tells the page when the gold warning shows ("warning" event, detail.kind: 'draw' for a level

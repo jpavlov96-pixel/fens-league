@@ -74,49 +74,67 @@
 
   // Why a card can't be added to this prediction ('' = it can): the rules and clarifications
   // (a card only where it is needed)
-  function blocked(id, p) {
-    if (USED.indexOf(id) >= 0) return 'Вече е използван този полусезон.';
+  // Why a card can't be added ('' = it can). An available card can be added at any time (the
+  // user's request, 2026-11-16); only a used one can't. Whether it then counts is mismatch().
+  function blocked(id) {
+    return USED.indexOf(id) >= 0 ? 'Вече е използван този полусезон.' : '';
+  }
+
+  // The card that's on but won't count with the prediction as it is ('' = it counts, or there
+  // is no pick yet). The card stays on and the match card shows "Коз “…” няма да бъде
+  // приложен." (the user's request, 2026-11-16):
+  // - Равенство: a Точен резултат that isn't level
+  // - Повторен избор: a winner that isn't a used team, or a draw
+  // - Голмайстор: a draw
+  // - Чиста мрежа: a draw, or a Точен резултат where the winner concedes (e.g. 2:1)
+  // - Всичко или нищо: Изход от мача, or a draw
+  // - Почивка: always counts
+  function mismatch(p) {
+    var t = p.trump;
+    if (!t || t === 'rest') return '';
     var r = read(p);
-    var hasWinner = r.winner === 'home' || r.winner === 'away';
-    switch (id) {
-      case 'rest': return '';
-      // Изход от мача: it makes the prediction a draw ("Равен"); Точен резултат: a level score
-      case 'even': return !r.exact || r.winner === 'draw' ? '' : 'Само за равен резултат.';
-      // Повторен избор: for a match with a used team; it's added first (the used team's button
-      // is disabled without it), and comes off if the other team is picked to win
-      case 'repeat':
-        if (!p.homeUsed && !p.awayUsed) return 'Само за мач с вече използван отбор.';
-        return hasWinner && !r.used ? 'Само за вече използван отбор.' : '';
-      case 'all-or-nothing':
-        if (!r.exact) return 'Само за точен резултат.';
-        if (!hasWinner) return 'Само за прогноза с победител.';
-        return r.used ? 'Отборът е използван.' : '';
-      default: // scorer, clean-sheet
-        if (!hasWinner) return 'Само за прогноза с победител.';
-        return r.used ? 'Отборът е използван.' : '';
+    if (!r.winner) return '';
+    var draw = r.winner === 'draw';
+    var hs = +p.homeScore || 0, as = +p.awayScore || 0;
+    switch (t) {
+      case 'even': return r.exact && !draw ? t : '';
+      case 'repeat': return draw || !r.used ? t : '';
+      case 'scorer': return draw ? t : '';
+      case 'clean-sheet': return draw || (r.exact && Math.min(hs, as) > 0) ? t : '';
+      case 'all-or-nothing': return !r.exact || draw ? t : '';
     }
+    return '';
+  }
+
+  // the card that counts ('' when none is on or it won't be applied)
+  function effective(p) { return p.trump && !mismatch(p) ? p.trump : ''; }
+
+  // the gold strip's text for a card that won't be applied
+  function mismatchText(p) {
+    var t = trumpOf(mismatch(p));
+    return t ? 'Коз <b>“' + t.name + '”</b> няма да бъде приложен.' : '';
   }
 
   // Keeps the pick and the card in step after a change (the user's request, 2026-11-16: a draw
   // in Изход от мача is the Равенство card):
   // - Изход от мача with Равенство is the draw pick; picking a team instead takes the card off
   // - a draw pick without Равенство is no pick
-  // - any other card that stopped applying is taken off (Почивка always applies)
   function settle(p) {
     p = Object.assign({}, p);
     var outcome = p.variant !== 'correct-score';
     if (outcome && p.trump === 'even' && (p.pick === 'home' || p.pick === 'away')) p.trump = '';
     if (outcome && p.trump !== 'even' && p.pick === 'draw') p.pick = '';
-    if (p.trump && p.trump !== 'rest' && blocked(p.trump, p)) p.trump = '';
     return p;
   }
 
+  // a prediction that can be saved: a card that won't be applied counts as no card
   function valid(p) {
     var r = read(p);
-    if (p.trump === 'rest') return true;
+    var t = effective(p);
+    if (t === 'rest') return true;
     if (!r.winner) return false;
-    if (r.winner === 'draw') return p.trump === 'even';
-    return !r.used || p.trump === 'repeat';
+    if (r.winner === 'draw') return t === 'even';
+    return !r.used || t === 'repeat';
   }
 
   function get() {
@@ -151,6 +169,7 @@
     TRUMPS: TRUMPS, USED: USED, trumpOf: trumpOf, titleCase: titleCase,
     get: function () { return memory; }, save: save, clear: clear,
     blocked: blocked, valid: valid, read: read, settle: settle,
+    mismatch: mismatch, effective: effective, mismatchText: mismatchText,
     onChange: function (fn) { listeners.push(fn); }
   };
 
@@ -183,7 +202,8 @@
       'home-used': p.homeUsed || null, 'away-used': p.awayUsed || null,
       'allow-used': p.trump === 'repeat' ? '' : null,
       'allow-draw': p.trump === 'even' ? '' : null,
-      'trump-card': p.trump ? null : ''
+      'trump-card': p.trump ? null : '',
+      'trump-warning': mismatchText(p) || null
     };
     Object.keys(set).forEach(function (k) {
       var v = set[k];

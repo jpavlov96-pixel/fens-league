@@ -13,6 +13,9 @@
    - the match card is <event-container form>: Изход от мача ↔ Точен Резултат, used teams
      greyed out with their round; picking a used team to win, or a level score, shows the
      card's gold warning until the right power card is added ("Повторен избор", "Равенство").
+   - power cards: any available card can be added at any time; one that won't count with the
+     prediction as it is stays on, and the card's gold strip says "Коз “…” няма да бъде
+     приложен." (P.mismatch; the points are counted without it).
    - power cards: Figma's two panels, "6 НАЛИЧНИ КОЗА" + "Избери Коз" (330:17255) and the
      picked card (440:19335) with the bin to take it off. The list that "Избери Коз" opens
      isn't in Figma: the six official cards in the Правила list's style, the ones that don't
@@ -130,13 +133,15 @@
 
   function valid() { return P.valid(current()); }
 
+  // a card that won't be applied (P.mismatch) adds nothing
   function points(p) {
-    if (trump === 'rest') return 1;
+    var t = P.effective(current());
+    if (t === 'rest') return 1;
     if (!valid(p)) return 0;
     var base = p.exact ? 4 : 3;
-    if (trump === 'scorer') return base * 2;
-    if (trump === 'clean-sheet') return base + 2;
-    if (trump === 'all-or-nothing') return 6;
+    if (t === 'scorer') return base * 2;
+    if (t === 'clean-sheet') return base + 2;
+    if (t === 'all-or-nothing') return 6;
     return base;
   }
 
@@ -149,7 +154,7 @@
       ['Познат победител, грешен резултат', '2'],
       ['Грешен победител', '0']
     ];
-    var t = TRUMPS.filter(function (x) { return x.id === trump; })[0];
+    var t = P.trumpOf(P.effective(current()));
     if (t && CARD_ROW[t.id]) rows.push(['Коз “' + t.name.replace(/ (\S)/g, function (m, c) { return ' ' + c.toUpperCase(); }) + '”', CARD_ROW[t.id], true]);
     q('.predict-sheet__tip-box').innerHTML = rows.map(function (r, i) {
       var num = r[1].charAt(0) === '×' ? r[1] : r[1] + '<small>т</small>';
@@ -320,6 +325,12 @@
         else event.removeAttribute(k);
       }
     });
+    // the card that won't be applied with this prediction: the gold strip says so
+    var warn = P.mismatchText(current());
+    if ((event.getAttribute('trump-warning') || '') !== warn) {
+      if (warn) event.setAttribute('trump-warning', warn);
+      else event.removeAttribute('trump-warning');
+    }
     var p = read();
     if (!q('.predict-sheet__tip').hidden) drawTip();
     setPoints(points(p));
