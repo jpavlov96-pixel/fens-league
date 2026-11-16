@@ -284,7 +284,8 @@
     if (!t) return;
     var why = blocked(t.id);
     var rule = q('.predict-sheet__picker-rule');
-    rule.innerHTML = why ? '<span class="predict-sheet__picker-why">' + esc(why) + '</span>' : t.rule;
+    // one inline box, so the flex centring doesn't split the text from its gold part
+    rule.innerHTML = '<span>' + (why ? '<span class="predict-sheet__picker-why">' + esc(why) + '</span>' : t.rule) + '</span>';
     q('[data-picker-apply]').disabled = !!why;
   }
 
@@ -295,6 +296,23 @@
       root.classList.add('is-picking');
       var track = drawPicker();
       if (window.initTrumpCarousel) window.initTrumpCarousel(track);
+      // everything comes in at once (the user's request): hidden until the cards' pictures are
+      // ready (at most 400ms), then the whole view fades in
+      picker.style.opacity = '0';
+      var imgs = Array.prototype.map.call(track.querySelectorAll('img'), function (img) {
+        return img.decode ? img.decode().catch(function () {}) : Promise.resolve();
+      });
+      var shown = false;
+      var show = function () {
+        if (shown) return;
+        shown = true;
+        picker.style.opacity = '';
+        if (picker.animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          picker.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, easing: 'ease-out' });
+        }
+      };
+      Promise.all(imgs).then(show);
+      setTimeout(show, 400);
     } else {
       picker.hidden = true;
       root.classList.remove('is-picking');
