@@ -258,6 +258,13 @@
       for (var i = 0; i < pickerCards.length; i++) if (!blocked(pickerCards[i].id)) { start = i; break; }
     }
     q('.predict-sheet__picker-count').textContent = pickerCards.length;
+    // the small pictures the card panel shows after "Приложи Коз", loaded and decoded now so
+    // the panel doesn't wait for them then
+    pickerCards.concat([{ file: 'b' }]).forEach(function (t) {
+      var img = new Image();
+      img.src = CARDS + t.file + '-small.webp';
+      if (img.decode) img.decode().catch(function () {});
+    });
     var old = q('.predict-sheet__picker-cards');
     var track = old.cloneNode(false); // a fresh track: the carousel sets itself up on it
     track.setAttribute('data-start', start);
@@ -364,12 +371,12 @@
       panelBox.animate([
         { opacity: 0, transform: 'translateY(8px) scale(0.97)' },
         { opacity: 1, transform: 'none' }
-      ], { duration: 360, delay: 120, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'backwards' });
+      ], { duration: 360, delay: 40, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)', fill: 'backwards' });
       var front = panelBox.querySelector('.predict-sheet__trump-front');
       if (front) front.animate([
         { transform: 'translateY(-14px) rotate(-8deg) scale(1.25)', opacity: 0 },
         { transform: 'none', opacity: 1 }
-      ], { duration: 420, delay: 160, easing: 'cubic-bezier(0.2, 0.9, 0.3, 1.15)', fill: 'backwards' });
+      ], { duration: 420, delay: 80, easing: 'cubic-bezier(0.2, 0.9, 0.3, 1.15)', fill: 'backwards' });
     }
     // opened from a saved prediction's card icons: the card goes straight onto that
     // prediction, saved, and the sheet closes (no "Запази Прогноза" step; the user's request)
