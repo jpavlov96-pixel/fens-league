@@ -337,8 +337,8 @@ img { display: block; }
   padding: 5px 8px;
   border-radius: 8px;
   background: #ffffff0d;
-  font-size: 12px;
-  font-weight: 400;
+  font-size: 13px; /* Figma 2026-11-17: Medium 13 (was Regular 12) */
+  font-weight: 500;
   line-height: normal;
   color: #dbdbdbbf; /* #dbdbdb at 75% */
   white-space: nowrap;
@@ -621,7 +621,7 @@ img { display: block; }
   border: 0;
   background: none;
   font-family: inherit;
-  font-size: 12px;
+  font-size: 11px; /* Figma 2026-11-17 (was 12px) */
   font-style: italic;
   font-weight: 400;
   line-height: 12px;
@@ -959,7 +959,7 @@ img { display: block; }
 .prize-table__row > span:last-child { text-align: right; }
 
 .prize-table__head {
-  font-size: 11px;
+  font-size: 12px; /* Figma 2026-11-17 (was 11px) */
   font-weight: 400;
   color: #dbdbdb;
 }
@@ -969,7 +969,7 @@ img { display: block; }
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  font-size: 13px;
+  font-size: 14px; /* Figma 2026-11-17 (was 13px) */
 }
 
 .prize-table__rows[hidden] { display: none; }
@@ -1024,7 +1024,7 @@ img { display: block; }
   flex-shrink: 0;
   align-items: center;
   gap: 3px;
-  font-size: 13px;
+  font-size: 14px; /* Figma 2026-11-17 (was 13px) */
   font-weight: 400;
   line-height: 13px;
   color: #f5d584;
@@ -1330,7 +1330,7 @@ img { display: block; }
   bottom: calc(10px + env(safe-area-inset-bottom));
   left: 0;
   z-index: 50;
-  width: 355px;
+  width: calc(100% - 20px); /* responsive (2026-11-17): 10px each side, as Figma's 355 of 375 */
   height: 58px;
   margin: 0 auto;
   border-radius: 240px;
@@ -1360,7 +1360,7 @@ img { display: block; }
   position: absolute;
   top: 4px;
   left: 4px;
-  width: 66px;
+  width: 66px; /* overridden below by the responsive share */
   height: 50px;
   border-radius: 60px;
   background: linear-gradient(180deg, #efefef26 0%, #89898926 100%);
@@ -1369,10 +1369,13 @@ img { display: block; }
 
 /* The pill is under the page's own tab from the very first frame, before tab-nav.js runs
    (otherwise a frame painted early could show it under Начало, then jump) */
-.tab-nav:has(.tab-nav__item--2.is-active) .tab-nav__active { left: 70px; width: 74px; }
-.tab-nav:has(.tab-nav__item--3.is-active) .tab-nav__active { left: 144px; width: 74px; }
-.tab-nav:has(.tab-nav__item--4.is-active) .tab-nav__active { left: 218px; width: 66px; }
-.tab-nav:has(.tab-nav__item--5.is-active) .tab-nav__active { left: 284px; width: 66px; }
+/* The five tabs share the bar's inside (its width less 4px left and 5px right) in Figma's
+   proportions, 66 : 74 : 74 : 66 : 66 of 346, so they grow with the bar on wider phones */
+.tab-nav__active { width: calc((100% - 9px) * 0.190751); }
+.tab-nav:has(.tab-nav__item--2.is-active) .tab-nav__active { left: calc(4px + (100% - 9px) * 0.190751); width: calc((100% - 9px) * 0.213873); }
+.tab-nav:has(.tab-nav__item--3.is-active) .tab-nav__active { left: calc(4px + (100% - 9px) * 0.404624); width: calc((100% - 9px) * 0.213873); }
+.tab-nav:has(.tab-nav__item--4.is-active) .tab-nav__active { left: calc(4px + (100% - 9px) * 0.618497); width: calc((100% - 9px) * 0.190751); }
+.tab-nav:has(.tab-nav__item--5.is-active) .tab-nav__active { left: calc(4px + (100% - 9px) * 0.809249); width: calc((100% - 9px) * 0.190751); }
 
 .tab-nav__active::before { background: linear-gradient(315deg, #ffffff05 6.9%, #99999900 93.1%); }
 
@@ -1391,11 +1394,11 @@ img { display: block; }
    both states: switching the filter off made the browser redraw its icon and label */
 .tab-nav__item.is-active { filter: drop-shadow(0 6px 8px #00000000); }
 
-.tab-nav__item--1 { left: 4px; width: 66px; }
-.tab-nav__item--2 { left: 70px; width: 74px; }
-.tab-nav__item--3 { left: 144px; width: 74px; }
-.tab-nav__item--4 { left: 218px; width: 66px; }
-.tab-nav__item--5 { left: 284px; width: 66px; }
+.tab-nav__item--1 { left: 4px; width: calc((100% - 9px) * 0.190751); }
+.tab-nav__item--2 { left: calc(4px + (100% - 9px) * 0.190751); width: calc((100% - 9px) * 0.213873); }
+.tab-nav__item--3 { left: calc(4px + (100% - 9px) * 0.404624); width: calc((100% - 9px) * 0.213873); }
+.tab-nav__item--4 { left: calc(4px + (100% - 9px) * 0.618497); width: calc((100% - 9px) * 0.190751); }
+.tab-nav__item--5 { left: calc(4px + (100% - 9px) * 0.809249); width: calc((100% - 9px) * 0.190751); }
 
 /* icon and label centred in their tab (Figma's offsets were 0.5–2px off centre; the user
    asked for them centred) */
@@ -2721,12 +2724,14 @@ img { display: block; }
   width: 100%;
   height: 30px;
   overflow: hidden;
-  font-size: 12px;
+  font-size: 13px; /* Figma 2026-11-17: available 13 (was 12); used stays 12 */
   font-weight: 500;
   line-height: 15px;
   color: #2b2b2b;
   text-align: center;
 }
+
+.team-card-02--used .team-card-02__name { font-size: 12px; }
 
 .team-card-02--used {
   border-color: #4a4a4a59;
@@ -2780,7 +2785,7 @@ img { display: block; }
   flex: 1 0 0;
   min-width: 1px;
   overflow: hidden;
-  font-size: 12px;
+  font-size: 13px; /* Figma 2026-11-17 (was 12px) */
   font-weight: 400;
   line-height: normal;
   color: #929295;
@@ -2847,7 +2852,7 @@ img { display: block; }
   padding: 0 10px 0 14px;
   border-radius: 0 0 0 50px;
   background: #19b14e;
-  font-size: 11px;
+  font-size: 12px; /* Figma 2026-11-17 (was 11px) */
   font-weight: 700;
   line-height: 12px;
   color: #ffffff;
@@ -2898,7 +2903,7 @@ img { display: block; }
   width: 80px;
   height: 28px;
   overflow: hidden;
-  font-size: 13px; /* the user's choice (Figma: 12px) */
+  font-size: 14px; /* Figma 2026-11-17 (was 13px, the user's choice over Figma's old 12px) */
   font-weight: 500;
   line-height: 14px;
   color: #ffffff;
@@ -2918,7 +2923,7 @@ img { display: block; }
   gap: 10px;
   width: 100%;
   padding: 0 5px;
-  font-size: 12px;
+  font-size: 13px; /* Figma 2026-11-17: labels 13 (was 12), values 14 below */
   line-height: normal;
 }
 
@@ -2932,6 +2937,7 @@ img { display: block; }
 }
 
 .history-card__value {
+  font-size: 14px;
   font-style: italic;
   font-weight: 700;
   color: #ffffff;
@@ -2949,7 +2955,7 @@ img { display: block; }
 
 .history-card__missed {
   font-family: "Montserrat", sans-serif;
-  font-size: 16px;
+  font-size: 18px; /* Figma 2026-11-17 (was 16px) */
   font-weight: 800;
   line-height: normal;
   color: #ffffff33;
@@ -3014,7 +3020,7 @@ img { display: block; }
   align-items: center;
   gap: 3px;
   min-width: 1px;
-  font-size: 11px;
+  font-size: 12px; /* Figma 2026-11-17 (was 11px) */
   font-style: italic;
   line-height: normal;
   color: #dbdbdb;
@@ -4663,8 +4669,7 @@ html.predict-sheet-open body { overflow: hidden; }
   position: absolute;
   bottom: 0;
   left: 50%;
-  width: 375px;
-  max-width: 100%;
+  width: 100%; /* responsive (2026-11-17): follows the screen width, not Figma's fixed 375 */
   height: 447px;
   transform: translate(-50%, calc(100% + 16px));
   transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -4681,7 +4686,7 @@ html.predict-sheet-open body { overflow: hidden; }
 .predict-sheet__handle {
   position: absolute;
   top: -12px;
-  left: 109px;
+  left: calc(50% - 77.5px); /* centred (Figma: x 109 of 375) */
   width: 155px;
   height: 4px;
   border-radius: 77px;
@@ -4709,7 +4714,7 @@ html.predict-sheet-open body { overflow: hidden; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 355px;
+  width: calc(100% - 20px); /* 10px each side (Figma: 355 of 375) */
   height: 44px;
 }
 
@@ -4785,7 +4790,7 @@ html.predict-sheet-open body { overflow: hidden; }
 .predict-sheet__event {
   top: 71px;
   left: 10px;
-  width: 355px;
+  width: calc(100% - 20px); /* 10px each side (Figma: 355 of 375) */
   height: 150px;
 }
 
@@ -4793,7 +4798,7 @@ html.predict-sheet-open body { overflow: hidden; }
 .predict-sheet__trump {
   top: 231px;
   left: 10px;
-  width: 355px;
+  width: calc(100% - 20px); /* 10px each side (Figma: 355 of 375) */
   height: 66px;
   border: 1px solid #f5d58459;
   border-radius: 12px;
@@ -4882,7 +4887,7 @@ html.predict-sheet-open body { overflow: hidden; }
 /* Frame 162: "Избери Коз" */
 .predict-sheet__trump-btn {
   top: 16px;
-  left: 253px;
+  right: 11px; /* Figma: x 253 of 355 */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4904,7 +4909,7 @@ html.predict-sheet-open body { overflow: hidden; }
 /* Frame 2147208146 and left-side: the divider and the bin */
 .predict-sheet__trump-divider {
   top: 15px;
-  left: 314px;
+  right: 40px; /* Figma: x 314 of 355 */
   width: 1px;
   height: 36px;
   border-radius: 6px;
@@ -4914,7 +4919,7 @@ html.predict-sheet-open body { overflow: hidden; }
 
 .predict-sheet__trump-bin {
   top: 0;
-  left: 320px;
+  right: 7px; /* Figma: x 320 of 355 */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4939,7 +4944,7 @@ html.predict-sheet-open body { overflow: hidden; }
   flex-direction: column;
   align-items: flex-start;
   gap: 4px;
-  width: 355px;
+  width: calc(100% - 20px); /* 10px each side (Figma: 355 of 375) */
   height: 24px;
   padding: 4px 8px;
   border: 0;
@@ -4963,7 +4968,7 @@ html.predict-sheet-open body { overflow: hidden; }
 }
 
 .predict-sheet__h2h-text {
-  width: 309px;
+  width: calc(100% - 30px); /* Figma: 309 of 339 */
   height: 15px;
   overflow: hidden;
   font-size: 12px;
@@ -5004,7 +5009,10 @@ html.predict-sheet-open body { overflow: hidden; }
 /* Frame 132: "Запази Прогноза" */
 .predict-sheet__save {
   top: 382px;
-  left: 100px;
+  right: 0;
+  left: 0;
+  width: fit-content;
+  margin: 0 auto; /* centred (Figma: x 100 of 375) */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5070,7 +5078,7 @@ html.predict-sheet-open body { overflow: hidden; }
 .predict-sheet__tip-box {
   position: absolute;
   top: 9px;
-  left: 62px;
+  right: 17px; /* Figma: x 62, 17px from the right of 375 */
   display: flex;
   flex-direction: column;
   gap: 3px;
@@ -5251,7 +5259,7 @@ html.predict-sheet-open body { overflow: hidden; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 355px;
+  width: calc(100% - 20px); /* 10px each side (Figma: 355 of 375) */
   height: 45px;
 }
 
@@ -5294,7 +5302,7 @@ html.predict-sheet-open body { overflow: hidden; }
   left: 10px;
   display: flex;
   justify-content: center;
-  width: 355px;
+  width: calc(100% - 20px); /* 10px each side (Figma: 355 of 375) */
   font-family: "Montserrat", sans-serif;
   font-size: 13px;
   line-height: normal;
@@ -5340,7 +5348,7 @@ html.predict-sheet-open body { overflow: hidden; }
 /* Frame 132: "Приложи Коз", the green button of "Запази Прогноза" */
 .predict-sheet__picker-apply {
   top: 435px;
-  left: 193px;
+  right: 15px; /* Figma: x 193, 15px from the right of 375 */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5433,7 +5441,7 @@ html.predict-sheet-open body { overflow: hidden; }
 .trump-sheet__head {
   top: 7px;
   left: 10px;
-  width: 355px;
+  width: calc(100% - 20px); /* 10px each side (Figma: 355 of 375) */
 }
 
 .trump-sheet__cards {
@@ -5449,7 +5457,9 @@ html.predict-sheet-open body { overflow: hidden; }
 /* Frame 132 (458:22341): "Към Прогнозите", the green button, x 94 */
 .trump-sheet__go {
   top: 435px;
-  left: 94px;
+  right: 0;
+  left: 0;
+  margin: 0 auto; /* centred (Figma: x 94 of 375) */
   display: flex;
   align-items: center;
   justify-content: center;

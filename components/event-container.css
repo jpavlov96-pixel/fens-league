@@ -185,7 +185,7 @@ event-container[hidden] { display: none; }
   border-radius: 8px;
   background: #ffffff80;
   overflow: hidden;
-  font-size: 12px;
+  font-size: 14px; /* Figma 2026-11-17 (was 12px) */
   font-weight: 500;
   line-height: 14px;
   color: #2b2b2b;
@@ -291,7 +291,7 @@ event-container[hidden] { display: none; }
   flex: 1 0 0;
   min-width: 1px;
   text-box: trim-both cap alphabetic;
-  font-size: 11px;
+  font-size: 12px; /* Figma 2026-11-17 (was 11px) */
   font-style: italic;
   font-weight: 400;
   line-height: 11px;

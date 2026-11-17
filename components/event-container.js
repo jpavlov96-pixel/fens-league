@@ -50,6 +50,32 @@
     });
   }
 
+  // Brings the drawn card (live) in line with a fresh render of it (next), keeping every element
+  // that's still there: attributes and text are changed in place, so images aren't reloaded.
+  // The gold warning laid over the date strip isn't part of the render and is left alone.
+  function morph(live, next) {
+    Array.prototype.slice.call(live.attributes).forEach(function (a) {
+      if (!next.hasAttribute(a.name)) live.removeAttribute(a.name);
+    });
+    Array.prototype.slice.call(next.attributes).forEach(function (a) {
+      if (live.getAttribute(a.name) !== a.value) live.setAttribute(a.name, a.value);
+    });
+    var have = Array.prototype.filter.call(live.childNodes, function (n) {
+      return !(n.nodeType === 1 && n.classList.contains('event__time--warning'));
+    });
+    var want = Array.prototype.slice.call(next.childNodes);
+    want.forEach(function (node, i) {
+      var old = have[i];
+      if (!old) live.appendChild(node);
+      else if (old.nodeType === 3 && node.nodeType === 3) {
+        if (old.nodeValue !== node.nodeValue) old.nodeValue = node.nodeValue;
+      } else if (old.nodeType === 1 && node.nodeType === 1 && old.tagName === node.tagName) {
+        morph(old, node);
+      } else live.replaceChild(node, old);
+    });
+    for (var i = want.length; i < have.length; i++) have[i].remove();
+  }
+
   class EventContainer extends HTMLElement {
     static get observedAttributes() {
       return ['variant', 'state', 'date', 'home', 'away', 'home-crest', 'away-crest',
@@ -241,6 +267,18 @@
           current.querySelector(selector).replaceWith(next.querySelector(selector));
         });
         current.className = next.firstChild.className;
+        this._drawWarning();
+        return;
+      }
+      // An edit on a card that's already drawn (a team picked, a score step, a used / draw
+      // flag): only what differs is changed, in place. Redrawing it all replaced the crests,
+      // background and buttons, which Safari on iPhone painted a frame late: the whole card
+      // blinked on every tap (2026-11-17)
+      var fresh = document.createElement('div');
+      fresh.innerHTML = html;
+      if (current && fresh.firstChild && current.className.indexOf('event--empty') < 0 &&
+          fresh.firstChild.className.indexOf('event--empty') < 0) {
+        morph(current, fresh.firstChild);
         this._drawWarning();
         return;
       }

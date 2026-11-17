@@ -49,6 +49,20 @@
     if (e.persisted) setActive(active);
   });
 
+  // the bar follows the screen width: on a resize (or turning the phone) the pill is put
+  // back under its tab at once, without sliding
+  // (only when the width changes: iOS Safari also fires resize as its toolbar hides)
+  var navWidth = nav.offsetWidth;
+  window.addEventListener('resize', function () {
+    if (nav.offsetWidth === navWidth) return;
+    navWidth = nav.offsetWidth;
+    var current = nav.querySelector('.tab-nav__item.is-active') || items[0];
+    pill.style.transition = 'none';
+    place(current);
+    void pill.offsetWidth;
+    pill.style.transition = '';
+  });
+
   items.forEach(function (item) {
     item.addEventListener('click', function (e) {
       e.preventDefault();

@@ -1,8 +1,8 @@
 // The Козове carousel: the full power-card collection, swiped left and right.
 //
 // Sizes and spacing are the lobby design's (Figma group-05): the middle card is 193 × 290,
-// the others 175 × 263, 10px apart. Text (the user's sizes): a 20px name and 12px
-// "Детайли" on every card, the description 13px in the middle and 12px at the sides;
+// the others 175 × 263, 10px apart. Text: a 20px name (18px at the sides, Figma 2026-11-17) and 12px
+// "Детайли" (11px at the sides), the description 13px in the middle and 12px at the sides;
 // 12px padding. Every card's place and size follow from how far it is from the middle, so as you
 // drag, a card grows smoothly into the middle size and the last one shrinks back. On
 // release it settles on the nearest card (a quick flick goes one further); tapping a side
@@ -32,8 +32,8 @@
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var picker = track.getAttribute('data-size') === 'picker';
-  var SMALL = picker ? { w: 162.328, h: 243.955, name: 19.433, desc: 12 } : { w: 175, h: 263, name: 20, desc: 12 };
-  var BIG = picker ? { w: 179.024, h: 269, name: 22.502, desc: 13 } : { w: 193, h: 290, name: 20, desc: 13 };
+  var SMALL = picker ? { w: 162.328, h: 243.955, name: 19.433, desc: 12 } : { w: 175, h: 263, name: 18, desc: 12, link: 11, info: 16 }; // Figma 2026-11-17: side name 18 (was 20)
+  var BIG = picker ? { w: 179.024, h: 269, name: 22.502, desc: 13 } : { w: 193, h: 290, name: 20, desc: 13, link: 12, info: 18 };
   var GAP = picker ? 9.276 : 10;
   var BLUR = picker ? 1.391 : 1.5; // px, on the side cards
   var NEXT = BIG.w / 2 + GAP + SMALL.w / 2; // middle card's centre to its neighbour's: 194
@@ -139,6 +139,13 @@
       var nameRoom = w - 2 * PAD - 4;
       if (nameNeed > nameRoom) nameSize *= nameRoom / nameNeed;
       card.querySelector('.trump__name').style.fontSize = nameSize + 'px';
+      if (!picker) {
+        // Figma 2026-11-17: "Детайли" 12 → 11 and the corner value 18 → 16 at the sides
+        var linkEl = card.querySelector('.trump__link');
+        if (linkEl) linkEl.style.fontSize = lerp(SMALL.link, BIG.link, t) + 'px';
+        var infoEl = card.querySelector('.trump__info');
+        if (infoEl) infoEl.style.fontSize = lerp(SMALL.info, BIG.info, t) + 'px';
+      }
       if (picker) card.style.padding = lerp(9.276, 11.131, t) + 'px'; // Figma: 9.276 at the sides, 11.131 in the middle
       var descEl = card.querySelector('.trump__desc');
       if (descEl) {
